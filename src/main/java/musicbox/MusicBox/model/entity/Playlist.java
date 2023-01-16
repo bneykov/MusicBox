@@ -1,7 +1,7 @@
 package musicbox.MusicBox.model.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Table(name = "playlists")
 public class Playlist extends BaseEntity {
 
-    @Nonnull
+    @NotNull
     @Column
     private String name;
 

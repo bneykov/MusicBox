@@ -1,10 +1,10 @@
 package musicbox.MusicBox.model.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "albums")
 public class Album extends BaseEntity {
-    @Nonnull
+    @NotNull
     @Column
     private String name;
     @Column

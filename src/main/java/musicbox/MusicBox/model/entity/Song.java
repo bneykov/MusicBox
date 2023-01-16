@@ -1,7 +1,7 @@
 package musicbox.MusicBox.model.entity;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +17,18 @@ import java.util.Set;
 @Entity
 @Table(name = "songs")
 public class Song extends BaseEntity {
-    @Nonnull
+    @NotNull
     @Column
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String lyrics;
 
-    @Nonnull
+    @NotNull
     @Column(columnDefinition = "TEXT")
     private String path;
 
-    @Nonnull
+    @NotNull
     @Column
     @Enumerated(EnumType.STRING)
     private Genre genre;

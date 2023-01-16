@@ -1,6 +1,8 @@
 package musicbox.MusicBox.model.dto;
 
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +14,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDTO {
 
-    @Nonnull
+    @NotNull
+    @Size(min = 2)
     private String firstName;
-    @Nonnull
-    private String lastName;
-    @Nonnull
 
+    @Size(min = 2)
+    @NotNull
+    private String lastName;
+    @NotNull
+    @Email
     private String email;
     private String password;
 
