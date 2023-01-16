@@ -1,7 +1,6 @@
 package musicbox.MusicBox.model.dto;
 
 import jakarta.annotation.Nonnull;
-import jakarta.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +17,7 @@ public class UserDTO {
     @Nonnull
     private String lastName;
     @Nonnull
+
     private String email;
     private String password;
 
