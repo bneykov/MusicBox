@@ -21,10 +21,8 @@ public abstract class BaseEntity {
     private Long id;
 
     @Column
-    @DateTimeFormat
     private LocalDateTime created;
     @Column
-    @DateTimeFormat
     private LocalDateTime modified;
 
 

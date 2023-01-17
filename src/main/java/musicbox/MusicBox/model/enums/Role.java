@@ -1,5 +1,5 @@
 package musicbox.MusicBox.model.enums;
 
-public enum Roles {
+public enum Role {
     ADMIN, USER,  MODERATOR
 }

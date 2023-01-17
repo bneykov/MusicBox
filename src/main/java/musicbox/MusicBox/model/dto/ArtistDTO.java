@@ -20,5 +20,5 @@ public class ArtistDTO {
     @NotNull
     private String lastName;
 
-    private String image;
+    private String imageUrl;
 }

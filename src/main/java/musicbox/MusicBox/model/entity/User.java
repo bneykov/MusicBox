@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -27,13 +26,14 @@ public class User extends Person {
     @Column
     private String password;
 
-    @ManyToOne
-    private Role role;
+    @OneToMany
+    private Set<UserRole> roles;
 
     @OneToMany(mappedBy = "user")
     private Set<Playlist> playlists;
 
     public User() {
         this.playlists = new HashSet<>();
+        this.roles = new HashSet<>();
     }
 }

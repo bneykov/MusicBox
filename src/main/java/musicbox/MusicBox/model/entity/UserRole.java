@@ -1,20 +1,20 @@
 package musicbox.MusicBox.model.entity;
 
 import jakarta.persistence.*;
-import musicbox.MusicBox.model.enums.Roles;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import musicbox.MusicBox.model.enums.Role;
 
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role extends BaseEntity {
-
-    @Column(nullable = false)
+public class UserRole extends BaseEntity {
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Role role;
 }
