@@ -1,25 +1,23 @@
 package musicbox.MusicBox.model.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User extends Person {
-
 
     @NotNull
     @Column(unique = true)
@@ -32,4 +30,10 @@ public class User extends Person {
     @ManyToOne
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Playlist> playlists;
+
+    public User() {
+        this.playlists = new HashSet<>();
+    }
 }

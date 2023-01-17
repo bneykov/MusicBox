@@ -18,7 +18,7 @@ public abstract class Person extends BaseEntity {
     @Column(name = "first_name")
     private String firstName;
 
-    @Nonnull
+    @NotNull
     @Column(name = "last_name")
     private String lastName;
 

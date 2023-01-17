@@ -7,12 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "playlists")
@@ -27,4 +27,8 @@ public class Playlist extends BaseEntity {
 
     @ManyToMany(mappedBy = "playlists")
     private Set<Song> songs;
+
+    public Playlist() {
+        this.songs = new HashSet<>();
+    }
 }

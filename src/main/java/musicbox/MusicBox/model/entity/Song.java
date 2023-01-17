@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import musicbox.MusicBox.model.enums.Genre;
 
+import java.io.FileReader;
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "songs")
@@ -30,6 +32,11 @@ public class Song extends BaseEntity {
 
     @NotNull
     @Column
+    private LocalTime length;
+    
+
+    @NotNull
+    @Column
     @Enumerated(EnumType.STRING)
     private Genre genre;
     @ManyToMany
@@ -44,4 +51,9 @@ public class Song extends BaseEntity {
 
     @ManyToOne
     private Album album;
+
+    public Song() {
+        this.artists = new HashSet<>();
+        this.playlists = new HashSet<>();
+    }
 }
