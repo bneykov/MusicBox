@@ -17,12 +17,13 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(){
-        return "auth-login";
+        return "login";
     }
 
     @GetMapping("/logout")
     public String logout(){
         userService.logout();
+        System.out.println("Logged out");
         return "redirect:/";
     }
 
@@ -35,12 +36,12 @@ public class UserController {
 
     @GetMapping("/register")
     public String register(){
-        return "auth-register";
+        return "register";
     }
 
     @PostMapping("/register")
     public String register(UserRegisterDTO userRegisterDTO){
-
-        return "redirect:/";
+        userService.register(userRegisterDTO);
+        return "redirect:/login";
     }
 }
