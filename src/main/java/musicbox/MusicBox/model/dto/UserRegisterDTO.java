@@ -12,29 +12,22 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserRegisterDTO {
 
-    @NotNull
-    @Size(min = 2)
     private String firstName;
-
-    @Size(min = 2)
-    @NotNull
     private String lastName;
-    @NotNull
-    @Email
     private String email;
     private String password;
-
+    private String confirmPassword;
     private String image;
 
     @Override
     public String toString() {
         return "UserDTO{" +
-               "firstName='" + firstName + '\'' +
-               ", lastName='" + lastName + '\'' +
-               ", email='" + email + '\'' +
-               ", password='" + password + '\'' +
-               '}';
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
