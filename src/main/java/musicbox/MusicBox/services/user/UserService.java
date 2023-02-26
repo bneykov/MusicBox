@@ -1,17 +1,17 @@
-package musicbox.MusicBox.services;
+package musicbox.MusicBox.services.user;
 
+import jakarta.servlet.http.HttpSession;
 import musicbox.MusicBox.model.dto.UserLoginDTO;
 import musicbox.MusicBox.model.dto.UserRegisterDTO;
+import musicbox.MusicBox.model.entity.Artist;
 import musicbox.MusicBox.model.entity.User;
 import musicbox.MusicBox.repositories.UserRepository;
-import musicbox.MusicBox.user.CurrentUser;
+import musicbox.MusicBox.utils.LoggedUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cglib.core.Local;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.InvalidAttributeValueException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,12 +21,15 @@ import java.util.Optional;
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
-    private final CurrentUser currentUser;
+    private final LoggedUser loggedUser;
+
+    private final HttpSession httpSession;
 
     private final PasswordEncoder passwordEncoder;
-    public UserService(UserRepository userRepository, CurrentUser currentUser, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, LoggedUser loggedUser, HttpSession httpSession, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.currentUser = currentUser;
+        this.loggedUser = loggedUser;
+        this.httpSession = httpSession;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -34,41 +37,41 @@ public class UserService {
         if (!userRegisterDTO.getPassword().equals(userRegisterDTO.getConfirmPassword())){
             throw new RuntimeException("Passwords don't match");
         }
-        User user = new User();
-        user.setEmail(userRegisterDTO.getEmail());
-        user.setFirstName(userRegisterDTO.getFirstName());
-        user.setLastName(userRegisterDTO.getLastName());
-        user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
-        user.setCreated(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
-        user.setModified(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
+        User user = User.builder()
+                .email(userRegisterDTO.getEmail())
+                .name(userRegisterDTO.getName())
+                .password(passwordEncoder.encode(userRegisterDTO.getPassword()))
+                .created(LocalDateTime.of(LocalDate.now(), LocalTime.now()))
+                .modified(LocalDateTime.of(LocalDate.now(), LocalTime.now())).build();
         userRepository.save(user);
-
     }
 
     public boolean login(UserLoginDTO loginDTO){
-        Optional<User> userOptional = userRepository.findByEmail(loginDTO.getEmail());
-        if (userOptional.isEmpty()){
+       User user = this.userRepository.findByEmail(loginDTO.getEmail()).orElse(null);
+        if (user == null){
             logger.debug("User with name [{}] not found", loginDTO.getEmail());
             return false;
         }
         var rawPassword = loginDTO.getPassword();
-        var encodedPassword = userOptional.get().getPassword();
+        var encodedPassword = user.getPassword();
         boolean success = passwordEncoder.matches(rawPassword, encodedPassword);
         if (success){
-            login(userOptional.get());
-        } else {
-            logout();
+            login(user);
         }
         return success;
     }
 
 
     private void login(User user){
-        currentUser.setName(String.join(" ", user.getFirstName(), user.getLastName()));
-        currentUser.setLoggedIn(true);
+        this.loggedUser.setName(user.getName());
+        this.loggedUser.setEmail(user.getEmail());
+        this.loggedUser.setId(user.getId());
     }
 
     public void logout(){
-        currentUser.clear();
+        this.loggedUser.setEmail(null);
+        this.loggedUser.setId(null);
+        this.loggedUser.setName(null);
+        this.httpSession.invalidate();
     }
 }

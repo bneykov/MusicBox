@@ -1,19 +1,19 @@
 package musicbox.MusicBox.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "artists")
@@ -22,11 +22,10 @@ public class Artist extends Person {
     @ManyToMany(mappedBy = "artists")
     private Set<Song> songs;
 
-    @OneToMany(mappedBy = "artist")
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "artist_id"),
+            inverseJoinColumns = @JoinColumn(name = "album_id"))
     private Set<Album> albums;
 
-    public Artist() {
-        this.songs = new HashSet<>();
-        this.albums = new HashSet<>();
-    }
+
 }

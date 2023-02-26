@@ -13,7 +13,7 @@ import lombok.Setter;
 public class AlbumDTO {
     @NotNull
     private String name;
-    private String cover;
+    private String imageUrl;
     @NotNull
     private Long artist;
 }

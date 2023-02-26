@@ -14,11 +14,7 @@ import lombok.Setter;
 public class ArtistDTO {
     @NotNull
     @Size(min = 2)
-    private String firstName;
-
-    @Size(min = 2)
-    @NotNull
-    private String lastName;
-
+    private String name;
     private String imageUrl;
 }
+
