@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User extends Person {
+public class UserEntity extends Person {
     @NotNull
     @Column(unique = true)
     private String username;
@@ -30,11 +30,16 @@ public class User extends Person {
     private String password;
 
 
-    @ManyToOne
+    @ManyToMany(fetch = FetchType.EAGER)
 
-    private UserRole role;
+    private List<UserRole> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userEntity")
     private Set<Playlist> playlists;
+
+    public UserEntity addRole(UserRole userRole){
+        this.roles.add(userRole);
+        return this;
+    }
 
 }

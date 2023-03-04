@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import musicbox.MusicBox.model.enums.Role;
+import musicbox.MusicBox.model.enums.RoleEnum;
 
 
 @Getter
@@ -18,5 +18,5 @@ import musicbox.MusicBox.model.enums.Role;
 @Table(name = "roles")
 public class UserRole extends BaseEntity {
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleEnum role;
 }

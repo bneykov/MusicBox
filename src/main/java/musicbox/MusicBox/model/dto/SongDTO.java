@@ -1,7 +1,9 @@
 package musicbox.MusicBox.model.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,17 +21,18 @@ import java.util.Set;
 public class SongDTO {
 
     @NotNull
+    @Size(min = 3, max = 30, message = "Title length must be between 3 and 30 characters")
     private String title;
-    @Positive
+    @Positive(message = "Length must be greater than 0")
     private int length;
-    @NotNull
+    @NotNull(message = "Please select at least one artist")
     private Set<Long> artists;
 
     private String path;
 
-    @NotNull
+    @NotNull(message = "Please select genre")
     private Genre genre;
 
-    @NotNull
+    @NotNull(message = "Please select an album")
     private Long album;
 }

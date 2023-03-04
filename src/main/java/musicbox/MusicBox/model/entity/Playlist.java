@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -26,7 +25,7 @@ public class Playlist extends BaseEntity {
     private String name;
 
     @ManyToOne
-    private User user;
+    private UserEntity userEntity;
 
     @ManyToMany(mappedBy = "playlists")
     private Set<Song> songs;

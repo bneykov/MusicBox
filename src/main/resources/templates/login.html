@@ -4,32 +4,35 @@
 </head>
 <body>
 <header th:replace="fragments/commons::nav"></header>
-<main>
-    <hr class="hr-3 w-25 bg-white"/>
-    <form class="mx-auto w-25 bg-blur" th:method="post"
-          th:action="@{/login}"
-          th:object="${loginDTO}">
+<main class="container">
 
-        <small  class="text-warning">Incorrect username or password!</small>
-        <div class="form-group">
-        <div class="label-holder text-white d-flex justify-content-center">
-            <label for="username" class="h3 mb-2">Username</label>
+    <form class="mx-auto w-25 bg-blur rounded"
+          th:method="post"
+          th:action="@{/users/login}"
+          >
+        <div class="form-group mt-4">
+            <div class="label-holder textCol d-flex justify-content-center">
+                <label for="username" class="h5 mb-2">Username</label>
+            </div>
+            <input  th:value="${username}"
+                    type="text" class="form-control" id="username" name="username"/>
         </div>
-        <input
-                type="text" class="form-control" id="username" name="username"/>
-        </div>
-        <div class="form-group">
-            <div class="label-holder text-white d-flex justify-content-center">
-                <label for="password" class="h3 mb-2">Password</label>
+
+        <div class="form-group mt-4">
+            <div class="label-holder textCol d-flex justify-content-center">
+                <label for="password" class="h5 mb-2">Password</label>
             </div>
             <input
-                   type="password" class="form-control" id="password" name="password"/>
+                    type="password" class="form-control" id="password" name="password"/>
+        <small th:if="${invalidCredentials}"
+                class="text-warning mt-3">Incorrect username or password!</small>
         </div>
         <div class="button-holder d-flex justify-content-center">
-            <button type="submit" class="btn btn-success btn-lg mb-3">Login</button>
+            <button type="submit" class="btn btn-success btn-lg mb-3 mt-3">Login</button>
         </div>
         <div>
-            <p>Don't have an account? <button type="button" class="btn btn-link mb-1">Sign up</button>
+            <p>Don't have an account?
+                <button type="button" class="btn btn-link mb-1">Sign up</button>
             </p>
         </div>
     </form>

@@ -27,7 +27,7 @@ public class Song extends BaseEntity {
     private String title;
 
 
-    @NotNull
+
     @Column(columnDefinition = "TEXT")
     private String path;
 
@@ -35,21 +35,24 @@ public class Song extends BaseEntity {
     @Column
     private int length;
 
+    @Column
+    private String imageUrl;
+
     @NotNull
     @Column
     @Enumerated(EnumType.STRING)
     private Genre genre;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "song_id"),
             inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artists;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "song_id"),
     inverseJoinColumns = @JoinColumn(name = "playlist_id"))
     private Set<Playlist> playlists;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Album album;
 
 }

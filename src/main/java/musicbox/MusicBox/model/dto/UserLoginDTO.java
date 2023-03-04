@@ -13,11 +13,4 @@ public class UserLoginDTO {
     private String email;
     private String password;
 
-    @Override
-    public String toString() {
-        return "UserLoginDTO{" +
-                "email='" + email + '\'' +
-                ", password='" + (password != null ? "PROVIDED" : null) + '\'' +
-                '}';
-    }
 }

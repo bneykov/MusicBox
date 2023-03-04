@@ -8,21 +8,30 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import musicbox.MusicBox.validation.annotation.PasswordMatch;
+import musicbox.MusicBox.validation.annotation.UniqueEmail;
+import musicbox.MusicBox.validation.annotation.UniqueUsername;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@PasswordMatch(password = "password", confirmPassword = "confirmPassword")
 public class UserRegisterDTO {
-
-    @NotEmpty
-    @Size(min = 2, max = 30)
+    @NotNull
+    @UniqueUsername
+    @Size(min = 2, max = 20, message = "Username length must be between 2 and 20 characters long")
+    private String username;
+    @NotNull
+    @Size(min = 2, max = 30, message = "Name length must be between 2 and 30 characters long")
     private String name;
-    @Email
-    @NotEmpty
+    @Email(message = "Enter a valid email address")
+    @UniqueEmail
+    @NotNull
+    @NotEmpty(message = "Enter a valid email address")
     private String email;
-    @NotEmpty
-    @Size(min = 6)
+    @NotNull
+    @Size(min = 6, message = "Password length must be at least 7 characters long")
     private String password;
     private String confirmPassword;
     private String image;
