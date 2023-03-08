@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/commons::head">
+</head>
+<body>
+<header th:replace="fragments/commons::nav"></header>
+<main class="container">
+
+
+    <form class="mx-auto w-25 bg-blur rounded"
+          th:method="post"
+          th:action="@{/artists/add}"
+          th:object="${artistDTO}">
+        <div class="form-group">
+            <div class="label-holder textCol d-flex justify-content-center">
+                <label for="name" class="h4 mb-2">Name</label>
+            </div>
+            <input
+                   type="text" class="form-control" id="name" name="name"/>
+            <small
+
+                   class="text-warning">Error message</small>
+        </div>
+
+
+        <div class="button-holder d-flex justify-content-center mt-2">
+            <button type="submit" class="btn btn-success btn-lg mb-3" value="Add_Artist">Add Artist</button><br/>
+
+        </div>
+    </form>
+</main>
+</body>
+</html>

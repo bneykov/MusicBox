@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head">
+</head>
+<body>
+
+<div>
+    <header th:replace="fragments/commons::nav"></header>
+    <div class="container-fluid mt-3">
+
+        <!-- Songs Row -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2 class="text-light mb-3  text-center">Songs</h2>
+            </div>
+            <div th:each="song:${songs}" class="col-lg-2 col-md-6 col-sm-12">
+                <div class="card bg-light text-dark mb-3">
+                    <img th:src="${song.imageUrl}" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 th:text="${song.title}" class="card-title">Song Name</h5>
+                        <p th:text="${song.album.name}" class="card-text">Album</p>
+                        <p th:text="${song.getArtistsNames()}" class="card-text">Artists</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 mb-3">
+            <div class="col text-center">
+                <a th:href="@{/songs/all}" class="btn btn-primary">View All Songs</a>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Albums Row -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2 class="text-light mb-3 text-center">Albums</h2>
+        </div>
+        <div th:each="album:${albums}" class="col-lg-2 col-md-6 col-sm-12">
+            <div class="card bg-light text-dark mb-3">
+                <img th:src="${album.cover}" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 th:text="${album.name}" class="card-title">Album Name</h5>
+                    <p th:text="${album.getArtistsNames()}" class="card-text">Artist Name</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row mt-3 mb-3">
+        <div class="col text-center">
+            <a th:href="@{/albums/all}" class="btn btn-primary">View All Albums</a>
+        </div>
+    </div>
+
+    <!-- Artists Row -->
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2 class="text-light mb-3 text-center">Artists</h2>
+        </div>
+        <div th:each="artist:${artists}" class="col-lg-2 col-md-6 col-sm-12">
+            <div class="card bg-light text-dark mb-3">
+                <img th:src="${artist.imageUrl}" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 th:text="${artist.name}" class="card-title">Artist Name</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3">
+        <div class="col text-center">
+            <a th:href="@{/artists/all}" class="btn btn-primary">View All Artists</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

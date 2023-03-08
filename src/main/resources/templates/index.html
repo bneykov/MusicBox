@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head">
+</head>
+<body>
+
+<div>
+<header th:replace="fragments/commons::nav"></header>
+    <div class="container">
+        <h1 class="text-left font-weight-bold mt-5">Welcome to Music Box</h1>
+        <h4 class="font-weight-bold mt-3">A streaming service for all music fans.</h4>
+        <a class="btn btn-primary btn-lg btn-light mt-5" href="/songs/all" role="button">Explore songs</a><br/>
+        <a class="btn btn-primary btn-lg btn-success  mt-5" href="/artists/all" role="button">Explore artists</a><br/>
+        <a class="btn btn-primary btn-lg btn-danger  mt-5" href="/albums/all" role="button">Explore albums</a>
+    </div>
+
+</div>
+</body>
+</html>

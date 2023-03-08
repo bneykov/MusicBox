@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head">
+</head>
+<body>
+
+<div>
+    <header th:replace="fragments/commons::nav"></header>
+    <div class="container-fluid mt-3">
+
+        <!-- Songs Row -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2 class="text-light mb-3  text-center" th:text="${title}"></h2>
+                <div th:switch="${title}" class="col text-center mb-3">
+                    <a th:case="'Songs'" th:href="@{/songs/add}" class="btn btn-primary">Add New</a>
+                    <a th:case="'Artists'" th:href="@{/artists/add}" class="btn btn-primary">Add New</a>
+                    <a th:case="'Albums'" th:href="@{/albums/add}" class="btn btn-primary">Add New</a>
+                </div>
+            </div>
+            <div th:if="${title.equals('Songs')}" th:each="song:${songs}" class="col-lg-2 col-md-6 col-sm-12">
+                <div class="card bg-light text-dark mb-3">
+                    <img th:src="${song.imageUrl}" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 th:text="${song.title}" class="card-title">Song Name</h5>
+                        <p th:text="${song.album.name}" class="card-text">Album</p>
+                        <p th:text="${song.getArtistsNames()}" class="card-text">Artists</p>
+                        <a th:href="@{/playlists/add/{id}(id = ${song.id})}" class="btn btn-primary">Add to playlist</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${title.equals('Albums')}" th:each="album:${albums}" class="col-lg-2 col-md-6 col-sm-12">
+                <div class="card bg-light text-dark mb-3">
+                    <img th:src="${album.cover}" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 th:text="${album.name}" class="card-title">Album Name</h5>
+                        <p th:text="${album.getArtistsNames()}" class="card-text">Artist Name</p>
+                        <a th:href="@{/albums/remove/{id}(id = *{album.id})}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${title.equals('Artists')}" th:each="artist:${artists}" class="col-lg-2 col-md-6 col-sm-12">
+                <div class="card bg-light text-dark mb-3">
+                    <img th:src="${artist.imageUrl}" class="card-img-top" alt="">
+                    <div class="card-body">
+                        <h5 th:text="${artist.name}" class="card-title">Artist Name</h5>
+                        <a th:href="@{/artists/remove/{id}(id = *{artist.id})}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+</body>
+</html>

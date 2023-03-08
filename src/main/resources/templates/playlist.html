@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/commons::head">
+</head>
+<body>
+
+<div>
+    <header th:replace="fragments/commons::nav"></header>
+    <div class="container-fluid mt-3">
+
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+            <div class="col-12">
+                <h2 class="text-light mb-3  text-center">Playlist name length</h2>
+            </div>
+            <!-- Playlists -->
+            <table class="table table-striped text-light">
+
+                <tbody>
+                <tr th:each="song: ${songs}" class="text-light text-center">
+                    <td th:text="${song.title}">Song Title</td>
+                    <td th:text="${song.getArtistsNames()}">Artists</td>
+                    <td th:text="${song.album.name}">Album</td>
+                    <td th:text="${song.length}">Length</td>
+                    <td><a th:href="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${playlistId}, songId = *{song.id})}"
+                           class="btn btn-danger">Remove</a></td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
