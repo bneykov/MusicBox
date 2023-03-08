@@ -24,10 +24,15 @@ public class Playlist extends BaseEntity {
     @Column
     private String name;
 
+    @Column
+    private String imageUrl;
+
     @ManyToOne
     private UserEntity userEntity;
 
-    @ManyToMany(mappedBy = "playlists")
+    @ManyToMany(fetch = FetchType.EAGER)
+
     private Set<Song> songs;
+
 
 }

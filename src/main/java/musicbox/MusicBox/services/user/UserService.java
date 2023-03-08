@@ -36,6 +36,13 @@ public class UserService {
         this.modelMapper = modelMapper;
     }
 
+    public UserEntity findById(Long id){
+        return this.userRepository.findById(id).orElseThrow();
+    }
+    public UserEntity findByUsername(String username){
+        return this.userRepository.findByUsername(username).orElseThrow();
+    }
+
     public void register(UserRegisterDTO registerDTO) {
 
         UserRole userRole = this.roleRepository.findUserRoleByRole(RoleEnum.USER).orElseThrow();

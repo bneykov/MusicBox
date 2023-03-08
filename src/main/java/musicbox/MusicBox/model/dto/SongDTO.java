@@ -25,7 +25,7 @@ public class SongDTO {
     private String title;
     @Positive(message = "Length must be greater than 0")
     private int length;
-    @NotNull(message = "Please select at least one artist")
+    @NotEmpty(message = "Please select at least one artist")
     private Set<Long> artists;
 
     private String path;

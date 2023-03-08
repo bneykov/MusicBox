@@ -19,10 +19,10 @@ import java.util.Set;
 @Table(name = "artists")
 public class Artist extends Person {
 
-    @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
     private Set<Song> songs;
 
-    @ManyToMany(mappedBy = "artists", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "artists", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Album> albums;
 
 

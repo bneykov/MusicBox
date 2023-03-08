@@ -32,7 +32,7 @@ public class Album extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artists;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Song> songs;
 
     public String getArtistsNames(){
