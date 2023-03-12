@@ -25,14 +25,14 @@
         </div>
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
-                <label for="length" class="h5 mb-2">Length in seconds</label>
+                <label for="duration" class="h5 mb-2">Duration in seconds</label>
             </div>
-            <input th:field="*{length}" th:errorclass="'is-invalid alert-danger'"
-                   type="number" step="1" class="form-control" id="length"
-                   name="length"/>
-            <small th:if="${#fields.hasErrors('length')}"
-                   th:errors="*{length}"
-                    class="text-warning">Length error message</small>
+            <input th:field="*{duration}" th:errorclass="'is-invalid alert-danger'"
+                   type="number" step="1" class="form-control" id="duration"
+                   name="duration"/>
+            <small th:if="${#fields.hasErrors('duration')}"
+                   th:errors="*{duration}"
+                    class="text-warning">Duration error message</small>
         </div>
         <div class="form-group">
             <div class="text-white label-holder d-flex justify-content-center">

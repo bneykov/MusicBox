@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head th:replace="fragments/commons::head">
+</head>
+<body>
+
+<div>
+    <header th:replace="fragments/commons::nav"></header>
+    <div class="container-fluid mt-3">
+
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+            <div class="col-12">
+                <h2 class="text-light mb-3  text-center">All Users</h2>
+
+            </div>
+
+            <table class="table table-striped text-light">
+
+                <tbody>
+                <tr class="text-light text-center">
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Last Modified</th>
+                    <th>Change role</th>
+                </tr>
+                <tr th:each="user: ${users}" class="text-light text-center">
+                    <form
+                            th:method="post"
+                    th:action="@{/users/{id}/change_role(id = ${user.id})}">
+                    <td th:text="${user.username}">Username</td>
+                    <td th:text="${user.name}">Name</td>
+                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${user.modified}">Last Modified</td>
+                    <td>
+                        <select onchange="this.form.submit()" sec:authorize="hasRole('ADMIN')" class="browser-default form-select" id="role" name="role">
+
+                            <option th:selected="${user.roles.size() == 1}"
+                                    th:value="USER"
+                                    th:text="User">
+
+                            </option>
+                            <option
+                                    th:selected="${user.roles.size() > 1}"
+                                    th:value="ADMIN"
+                                    th:text="Admin">
+                            </option>
+
+                        </select>
+                    </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

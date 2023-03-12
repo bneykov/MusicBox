@@ -2,7 +2,7 @@ package musicbox.MusicBox.validation.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import musicbox.MusicBox.validation.PasswordMather;
+import musicbox.MusicBox.validation.PasswordMatcher;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Constraint(validatedBy = PasswordMather.class)
+@Constraint(validatedBy = PasswordMatcher.class)
 public @interface PasswordMatch {
 
     String password();

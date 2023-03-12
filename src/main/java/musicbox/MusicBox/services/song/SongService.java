@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class SongService {
     private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
     private final PlaylistRepository playlistRepository;
+
 
     public SongService(SongRepository songRepository, ModelMapper modelMapper, ArtistService artistService, ArtistRepository artistRepository, AlbumRepository albumRepository, PlaylistRepository playlistRepository) {
         this.songRepository = songRepository;
@@ -49,6 +51,7 @@ public class SongService {
     public List<Song> getHomeSongs(){
         return this.songRepository.findAll().stream().limit(6).toList();
     }
+
     @Transactional
     public void addSong(SongDTO songDTO){
         Song song = this.modelMapper.map(songDTO, Song.class);
@@ -59,29 +62,37 @@ public class SongService {
         song.setModified(LocalDateTime.now());
         song.setPlaylists(new HashSet<>());
         songDTO.getArtists().forEach(artistId -> {
-            Artist artist = this.artistService.findById(artistId);
+            Artist artist = this.artistService.getArtistById(artistId);
             song.getArtists().add(artist);
         });
         this.modelMapper.map(song, Song.class);
         this.songRepository.save(song);
     }
-    @Transactional
-    public void removeSong(Long id){
+    @Transactional()
+    public void removeSongConnections(Long id){
+
+        List<Artist> artistsToSave = new ArrayList<>();
+        List<Playlist> playlistsToSave = new ArrayList<>();
         Song song = this.getSongById(id);
         song.getArtists().forEach(entry -> {
+
             Artist artist = this.artistRepository.findById(entry.getId()).orElse(null);
             artist.getSongs().remove(song);
-            this.artistRepository.save(artist);
+            artistsToSave.add(artist);
         });
         song.getPlaylists().forEach(entry -> {
             Playlist playlist = this.playlistRepository.findById(entry.getId()).orElse(null);
             playlist.getSongs().remove(song);
-            this.playlistRepository.save(playlist);
+            playlistsToSave.add(playlist);
         });
+        this.playlistRepository.saveAll(playlistsToSave);
+        this.artistRepository.saveAll(artistsToSave);
         song.getArtists().clear();
         song.getPlaylists().clear();
         song.setAlbum(null);
         this.songRepository.save(song);
+    }
+    public void removeSong(Long id){
 
         this.songRepository.deleteById(id);
     }

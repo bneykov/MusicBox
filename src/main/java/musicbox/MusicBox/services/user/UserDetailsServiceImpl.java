@@ -1,5 +1,6 @@
 package musicbox.MusicBox.services.user;
 
+import musicbox.MusicBox.model.CustomUserDetails;
 import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.model.entity.UserRole;
 import musicbox.MusicBox.repositories.UserRepository;
@@ -23,23 +24,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .map(this::map).orElseThrow(() -> new UsernameNotFoundException("User with username "
-                + username +" doesn't exist!"));
+                        + username + " doesn't exist!"));
     }
-    private UserDetails map(UserEntity userEntity){
-        return new User(
+
+    private CustomUserDetails map(UserEntity userEntity) {
+        return new CustomUserDetails(
                 userEntity.getUsername(),
                 userEntity.getPassword(),
-               extractAuthorities(userEntity)
-        );
+                extractAuthorities(userEntity)
+        ).setName(userEntity.getName())
+                .setEmail(userEntity.getEmail())
+                .setImageUrl(userEntity.getImageUrl())
+                .setId(userEntity.getId());
     }
-    private List<GrantedAuthority> extractAuthorities(UserEntity userEntity){
+
+    private List<GrantedAuthority> extractAuthorities(UserEntity userEntity) {
         return userEntity
                 .getRoles()
                 .stream()
                 .map(this::mapRole)
                 .toList();
     }
-    private GrantedAuthority mapRole(UserRole userRole){
+
+    private GrantedAuthority mapRole(UserRole userRole) {
         return new SimpleGrantedAuthority("ROLE_" + userRole.getRole().name());
     }
 }

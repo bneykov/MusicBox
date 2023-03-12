@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Getter
@@ -26,6 +27,15 @@ public abstract class BaseEntity {
 
     @Column()
     private LocalDateTime created;
+
+    public String getCreated() {
+        return created.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+    }
+
+    public String getModified() {
+        return modified.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+    }
+
     @Column
     private LocalDateTime modified;
 

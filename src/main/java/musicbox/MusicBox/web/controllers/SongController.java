@@ -64,6 +64,7 @@ public class SongController {
     }
     @GetMapping("/remove/{id}")
     private String removeSong(@PathVariable Long id) {
+       this.songService.removeSongConnections(id);
        this.songService.removeSong(id);
         return "redirect:/songs/all";
 

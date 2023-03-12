@@ -13,25 +13,25 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
             <div class="col-12">
                 <h2 th:if="${songId == null}" class="text-light mb-3  text-center">My Playlists</h2>
-                <h2 th:unless="${songId == null}" class="text-light mb-3  text-center">Add song to playlist</h2>
+                <h2 th:unless="${songId == null}" class="text-light mb-3  text-center">Select a playlist</h2>
                     <div class="col text-center mb-3">
                         <a th:href="@{/playlists/add}" class="btn btn-primary">Create New</a>
                     </div>
             </div>
 
 
-            <!-- Playlists -->
+
             <div th:each="playlist:${playlists}" class="col">
                 <div class="card bg-light text-dark mb-3">
 
                     <a th:if="${songId == null}" th:href="@{/playlists/{id}(id = *{playlist.id})}" class="card-img-top">
-                    <img src="https://i.pinimg.com/originals/19/f7/68/19f76854a898d32735a5cfdc2d2fc262.jpg"
+                    <img th:src="${playlist.imageUrl}"
                          class="card-img-top" alt="">
                     </a>
                     <a th:unless="${songId == null}"
                        th:href="@{/playlists/{playlistId}/add/{songId}(playlistId = *{playlist.id}, songId = ${songId})}"
                        class="card-img-top">
-                        <img src="https://i.pinimg.com/originals/19/f7/68/19f76854a898d32735a5cfdc2d2fc262.jpg"
+                        <img th:src="${playlist.imageUrl}"
                              class="card-img-top" alt="">
                     </a>
                     <div class="card-body">

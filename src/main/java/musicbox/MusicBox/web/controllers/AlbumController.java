@@ -6,6 +6,7 @@ import musicbox.MusicBox.model.entity.Album;
 import musicbox.MusicBox.model.entity.Artist;
 import musicbox.MusicBox.services.album.AlbumService;
 import musicbox.MusicBox.services.artist.ArtistService;
+import musicbox.MusicBox.utils.ObjectNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,8 +40,21 @@ public class AlbumController {
 
         return "view-all";
     }
+    @GetMapping("/{id}")
+    public String album(Model model, @PathVariable Long id) {
+        if (this.albumService.getAlbumById(id) == null) {
+            throw new ObjectNotFoundException(id, "Album");
+        }
+        model.addAttribute("title", "Songs");
+        model.addAttribute("songs", this.albumService.getSongsByAlbumId(id));
+
+        return "view-all";
+    }
     @GetMapping("/remove/{id}")
     private String removeAlbum(@PathVariable Long id){
+        if (this.albumService.getAlbumById(id) == null) {
+            throw new ObjectNotFoundException(id, "Album");
+        }
         this.albumService.removeAlbum(id);
         return "redirect:/albums/all";
     }

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head th:replace="fragments/commons::head">
+</head>
+<body>
+
+<div>
+    <header th:replace="fragments/commons::nav"></header>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card bg-secondary text-white text-center">
+                    <div class="card-body">
+                        <img th:src="${currentUser.imageUrl}" class="rounded-circle mb-3 card-img" alt="Profile Picture">
+                        <h5 th:text="${currentUser.name}" class="card-title ">Name</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card bg-secondary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4 text-center">Profile info</h5>
+                        <form>
+                            <div class="row mb-3">
+                                <label for="name" class="col-sm-3 col-form-label">Name</label>
+                                <div class="col-sm-9">
+                                    <span type="text" class="form-control" id="name" th:text="${currentUser.name}">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="username" class="col-sm-3 col-form-label">Username</label>
+                                <div class="col-sm-9">
+                                    <span type="text" class="form-control" id="username"
+                                           th:text="${currentUser.username}">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                <div class="col-sm-9">
+                                    <span
+                                            type="email" class="form-control" id="email"
+                                           th:text="${currentUser.email}">
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+<!--                        <form-->
+<!--                                th:method="put"-->
+<!--                                th:action="@{/users/{id}/edit (id = ${currentUser.id})}"-->
+<!--                                th:object="${editProfileDTO}">-->
+<!--                            <div class="row mb-3">-->
+<!--                                <label for="name" class="col-sm-3 col-form-label">Name</label>-->
+<!--                                <div class="col-sm-9">-->
+<!--                                    <input  th:field="*{name}" th:errorclass="'is-invalid alert-danger'"-->
+<!--                                            type="text" class="form-control" id="name" th:value="${currentUser.name}">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="row mb-3">-->
+<!--                                <label for="username" class="col-sm-3 col-form-label">Username</label>-->
+<!--                                <div class="col-sm-9">-->
+<!--                                    <input th:field="*{username}" th:errorclass="'is-invalid alert-danger'"-->
+<!--                                           type="text" class="form-control" id="username"-->
+<!--                                           th:value="${currentUser.username}">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="row mb-3">-->
+<!--                                <label for="email" class="col-sm-3 col-form-label">Email</label>-->
+<!--                                <div class="col-sm-9">-->
+<!--                                    <input  th:field="*{email}" th:errorclass="'is-invalid alert-danger'"-->
+<!--                                            type="email" class="form-control" id="email"-->
+<!--                                            th:value="${currentUser.email}">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="row mb-3">-->
+<!--                                <label for="currentPassword" class="col-sm-3 col-form-label">Current Password</label>-->
+<!--                                <div class="col-sm-9">-->
+<!--                                    <input  th:field="*{currentPassword}" th:errorclass="'is-invalid alert-danger'"-->
+<!--                                            type="password" class="form-control" id="currentPassword" >-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="row mb-3">-->
+<!--                                <label for="newPassword" class="col-sm-3 col-form-label">New Password</label>-->
+<!--                                <div class="col-sm-9">-->
+<!--                                    <input th:field="*{password}" th:errorclass="'is-invalid alert-danger'"-->
+<!--                                           type="password"-->
+<!--                                           class="form-control"-->
+<!--                                           id="newPassword">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="row mb-3">-->
+<!--                                <label for="confirmPassword" class="col-sm-3 col-form-label">Confirm Password</label>-->
+<!--                                <div class="col-sm-9">-->
+<!--                                    <input  th:field="*{confirmPassword}" th:errorclass="'is-invalid alert-danger'"-->
+<!--                                            type="password" class="form-control" id="confirmPassword">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <button type="submit" class="btn btn-primary form-control">Save Changes</button>-->
+<!--                        </form>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

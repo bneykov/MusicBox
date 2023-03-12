@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import musicbox.MusicBox.validation.annotation.UniqueArtistName;
 
 @Getter
 @Setter
@@ -13,7 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ArtistDTO {
     @NotNull
-    @Size(min = 2)
+    @UniqueArtistName
+    @Size(min = 3, max = 30, message = "Artist name length must be at between 3 and 30 characters")
     private String name;
     private String imageUrl;
 }

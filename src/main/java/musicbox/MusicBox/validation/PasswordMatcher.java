@@ -6,7 +6,7 @@ import musicbox.MusicBox.validation.annotation.PasswordMatch;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
-public class PasswordMather implements ConstraintValidator<PasswordMatch, Object> {
+public class PasswordMatcher implements ConstraintValidator<PasswordMatch, Object> {
 
     private String password;
     private String confirmPassword;
@@ -29,7 +29,7 @@ public class PasswordMather implements ConstraintValidator<PasswordMatch, Object
         Object confirmPasswordValue = beanWrapper.getPropertyValue(this.confirmPassword);
 
 
-        if (passwordValue != null && passwordValue.equals(confirmPasswordValue)) {
+        if (passwordValue == null || passwordValue.equals(confirmPasswordValue)) {
             return true;
         }
 

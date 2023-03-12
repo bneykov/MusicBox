@@ -17,8 +17,8 @@
             </div>
             <input th:field="*{name}" th:errorclass="'is-invalid alert-danger'"
                     type="text" class="form-control" id="name" name="name"/>
-            <small
-
+            <small th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}"
                     class="text-warning">Error message</small>
         </div>
         <div class="form-group">

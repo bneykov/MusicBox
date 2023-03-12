@@ -125,7 +125,7 @@ public class InitService {
                     .artists(Set.of(artist))
                     .created(LocalDateTime.now())
                     .modified(LocalDateTime.now())
-                    .cover("https://m.media-amazon.com/images/I/71maiXUoH2L._SX425_.jpg")
+                    .imageUrl("https://m.media-amazon.com/images/I/71maiXUoH2L._SX425_.jpg")
                     .build();
             this.albumRepository.save(album);
         }
@@ -142,7 +142,7 @@ public class InitService {
                     .artists(Set.of(artist))
                     .album(album)
                     .genre(Genre.POP)
-                    .length(226)
+                    .duration(226)
                     .playlists(new HashSet<>())
                     .created(LocalDateTime.now())
                     .modified(LocalDateTime.now())

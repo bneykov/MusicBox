@@ -31,10 +31,10 @@ public class UserRegisterDTO {
     @NotEmpty(message = "Enter a valid email address")
     private String email;
     @NotNull
-    @Size(min = 6, message = "Password length must be at least 7 characters long")
+    @Size(min = 7, message = "Password length must be at least 7 characters long")
     private String password;
     private String confirmPassword;
-    private String image;
+    private String imageUrl;
 
 
 }

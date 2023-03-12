@@ -2,7 +2,9 @@ package musicbox.MusicBox.services.artist;
 
 import jakarta.transaction.Transactional;
 import musicbox.MusicBox.model.dto.ArtistDTO;
+import musicbox.MusicBox.model.entity.Album;
 import musicbox.MusicBox.model.entity.Artist;
+import musicbox.MusicBox.repositories.AlbumRepository;
 import musicbox.MusicBox.repositories.ArtistRepository;
 import musicbox.MusicBox.repositories.PlaylistRepository;
 import musicbox.MusicBox.repositories.SongRepository;
@@ -13,17 +15,20 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ArtistService {
     private final ArtistRepository artistRepository;
     private final ModelMapper modelMapper;
     private final SongRepository songRepository;
+    private final AlbumRepository albumRepository;
 private final PlaylistRepository playlistRepository;
-    public ArtistService(ArtistRepository artistRepository, ModelMapper modelMapper, SongRepository songRepository, PlaylistRepository playlistRepository) {
+    public ArtistService(ArtistRepository artistRepository, ModelMapper modelMapper, SongRepository songRepository, AlbumRepository albumRepository, PlaylistRepository playlistRepository) {
         this.artistRepository = artistRepository;
         this.modelMapper = modelMapper;
         this.songRepository = songRepository;
+        this.albumRepository = albumRepository;
         this.playlistRepository = playlistRepository;
     }
 
@@ -35,8 +40,11 @@ private final PlaylistRepository playlistRepository;
         return this.artistRepository.findAll().stream().limit(6).toList();
     }
 
-    public Artist findById(Long id) {
+    public Artist getArtistById(Long id) {
         return this.artistRepository.findById(id).orElse(null);
+    }
+    public Set<Album> getAlbumsByArtistId(Long id){
+        return this.albumRepository.findAllByArtistId(id);
     }
 
     public void addArtist(ArtistDTO artistDTO) {
@@ -52,7 +60,7 @@ private final PlaylistRepository playlistRepository;
 
     @Transactional
     public void removeArtist(Long id) {
-        Artist artist = this.artistRepository.findById(id).orElse(null);
+        Artist artist = this.getArtistById(id);
         AlbumService.removeSongsFromMappedEntity(artist.getSongs(), this.songRepository, this.playlistRepository);
         this.artistRepository.deleteById(id);
     }

@@ -1,6 +1,7 @@
 package musicbox.MusicBox.services.playlist;
 
 import jakarta.transaction.Transactional;
+import musicbox.MusicBox.model.CustomUserDetails;
 import musicbox.MusicBox.model.dto.PlaylistDTO;
 import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.model.entity.Song;
@@ -11,7 +12,6 @@ import musicbox.MusicBox.services.song.SongService;
 import musicbox.MusicBox.services.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class PlaylistService {
         return this.playlistRepository.findAllByUserEntityId(id);
     }
 
-    public Playlist getById(Long id) {
+    public Playlist getPlaylistById(Long id) {
         return this.playlistRepository.findById(id).orElse(null);
     }
 
@@ -45,18 +45,23 @@ public class PlaylistService {
         this.songRepository = songRepository;
     }
 
-    public void addPlaylist(PlaylistDTO playlistDTO, UserDetails userDetails) {
+    @Transactional
+    public boolean addPlaylist(PlaylistDTO playlistDTO, CustomUserDetails userDetails) {
         Playlist playlist = this.modelMapper.map(playlistDTO, Playlist.class);
-        UserEntity owner = this.userService.findByUsername(userDetails.getUsername());
+        UserEntity owner = this.userService.getUserById(userDetails.getId());
+        if (owner.getPlaylists().stream().anyMatch(playlist1 -> playlist1.getName().equals(playlist.getName()))) {
+            return false;
+        }
         playlist.setUserEntity(owner);
         playlist.setCreated(LocalDateTime.now());
         playlist.setModified(LocalDateTime.now());
         playlist.setSongs(new HashSet<>());
         this.playlistRepository.save(playlist);
+        return true;
     }
 
     public void addSongToPlaylist(Long playlistId, Long songId) {
-        Playlist playlist = this.playlistRepository.findById(playlistId).orElse(null);
+        Playlist playlist = this.getPlaylistById(playlistId);
         Song song = this.songService.getSongById(songId);
         playlist.getSongs().add(song);
         playlist.setModified(LocalDateTime.now());
@@ -65,7 +70,7 @@ public class PlaylistService {
 
     @Transactional
     public void removeSongFromPlaylist(Long playlistId, Long songId) {
-        Playlist playlist = this.playlistRepository.findById(playlistId).orElse(null);
+        Playlist playlist = this.getPlaylistById(playlistId);
         Song song = this.songService.getSongById(songId);
         playlist.getSongs().remove(song);
         playlist.setModified(LocalDateTime.now());

@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +44,12 @@ public class AlbumService {
     public List<Album> getHomeAlbums() {
         return this.albumRepository.findAll().stream().limit(6).toList();
     }
+    public Set<Song> getSongsByAlbumId(Long id){
+        return this.songRepository.findAllByAlbumId(id);
+    }
+    public Album getAlbumById(Long id){
+        return this.albumRepository.findById(id).orElse(null);
+    }
 
     public void addAlbum(AlbumDTO albumDTO) {
         Album album = this.modelMapper.map(albumDTO, Album.class);
@@ -53,7 +58,7 @@ public class AlbumService {
         album.setSongs(new HashSet<>());
         album.setArtists(new HashSet<>());
         albumDTO.getArtists().forEach(artistId -> {
-            Artist artist = this.artistService.findById(artistId);
+            Artist artist = this.artistService.getArtistById(artistId);
             album.getArtists().add(artist);
         });
         this.modelMapper.map(album, Album.class);
@@ -65,7 +70,7 @@ public class AlbumService {
         Album album = this.albumRepository.findById(id).orElse(null);
         removeSongsFromMappedEntity(album.getSongs(), this.songRepository, this.playlistRepository);
         album.getArtists().forEach(entry -> {
-            Artist artist = this.artistService.findById(entry.getId());
+            Artist artist = this.artistService.getArtistById(entry.getId());
             artist.getAlbums().remove(album);
             this.artistRepository.save(artist);
         });
@@ -82,6 +87,7 @@ public class AlbumService {
                 playlistRepository.save(playlist);
             });
             song.getPlaylists().clear();
+            song.getArtists().clear();
             songRepository.save(song);
 
         });

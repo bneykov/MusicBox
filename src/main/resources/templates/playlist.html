@@ -12,18 +12,37 @@
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
             <div class="col-12">
-                <h2 class="text-light mb-3  text-center">Playlist name length</h2>
+                <h2 th:text="${currentPlaylist.name}" class="text-light mb-3  text-center"></h2>
+                <h2 th:if="${songs.isEmpty()}" class="text-warning mb-3 mt-5  text-center">
+                   Let's add some songs!
+
+                </h2>
+                <div class="col text-center">
+                <a th:if="${songs.isEmpty()}"
+                   class="btn btn-lg btn-success mt-3 mb-3" href="/songs/all" role="button">Explore songs</a>
+                </div>
+                <h3 th:if="${!songs.isEmpty()}"
+                        th:text="|Duration: ${currentPlaylist.playlistDurationFormat}|"
+                    class="text-light mb-3  text-center"></h3>
             </div>
             <!-- Playlists -->
-            <table class="table table-striped text-light">
+            <table th:if="${!songs.isEmpty()}" class="table table-striped text-light">
 
                 <tbody>
+                <tr class="text-light text-center">
+                    <th>Title</th>
+                    <th>Contributing artists</th>
+                    <th>Album</th>
+                    <th>Duration</th>
+                    <th>Action</th>
+                </tr>
                 <tr th:each="song: ${songs}" class="text-light text-center">
                     <td th:text="${song.title}">Song Title</td>
                     <td th:text="${song.getArtistsNames()}">Artists</td>
                     <td th:text="${song.album.name}">Album</td>
-                    <td th:text="${song.length}">Length</td>
-                    <td><a th:href="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${playlistId}, songId = *{song.id})}"
+                    <td th:text="${song.formattedDuration}">Duration</td>
+                    <td><a
+                            th:href="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${currentPlaylist.id}, songId = *{song.id})}"
                            class="btn btn-danger">Remove</a></td>
                 </tr>
                 </tbody>

@@ -1,7 +1,6 @@
 package musicbox.MusicBox.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import musicbox.MusicBox.model.enums.Genre;
 
-import java.io.FileReader;
-import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -34,7 +30,7 @@ public class Song extends BaseEntity {
 
     @NotNull
     @Column
-    private int length;
+    private int duration;
 
     @Column
     private String imageUrl;
@@ -58,6 +54,17 @@ public class Song extends BaseEntity {
         StringBuilder stringBuilder = new StringBuilder();
         this.artists.forEach(artist -> stringBuilder.append(artist.getName()).append(", "));
         return stringBuilder.substring(0, stringBuilder.length() - 2);
+    }
+    @PrePersist
+    public void setDefaultValue(){
+        if (this.imageUrl == null) {
+            this.imageUrl = "/images/generic_song.jpg";
+        }
+    }
+    public String getFormattedDuration(){
+        int minutes = duration /60;
+        int seconds = duration % 60;
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
 }

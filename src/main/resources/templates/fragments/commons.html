@@ -34,9 +34,8 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto col-12 justify-content-between ">
-        <li class="nav-item"
-        >
-          <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/users/all}">All Users</a>
+        <li sec:authorize="hasRole('ADMIN')" class="nav-item">
+          <a class="nav-link"  th:href="@{/users/all}">All Users</a>
         </li>
         <li class="nav-item"
         >
@@ -48,8 +47,8 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/albums/all}">Albums</a>
         </li>
-        <li  class="nav-item">
-          <a class="nav-link" th:href="@{/playlists/all}">My Playlists</a>
+        <li sec:authorize="isAuthenticated()" class="nav-item">
+          <a  class="nav-link" th:href="@{/playlists/all}">My Playlists</a>
         </li>
         <li sec:authorize="isAuthenticated()" class="nav-item dropdown me-4">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="navbarDropdown" role="button"
