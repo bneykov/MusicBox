@@ -25,7 +25,6 @@ public class PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final UserService userService;
     private final SongService songService;
-    private final SongRepository songRepository;
 
     public Set<Playlist> getUserPlaylists(Long id) {
         return this.playlistRepository.findAllByUserEntityId(id);
@@ -37,12 +36,12 @@ public class PlaylistService {
 
     @Autowired
 
-    public PlaylistService(ModelMapper modelMapper, PlaylistRepository playlistRepository, UserService userService, SongService songService, SongRepository songRepository) {
+    public PlaylistService(ModelMapper modelMapper, PlaylistRepository playlistRepository, UserService userService, SongService songService) {
         this.modelMapper = modelMapper;
         this.playlistRepository = playlistRepository;
         this.userService = userService;
         this.songService = songService;
-        this.songRepository = songRepository;
+
     }
 
     @Transactional

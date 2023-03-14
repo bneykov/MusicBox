@@ -20,8 +20,8 @@
             <input th:field="*{title}" th:errorclass="'is-ivalid alert-danger'"
                    type="text" class="form-control" id="title" name="title"/>
             <small th:if="${#fields.hasErrors('title')}"
-                    th:errors="*{title}"
-                    class="text-warning">Title error message</small>
+                   th:errors="*{title}"
+                   class="text-warning">Title error message</small>
         </div>
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
@@ -32,7 +32,7 @@
                    name="duration"/>
             <small th:if="${#fields.hasErrors('duration')}"
                    th:errors="*{duration}"
-                    class="text-warning">Duration error message</small>
+                   class="text-warning">Duration error message</small>
         </div>
         <div class="form-group">
             <div class="text-white label-holder d-flex justify-content-center">
@@ -48,7 +48,7 @@
             </select>
             <small th:if="${#fields.hasErrors('genre')}"
                    th:errors="*{genre}"
-                    class="text-warning">Error message</small>
+                   class="text-warning">Error message</small>
         </div>
         <div class="form-group">
             <div class="text-white label-holder d-flex justify-content-center">
@@ -62,29 +62,30 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                     Select Artists
                 </button>
-                <ul class="dropdown-menu form-control " aria-labelledby="artistDropdown" id="artistsList">
+                <ul class="dropdown-menu form-control " aria-labelledby="artistDropdown" id="artistsList"
+                onclick="event.stopPropagation()">
 
-                    <input
-                            type="text" placeholder="Search artists" class="mb-2 form-control" id="artistSearch"
-                            name="artistSearch"/>
-                    <li>
-                        <div class="form-check" th:each="artist:${artists}">
-                            <input class="form-check-input artist-checkbox" type="checkbox" th:field="*{artists}"
-                                   th:value="${artist.id}"
-                                   th:id="${artist.id}">
-                            <label class="form-check-label" th:for="${artist.id}" th:text="${artist.name.trim()}">
+                    <input onkeyup="filterListByInput('artistsSearch', 'artists')"
+                           type="text" placeholder="Search artists" class="mb-2 form-control" id="artistsSearch"
+                           name="artistsSearch"/>
+                    <li id="artists" class="form-check" th:each="artist:${artists}">
 
-                            </label>
-                        </div>
+                        <input class="form-check-input artist-checkbox" onchange="selectArtists()"
+                               type="checkbox" th:field="*{artists}"
+                               th:value="${artist.id}"
+                               th:id="${'artist' + artist.id}">
+                        <label class="form-check-label" th:for="${'artist' + artist.id}" th:text="${artist.name.trim()}">
+
+                        </label>
+
                     </li>
 
                 </ul>
-                <small  th:if="${#fields.hasErrors('artists')}"
-                        th:errors="*{artists}"
-                        class="text-warning">Error message</small>
+                <small th:if="${#fields.hasErrors('artists')}"
+                       th:errors="*{artists}"
+                       class="text-warning">Error message</small>
             </div>
         </div>
-
 
 
         <div class="form-group">
@@ -99,28 +100,30 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                     Select Album
                 </button>
-                <ul class="dropdown-menu form-control " aria-labelledby="albumDropdown" id="albumsList">
+                <ul     onclick="event.stopPropagation()"
+                        class="dropdown-menu form-control " aria-labelledby="albumDropdown" id="albumsList">
 
                     <input
-                            type="text" placeholder="Search artists" class="mb-2 form-control" id="albumSearch"
+                            type="text" placeholder="Search albums" onkeyup="filterListByInput('albumSearch', 'albums')"
+                            class="mb-2 form-control" id="albumSearch"
                             name="albumSearch"/>
-                    <li>
-                        <div class="form-range"  th:each="album:${albums}">
-                            <input class="form-check-input album-radio" type="radio" th:field="*{album}"
-                                   th:value="${album.id}"
-                                   th:id="${album.id}">
-                            <label class="form-check-label" th:for="${album.id}" th:text="${album.name.trim()}">
+                    <li id="albums" class="form-range" th:each="album:${albums}">
 
-                            </label>
-                        </div>
+                        <input  onchange="selectAlbum()"
+                                class="form-check-input album-radio" type="radio" th:field="*{album}"
+                               th:value="${album.id}"
+                               th:id="${'album' + album.id}">
+                        <label class="form-label"  th:for="${'album' + album.id}" th:text="${album.name.trim()}">
+                        </label>
+
                     </li>
 
                 </ul>
 
             </div>
-            <small  th:if="${#fields.hasErrors('album')}"
-                    th:errors="*{album}"
-                    class="text-warning">Error message</small>
+            <small th:if="${#fields.hasErrors('album')}"
+                   th:errors="*{album}"
+                   class="text-warning">Error message</small>
         </div>
 
         <div class="button-holder d-flex justify-content-center mt-2">
@@ -130,9 +133,6 @@
 </main>
 
 <script src="/js/main.js">
-
-
-
 </script>
 
 

@@ -37,9 +37,4 @@ public class UserEntity extends Person {
     @OneToMany(mappedBy = "userEntity")
     private Set<Playlist> playlists;
 
-    public UserEntity addRole(UserRole userRole){
-        this.roles.add(userRole);
-        return this;
-    }
-
 }

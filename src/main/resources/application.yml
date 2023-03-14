@@ -3,6 +3,7 @@ logging:
         blog: WARN
         org: WARN
         org.hibernate.SQL: DEBUG
+        org.springframework.security.web.csrf: DEBUG
 spring:
     datasource:
         driverClassName: com.mysql.cj.jdbc.Driver

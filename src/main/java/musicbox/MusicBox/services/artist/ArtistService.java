@@ -61,6 +61,11 @@ private final PlaylistRepository playlistRepository;
     @Transactional
     public void removeArtist(Long id) {
         Artist artist = this.getArtistById(id);
+        artist.getAlbums().forEach(entry -> {
+            Album album = this.albumRepository.findById(entry.getId()).orElse(null);
+            album.getArtists().remove(artist);
+            this.albumRepository.save(album);
+        });
         AlbumService.removeSongsFromMappedEntity(artist.getSongs(), this.songRepository, this.playlistRepository);
         this.artistRepository.deleteById(id);
     }

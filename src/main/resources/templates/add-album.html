@@ -13,7 +13,7 @@
           th:object="${albumDTO}">
         <div class="form-group">
             <div class="label-holder textCol d-flex justify-content-center">
-                <label for="name" class="h4 mb-2">Name</label>
+                <label for="name" class="h4 mb-3">Name</label>
             </div>
             <input th:field="*{name}" th:errorclass="'is-invalid alert-danger'"
                     type="text" class="form-control" id="name" name="name"/>
@@ -23,7 +23,7 @@
         </div>
         <div class="form-group">
             <div class="text-white label-holder d-flex justify-content-center">
-                <label for="artistDropdown" class="h4 mb-2">Contributing Artists</label>
+                <label for="artistDropdown" class="h4 mb-3 mt-3">Contributing Artists</label>
             </div>
             <div class="dropdown">
                 <button th:errorclass="'is-invalid alert-danger'"
@@ -33,21 +33,22 @@
                         data-bs-toggle="dropdown" aria-expanded="false">
                     Select Artists
                 </button>
-                <ul class="dropdown-menu form-control " aria-labelledby="artistDropdown" id="artistsList">
+                <ul class="dropdown-menu form-control " aria-labelledby="artistDropdown" id="artistsList"
+                onclick="event.stopPropagation()">
 
-                    <input
-                            type="text" placeholder="Search artists" class="mb-2 form-control" id="artistSearch"
-                            name="artistSearch"/>
-                    <li >
-                        <div th:each="artist:${artists}" class="form-check">
-                            <input class="form-check-input artist-checkbox" type="checkbox"
-                                   th:value="${artist.id}"
-                                   th:id="${artist.id}"
-                                   th:field="*{artists}">
-                            <label class="form-check-label" th:text="${artist.name.trim()}" th:for="${artist.id}">
+                    <input  onkeyup="filterListByInput('artistsSearch', 'artists')"
+                            type="text" placeholder="Search artists" class="mb-2 form-control" id="artistsSearch"
+                            name="artistsSearch"/>
+                    <li id="artists" class="form-check" th:each="artist:${artists}">
 
-                            </label>
-                        </div>
+                        <input class="form-check-input artist-checkbox" onchange="selectArtists()"
+                               type="checkbox" th:field="*{artists}"
+                               th:value="${artist.id}"
+                               th:id="${'artist' + artist.id}">
+                        <label class="form-check-label" th:for="${'artist' + artist.id}" th:text="${artist.name.trim()}">
+
+                        </label>
+
                     </li>
 
                 </ul>

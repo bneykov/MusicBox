@@ -23,14 +23,17 @@ import org.springframework.security.web.context.SecurityContextRepository;
 public class SecurityConfiguration {
     private final UserRepository userRepository;
 
+
     public SecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity
+    public SecurityFilterChain filterChain(HttpSecurity http
             , SecurityContextRepository securityContextRepository) throws Exception {
-        httpSecurity
+        http
+
                 .authorizeHttpRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/", "/albums/all", "/songs/all", "/artists/all").permitAll()
@@ -51,8 +54,11 @@ public class SecurityConfiguration {
                 .invalidateHttpSession(true).and()
                 .securityContext()
                 .securityContextRepository(securityContextRepository);
-        return httpSecurity.build();
+       http.headers().xssProtection();
+
+        return http.build();
     }
+
 
     @Bean
     public SecurityContextRepository securityContextRepository() {
@@ -67,5 +73,6 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService(){
         return new UserDetailsServiceImpl(userRepository);
     }
+
 
 }

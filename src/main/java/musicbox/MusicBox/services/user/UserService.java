@@ -1,6 +1,7 @@
 package musicbox.MusicBox.services.user;
 
 import musicbox.MusicBox.model.dto.UserRegisterDTO;
+import musicbox.MusicBox.model.dto.UserViewDTO;
 import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.model.entity.UserRole;
 import musicbox.MusicBox.model.enums.RoleEnum;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -47,12 +49,12 @@ public class UserService {
         return this.userRepository.findById(id).orElseThrow();
     }
 
-    public UserEntity findByUsername(String username) {
-        return this.userRepository.findByUsername(username).orElseThrow();
-    }
-
     public List<UserEntity> getUsers() {
         return this.userRepository.findAll();
+    }
+
+    public List<UserViewDTO> mapUsers(List<UserEntity> users){
+        return users.stream().map(user -> this.modelMapper.map(user, UserViewDTO.class)).toList();
     }
 
     public void changeRole(Long id) {

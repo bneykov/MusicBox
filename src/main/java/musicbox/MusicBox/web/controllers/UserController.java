@@ -93,7 +93,7 @@ public class UserController {
         return "redirect:/home";
     }
 
-    @PostMapping("/{id}/change_role")
+    @GetMapping("/{id}/change_role")
     public String changeRole(@PathVariable Long id) {
         if (this.userService.getUserById(id) == null) {
             throw new ObjectNotFoundException(id, "User");

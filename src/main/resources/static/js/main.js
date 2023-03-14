@@ -1,42 +1,49 @@
-$(document).ready(function () {
-    $('#artistSearch').keyup(function () {
-        let inputVal = $(this).val().toLowerCase();
-        let items = document.getElementsByClassName("form-check");
 
-        for (let i = 0; i < items.length; i++) {
 
-            let label = items[i].getElementsByTagName("label")[0];
+function filterListByInput(inputId, listId) {
+    const inputField = document.getElementById(inputId);
+    const filter = inputField.value.toLowerCase();
+    const lists = document.querySelectorAll('#' + listId);
 
-            if (label.innerHTML.toLowerCase().indexOf(inputVal) > -1) {
-                items[i].style.display = "";
-            } else {
-                items[i].style.display = "none";
-            }
+    lists.forEach((li) => {
+        const label = li.querySelector('label')
+        const labelText = label.textContent.toLowerCase();
+        if (labelText.includes(filter)) {
+            li.style.display = '';
+        } else {
+            li.style.display = 'none';
         }
-
-
     });
+}
 
+function selectArtists() {
+    let selectedArtists = $("input.artist-checkbox:checked").map(function () {
+        return $(this).siblings("label").text()
+    }).get();
+    selectedArtists = selectedArtists.join(", ")
 
-    $('#artistsList').on('click', function (event) {
-        event.stopPropagation();
-    });
-    $(".artist-checkbox").change( function () {
+    if (selectedArtists.length > 38) {
+        selectedArtists = selectedArtists.substring(0, 38) + "...";
+        $("#artistDropdown").text(selectedArtists);
+    } else if (selectedArtists.length > 0) {
+        $("#artistDropdown").text(selectedArtists);
+    } else {
+        $("#artistDropdown").text("Select Artists");
+    }
+}
 
-        let selectedArtists = $("input.artist-checkbox:checked").map(function () {
-            return $(this).siblings("label").text()
-        }).get();
-        selectedArtists = selectedArtists.join(", ")
+function selectAlbum() {
+    let selectedAlbum = $("input.album-radio:checked").map(function () {
+        return $(this).siblings("label").text()
+    }).get();
 
-        if (selectedArtists.length > 38) {
-            selectedArtists = selectedArtists.substring(0, 38) + "...";
-            $("#artistDropdown").text(selectedArtists);
-        } else if (selectedArtists.length > 0) {
-            $("#artistDropdown").text(selectedArtists);
-        } else{
-            $("#artistDropdown").text("Select Artists");
-        }
-
-    });
-
+     if (selectedAlbum.length > 0) {
+        $("#albumDropdown").text(selectedAlbum);
+    } else {
+        $("#albumDropdown").text("Select Album");
+    }
+}
+$(document).ready(function() {
+    selectArtists();
+    selectAlbum();
 });
