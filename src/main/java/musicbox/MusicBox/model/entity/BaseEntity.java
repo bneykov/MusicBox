@@ -27,6 +27,8 @@ public abstract class BaseEntity {
 
     @Column()
     private LocalDateTime created;
+    @Column
+    private LocalDateTime modified;
 
     public String getCreated() {
         return created.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
@@ -36,8 +38,8 @@ public abstract class BaseEntity {
         return modified.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
     }
 
-    @Column
-    private LocalDateTime modified;
+
+
 
 
 }

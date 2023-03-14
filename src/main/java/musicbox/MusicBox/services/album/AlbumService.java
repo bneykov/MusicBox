@@ -88,6 +88,7 @@ public class AlbumService {
             });
             song.getPlaylists().clear();
             song.getArtists().clear();
+            song.setAlbum(null);
             songRepository.save(song);
 
         });

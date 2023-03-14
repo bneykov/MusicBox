@@ -51,7 +51,7 @@ public class SongService {
     public List<Song> getHomeSongs(){
         return this.songRepository.findAll().stream().limit(6).toList();
     }
-
+   //TODO: set song artists via album.getArtists() instead of DTO input
     @Transactional
     public void addSong(SongDTO songDTO){
         Song song = this.modelMapper.map(songDTO, Song.class);

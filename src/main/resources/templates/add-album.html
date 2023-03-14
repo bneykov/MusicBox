@@ -8,6 +8,7 @@
 
 
     <form class="mx-auto w-25 bg-blur rounded"
+          th:enctype="'multipart/form-data'"
           th:method="post"
           th:action="@{/albums/add}"
           th:object="${albumDTO}">
@@ -56,6 +57,12 @@
                         th:errors="*{artists}"
                         class="text-warning">Error message</small>
             </div>
+        </div>
+        <div class="form-group mb-3" >
+            <div class="text-white label-holder d-flex justify-content-center mt-3">
+                <label for="image" class="h4 mb-2">Select image</label>
+            </div>
+            <input th:field="*{image}" value="Choose image" type="file" name="image" accept="image/*" id="image"/>
         </div>
 
         <div class="button-holder d-flex justify-content-center mt-2">

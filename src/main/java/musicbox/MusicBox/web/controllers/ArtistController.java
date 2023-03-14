@@ -2,22 +2,29 @@ package musicbox.MusicBox.web.controllers;
 
 import jakarta.validation.Valid;
 import musicbox.MusicBox.model.dto.ArtistDTO;
-import musicbox.MusicBox.model.entity.Artist;
 import musicbox.MusicBox.services.artist.ArtistService;
+import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 import musicbox.MusicBox.utils.ObjectNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/artists")
 public class ArtistController {
     private final ArtistService artistService;
+    private final CloudinaryService cloudinaryService;
 
-    public ArtistController(ArtistService artistService) {
+    public ArtistController(ArtistService artistService, CloudinaryService cloudinaryService) {
         this.artistService = artistService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @ModelAttribute("artistDTO")
@@ -39,6 +46,7 @@ public class ArtistController {
 
         return "view-all";
     }
+
     @GetMapping("/{id}")
     public String artist(Model model, @PathVariable Long id) {
         if (this.artistService.getArtistById(id) == null) {
@@ -48,8 +56,9 @@ public class ArtistController {
         model.addAttribute("albums", this.artistService.getAlbumsByArtistId(id));
         return "view-all";
     }
+
     @GetMapping("/remove/{id}")
-    private String removeArtist(@PathVariable Long id){
+    private String removeArtist(@PathVariable Long id) {
         if (this.artistService.getArtistById(id) == null) {
             throw new ObjectNotFoundException(id, "Artist");
         }
@@ -59,7 +68,11 @@ public class ArtistController {
 
     @PostMapping("/add")
     private String addArtist(@Valid ArtistDTO artistDTO, BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) {
+                             RedirectAttributes redirectAttributes) throws IOException {
+        if (artistDTO.getImage().isEmpty()) {
+            bindingResult.addError(new FieldError("artistDTO", "image"
+                    , "Please select an image"));
+        }
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("artistDTO", artistDTO);
             redirectAttributes
@@ -67,6 +80,12 @@ public class ArtistController {
                             "org.springframework.validation.BindingResult.artistDTO", bindingResult);
             return "redirect:/artists/add";
         }
+        File image = File.createTempFile("temp", null);
+        artistDTO.getImage().transferTo(image);
+        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
+        artistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
+        artistDTO.setImageUUID(imageUploadResponse.get("public"));
+
         this.artistService.addArtist(artistDTO);
         return "redirect:/home";
 

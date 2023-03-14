@@ -15,6 +15,7 @@ public class UserViewDTO {
     private String name;
     private String modified;
     private String email;
-
+    private String imageUrl;
+    private String imageUUID;
     private List<UserRole> roles;
 }
