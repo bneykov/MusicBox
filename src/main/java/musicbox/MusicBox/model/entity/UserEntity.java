@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class UserEntity extends Person {
+public class UserEntity extends BaseImage {
     @NotNull
     @Column(unique = true)
     private String username;
@@ -36,5 +36,10 @@ public class UserEntity extends Person {
 
     @OneToMany(mappedBy = "userEntity")
     private Set<Playlist> playlists;
+
+
+    public void setDefaultImage(){
+
+    }
 
 }

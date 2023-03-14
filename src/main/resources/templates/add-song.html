@@ -10,17 +10,18 @@
 <main class="container">
 
     <form class="mx-auto w-25 bg-blur rounded"
+          th:enctype="'multipart/form-data'"
           th:method="post"
           th:action="@{/songs/add}"
           th:object="${songDTO}">
         <div class="form-group">
             <div class="label-holder textCol d-flex justify-content-center">
-                <label for="title" class="h5 mb-2">Title</label>
+                <label for="name" class="h5 mb-2">Title</label>
             </div>
-            <input th:field="*{title}" th:errorclass="'is-ivalid alert-danger'"
-                   type="text" class="form-control" id="title" name="title"/>
-            <small th:if="${#fields.hasErrors('title')}"
-                   th:errors="*{title}"
+            <input th:field="*{name}" th:errorclass="'is-ivalid alert-danger'"
+                   type="text" class="form-control" id="name" name="name"/>
+            <small th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}"
                    class="text-warning">Title error message</small>
         </div>
         <div class="form-group">
@@ -36,7 +37,7 @@
         </div>
         <div class="form-group">
             <div class="text-white label-holder d-flex justify-content-center">
-                <label for="genre" class="h4 mb-2">Genre</label>
+                <label for="genre" class="h5 mb-2">Genre</label>
             </div>
             <select th:field="*{genre}" th:errorclass="'is-invalid alert-danger'"
                     class="browser-default form-select" id="genre" name="genre">
@@ -52,7 +53,7 @@
         </div>
         <div class="form-group">
             <div class="text-white label-holder d-flex justify-content-center">
-                <label for="artistDropdown" class="h4 mb-2">Contributing Artists</label>
+                <label for="artistDropdown" class="h5 mb-2">Contributing Artists</label>
             </div>
             <div class="dropdown">
                 <button th:errorclass="'is-invalid alert-danger'"
@@ -88,9 +89,10 @@
         </div>
 
 
+
         <div class="form-group">
             <div class="text-white label-holder d-flex justify-content-center">
-                <label for="albumDropdown" class="h4 mb-2">Album</label>
+                <label for="albumDropdown" class="h5 mb-2">Album</label>
             </div>
             <div class="dropdown">
                 <button th:errorclass="'is-invalid alert-danger'"
@@ -124,6 +126,14 @@
             <small th:if="${#fields.hasErrors('album')}"
                    th:errors="*{album}"
                    class="text-warning">Error message</small>
+        </div>
+
+
+        <div class="form-group mb-3" >
+            <div class="text-white label-holder d-flex justify-content-center mt-3">
+            <label for="image" class="h5 mb-2">Select image</label>
+            </div>
+            <input th:field="*{image}" value="Choose image" type="file" name="image" accept="image/*" id="image"/>
         </div>
 
         <div class="button-holder d-flex justify-content-center mt-2">

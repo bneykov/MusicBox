@@ -4,11 +4,12 @@ import jakarta.transaction.Transactional;
 import musicbox.MusicBox.model.dto.ArtistDTO;
 import musicbox.MusicBox.model.entity.Album;
 import musicbox.MusicBox.model.entity.Artist;
+import musicbox.MusicBox.model.entity.Playlist;
+import musicbox.MusicBox.model.entity.Song;
 import musicbox.MusicBox.repositories.AlbumRepository;
 import musicbox.MusicBox.repositories.ArtistRepository;
 import musicbox.MusicBox.repositories.PlaylistRepository;
 import musicbox.MusicBox.repositories.SongRepository;
-import musicbox.MusicBox.services.album.AlbumService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,15 @@ public class ArtistService {
     private final ModelMapper modelMapper;
     private final SongRepository songRepository;
     private final AlbumRepository albumRepository;
-private final PlaylistRepository playlistRepository;
+    private final PlaylistRepository playlistRepository;
+
     public ArtistService(ArtistRepository artistRepository, ModelMapper modelMapper, SongRepository songRepository, AlbumRepository albumRepository, PlaylistRepository playlistRepository) {
         this.artistRepository = artistRepository;
         this.modelMapper = modelMapper;
         this.songRepository = songRepository;
         this.albumRepository = albumRepository;
         this.playlistRepository = playlistRepository;
+
     }
 
     public List<Artist> getArtists() {
@@ -43,7 +46,8 @@ private final PlaylistRepository playlistRepository;
     public Artist getArtistById(Long id) {
         return this.artistRepository.findById(id).orElse(null);
     }
-    public Set<Album> getAlbumsByArtistId(Long id){
+
+    public Set<Album> getAlbumsByArtistId(Long id) {
         return this.albumRepository.findAllByArtistId(id);
     }
 
@@ -66,7 +70,19 @@ private final PlaylistRepository playlistRepository;
             album.getArtists().remove(artist);
             this.albumRepository.save(album);
         });
-        AlbumService.removeSongsFromMappedEntity(artist.getSongs(), this.songRepository, this.playlistRepository);
+        artist.getSongs().forEach(element -> {
+            Song song = songRepository.findById(element.getId()).orElse(null);
+            song.getArtists().remove(artist);
+            if (song.getArtists().size() == 0) {
+                song.getPlaylists().forEach(entry -> {
+                    Playlist playlist = playlistRepository.findById(entry.getId()).orElse(null);
+                    playlist.getSongs().remove(song);
+                    playlistRepository.save(playlist);
+                });
+            }
+            songRepository.save(song);
+
+        });
         this.artistRepository.deleteById(id);
     }
 

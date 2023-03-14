@@ -38,10 +38,10 @@
                     <th>Action</th>
                 </tr>
                 <tr th:each="song: ${songs}" class="text-light text-center">
-                    <td th:text="${song.title}">Song Title</td>
+                    <td th:text="${song.getName()}">Song Title</td>
                     <td th:text="${song.getArtistsNames()}">Artists</td>
                     <td th:text="${song.album.name}">Album</td>
-                    <td th:text="${song.genre.value}">Album</td>
+                    <td th:text="${song.genre.value}">Genre</td>
                     <td th:text="${song.formattedDuration}">Duration</td>
                     <td><a
                             th:href="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${currentPlaylist.id}, songId = *{song.id})}"

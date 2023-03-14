@@ -19,14 +19,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "playlists")
-public class Playlist extends BaseEntity {
+public class Playlist extends BaseImage {
 
-    @NotNull
-    @Column
-    private String name;
-
-    @Column
-    private String imageUrl;
 
     @ManyToOne
     private UserEntity userEntity;
@@ -35,10 +29,15 @@ public class Playlist extends BaseEntity {
 
     private Set<Song> songs;
 
-    @PrePersist
-    public void setDefaultValue() {
-        if (this.imageUrl == null) {
-            this.imageUrl = "/images/generic_playlist.jpg";
+    public void removeSong(Song song){
+        this.songs.remove(song);
+        song.getPlaylists().remove(this);
+    }
+
+    @Override
+    public void setDefaultImage() {
+        if (this.getImageUrl() == null) {
+            this.setImageUrl("https://res.cloudinary.com/bneikov/image/upload/v1678816107/generic_playlist_jmjw1h.jpg");
         }
     }
 

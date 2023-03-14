@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -17,13 +16,20 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "artists")
-public class Artist extends Person {
+public class Artist extends BaseImage {
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
     private Set<Song> songs;
 
     @ManyToMany(mappedBy = "artists", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Album> albums;
+
+    public void removeSong(Song song){
+        this.songs.remove(song);
+        song.getArtists().remove(this);
+    }
+
+
 
 
 }

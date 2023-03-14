@@ -137,7 +137,7 @@ public class InitService {
             Album album = this.albumRepository.findById(1L).orElseThrow();
             Song song = Song.builder()
                     .id(1L)
-                    .title("Who says")
+                    .name("Who says")
                     .imageUrl("https://i.scdn.co/image/ab67616d0000b273fddfbee3aafd7fadab0e5460")
                     .artists(Set.of(artist))
                     .album(album)

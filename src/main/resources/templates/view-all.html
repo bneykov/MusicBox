@@ -27,7 +27,7 @@
                 <div class="card bg-light text-dark mb-3">
                     <img th:src="${song.imageUrl}" class="card-img-top" alt="">
                     <div class="card-body">
-                        <h5 th:text="${song.title}" class="card-title">Song Name</h5>
+                        <h5 th:text="${song.getName()}" class="card-title">Song Name</h5>
                         <p th:text="${song.album.name}" class="card-text">Album</p>
                         <p th:text="${song.getArtistsNames()}" class="card-text">Artists</p>
                         <a sec:authorize="isAuthenticated()"

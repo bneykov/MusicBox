@@ -2,10 +2,10 @@ package musicbox.MusicBox.web.controllers;
 
 import jakarta.validation.Valid;
 import musicbox.MusicBox.model.dto.SongDTO;
-import musicbox.MusicBox.model.entity.Song;
 import musicbox.MusicBox.model.enums.Genre;
 import musicbox.MusicBox.services.album.AlbumService;
 import musicbox.MusicBox.services.artist.ArtistService;
+import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 import musicbox.MusicBox.services.song.SongService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 
 @Controller
@@ -21,11 +24,13 @@ public class SongController {
     private final SongService songService;
     private final AlbumService albumService;
     private final ArtistService artistService;
+    private final CloudinaryService cloudinaryService;
 
-    public SongController(SongService songService, AlbumService albumService, ArtistService artistService) {
+    public SongController(SongService songService, AlbumService albumService, ArtistService artistService, CloudinaryService cloudinaryService) {
         this.songService = songService;
         this.albumService = albumService;
         this.artistService = artistService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @ModelAttribute("songDTO")
@@ -50,13 +55,20 @@ public class SongController {
     }
     @PostMapping("/add")
     private String addSong(@Valid SongDTO songDTO, BindingResult bindingResult,
-                              RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes) throws IOException {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("songDTO", songDTO);
             redirectAttributes
                     .addFlashAttribute(
                             "org.springframework.validation.BindingResult.songDTO", bindingResult);
             return "redirect:/songs/add";
+        }
+        if(!songDTO.getImage().isEmpty()) {
+            File image = File.createTempFile("temp", null);
+            songDTO.getImage().transferTo(image);
+            Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
+            songDTO.setImageUrl(imageUploadResponse.get("secure_url"));
+            songDTO.setImageUUID(imageUploadResponse.get("public"));
         }
         this.songService.addSong(songDTO);
         return "redirect:/home";

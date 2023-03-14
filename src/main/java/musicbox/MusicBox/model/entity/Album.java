@@ -17,12 +17,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "albums")
-public class Album extends BaseEntity {
-    @NotEmpty
-    @Column
-    private String name;
-    @Column(columnDefinition = "TEXT")
-    private String imageUrl;
+public class Album extends BaseImage {
+
 
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -33,15 +29,20 @@ public class Album extends BaseEntity {
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Song> songs;
 
+    public void removeArtist(Artist artist){
+        this.artists.remove(artist);
+        artist.getAlbums().remove(this);
+    }
+
     public String getArtistsNames(){
         StringBuilder stringBuilder = new StringBuilder();
         this.artists.forEach(artist -> stringBuilder.append(artist.getName()).append(", "));
        return stringBuilder.substring(0, stringBuilder.length() - 2);
     }
-    @PrePersist
-    public void setDefaultValue(){
-        if (this.imageUrl == null) {
-            this.imageUrl = "/images/generic_album.png";
+
+    public void setDefaultImage(){
+        if (this.getImageUrl() == null) {
+            this.setImageUrl("https://res.cloudinary.com/bneikov/image/upload/v1678813465/generic_album_gnkoaj.png");
         }
     }
 
