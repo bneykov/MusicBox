@@ -28,6 +28,11 @@ public class Album extends BaseImage {
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Song> songs;
 
+    public void removeArtist(Artist artist){
+        this.artists.remove(artist);
+        artist.getAlbums().remove(this);
+    }
+
     public String getArtistsNames(){
         StringBuilder stringBuilder = new StringBuilder();
         this.artists.forEach(artist -> stringBuilder.append(artist.getName()).append(", "));
