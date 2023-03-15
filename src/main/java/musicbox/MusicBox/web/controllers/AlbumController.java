@@ -5,11 +5,10 @@ import musicbox.MusicBox.model.dto.AlbumDTO;
 import musicbox.MusicBox.services.album.AlbumService;
 import musicbox.MusicBox.services.artist.ArtistService;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
-import musicbox.MusicBox.utils.ObjectNotFoundException;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 

@@ -1,6 +1,5 @@
 package musicbox.MusicBox.model.entity;
 
-import com.cloudinary.Cloudinary;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,11 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import musicbox.MusicBox.model.enums.Genre;
-import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -46,10 +41,6 @@ public class Song extends BaseImage {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Album album;
-    public void removeArtist(Artist artist) {
-        this.artists.remove(artist);
-        artist.getSongs().remove(this);
-    }
 
 
     public String getArtistsNames() {
@@ -71,9 +62,5 @@ public class Song extends BaseImage {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    public void preRemove() throws IOException {
-        super.preRemove();
-
-    }
 
 }

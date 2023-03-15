@@ -3,6 +3,7 @@ package musicbox.MusicBox.config;
 import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.repositories.UserRepository;
 import musicbox.MusicBox.services.user.UserDetailsServiceImpl;
+import musicbox.MusicBox.utils.CustomAuthSuccessHandler;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +21,16 @@ import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfiguration {
     private final UserRepository userRepository;
+    private final CustomAuthSuccessHandler authSuccessHandler;
 
 
-    public SecurityConfiguration(UserRepository userRepository) {
+    public SecurityConfiguration(UserRepository userRepository, CustomAuthSuccessHandler authSuccessHandler) {
         this.userRepository = userRepository;
 
+        this.authSuccessHandler = authSuccessHandler;
     }
 
     @Bean
@@ -44,9 +48,9 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin()
                 .loginPage("/users/login")
+                .successHandler(authSuccessHandler)
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                 .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
-                .defaultSuccessUrl("/home")
                 .failureForwardUrl("/users/login-error")
                 .and()
                 .logout().logoutUrl("/users/logout")

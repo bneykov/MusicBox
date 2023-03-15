@@ -1,6 +1,5 @@
 package musicbox.MusicBox.model.dto;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import musicbox.MusicBox.model.enums.Genre;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -30,8 +27,6 @@ public class SongDTO {
     private String imageUUID;
     @Positive(message = "Duration must be greater than 0")
     private int duration;
-    @NotEmpty(message = "Please select at least one artist")
-    private Set<Long> artists;
 
     private String path;
 

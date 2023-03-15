@@ -84,6 +84,7 @@ public class InitService {
                 .playlists(new HashSet<>())
                 .created(LocalDateTime.now())
                 .modified(LocalDateTime.now())
+                .lastLoggedIn(LocalDateTime.now())
                 .build();
         userRepository.save(user);
     }
@@ -98,6 +99,7 @@ public class InitService {
                 .playlists(new HashSet<>())
                 .created(LocalDateTime.now())
                 .modified(LocalDateTime.now())
+                .lastLoggedIn(LocalDateTime.now())
                 .build();
         userRepository.save(admin);
     }

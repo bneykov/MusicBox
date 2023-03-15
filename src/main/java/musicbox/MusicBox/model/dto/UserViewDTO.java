@@ -14,6 +14,7 @@ public class UserViewDTO {
     private String username;
     private String name;
     private String modified;
+    private String lastLoggedIn;
     private String email;
     private String imageUrl;
     private String imageUUID;

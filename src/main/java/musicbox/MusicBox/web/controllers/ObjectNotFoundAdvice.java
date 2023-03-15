@@ -1,6 +1,6 @@
 package musicbox.MusicBox.web.controllers;
 
-import musicbox.MusicBox.utils.ObjectNotFoundException;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

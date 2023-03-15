@@ -1,4 +1,4 @@
-package musicbox.MusicBox.interceptor;
+package musicbox.MusicBox.utils.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

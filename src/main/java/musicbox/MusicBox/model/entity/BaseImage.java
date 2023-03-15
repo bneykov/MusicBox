@@ -1,9 +1,15 @@
 package musicbox.MusicBox.model.entity;
 
 import com.cloudinary.Cloudinary;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreRemove;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 

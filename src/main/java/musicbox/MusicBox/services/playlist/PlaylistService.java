@@ -7,7 +7,6 @@ import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.model.entity.Song;
 import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.repositories.PlaylistRepository;
-import musicbox.MusicBox.repositories.SongRepository;
 import musicbox.MusicBox.services.song.SongService;
 import musicbox.MusicBox.services.user.UserService;
 import org.modelmapper.ModelMapper;

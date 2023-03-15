@@ -1,7 +1,6 @@
 package musicbox.MusicBox.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,11 +27,6 @@ public class Album extends BaseImage {
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Song> songs;
-
-    public void removeArtist(Artist artist){
-        this.artists.remove(artist);
-        artist.getAlbums().remove(this);
-    }
 
     public String getArtistsNames(){
         StringBuilder stringBuilder = new StringBuilder();

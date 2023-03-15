@@ -30,7 +30,7 @@ function generateTable(users) {
 
 
     let headerRow = table.insertRow();
-    let headers = ['Username', 'Name', 'Email', 'Last Modified', 'Role'];
+    let headers = ['Username', 'Name', 'Email', 'Last Modified', 'Last Logged In', 'Role'];
 
     headers.forEach(function(header) {
         let th = document.createElement('th');
@@ -64,6 +64,10 @@ function generateTable(users) {
         let modifiedTd = document.createElement('td');
         modifiedTd.innerText = user.modified;
         row.appendChild(modifiedTd);
+
+        let lastLoggedInTd = document.createElement('td');
+        lastLoggedInTd.innerText = user.lastLoggedIn;
+        row.appendChild(lastLoggedInTd);
 
         let selectTd = document.createElement('td');
         let select = document.createElement('select');

@@ -7,7 +7,7 @@ import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 import musicbox.MusicBox.services.playlist.PlaylistService;
 import musicbox.MusicBox.services.song.SongService;
-import musicbox.MusicBox.utils.ObjectNotFoundException;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -126,7 +126,7 @@ public class PlaylistController {
     }
 
     @GetMapping("/remove/{id}")
-    private String removePlaylist(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    private String removePlaylist(@PathVariable Long id) {
         Playlist playlist = this.playlistService.getPlaylistById(id);
         if (playlist == null) {
             throw new ObjectNotFoundException(id, "Playlist");

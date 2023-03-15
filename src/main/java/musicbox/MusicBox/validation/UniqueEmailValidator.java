@@ -1,10 +1,8 @@
 package musicbox.MusicBox.validation;
 
 
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 import musicbox.MusicBox.repositories.UserRepository;
 import musicbox.MusicBox.validation.annotation.UniqueEmail;
 

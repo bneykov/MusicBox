@@ -1,6 +1,6 @@
 package musicbox.MusicBox.config;
 
-import musicbox.MusicBox.interceptor.LoggingInterceptor;
+import musicbox.MusicBox.utils.interceptor.LoggingInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

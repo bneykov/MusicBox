@@ -61,8 +61,8 @@ public class SongService {
         song.setCreated(LocalDateTime.now());
         song.setModified(LocalDateTime.now());
         song.setPlaylists(new HashSet<>());
-        songDTO.getArtists().forEach(artistId -> {
-            Artist artist = this.artistService.getArtistById(artistId);
+        album.getArtists().forEach(entry -> {
+            Artist artist = this.artistService.getArtistById(entry.getId());
             song.getArtists().add(artist);
         });
         this.modelMapper.map(song, Song.class);

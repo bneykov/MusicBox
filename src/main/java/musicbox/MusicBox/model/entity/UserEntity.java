@@ -3,9 +3,14 @@ package musicbox.MusicBox.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
@@ -29,12 +34,14 @@ public class UserEntity extends BaseImage {
     @Column
     private String password;
 
+    @Column
+    private LocalDateTime lastLoggedIn;
 
-    @ManyToMany(fetch = FetchType.EAGER)
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<UserRole> roles;
 
-    @OneToMany(mappedBy = "userEntity")
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
     private Set<Playlist> playlists;
 
 
@@ -42,4 +49,7 @@ public class UserEntity extends BaseImage {
 
     }
 
+    public String getLastLoggedIn() {
+        return lastLoggedIn.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+    }
 }

@@ -1,7 +1,6 @@
 package musicbox.MusicBox.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,11 +27,6 @@ public class Playlist extends BaseImage {
     @ManyToMany(fetch = FetchType.EAGER)
 
     private Set<Song> songs;
-
-    public void removeSong(Song song){
-        this.songs.remove(song);
-        song.getPlaylists().remove(this);
-    }
 
     @Override
     public void setDefaultImage() {

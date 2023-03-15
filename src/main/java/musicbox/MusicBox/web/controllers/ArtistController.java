@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import musicbox.MusicBox.model.dto.ArtistDTO;
 import musicbox.MusicBox.services.artist.ArtistService;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
-import musicbox.MusicBox.utils.ObjectNotFoundException;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

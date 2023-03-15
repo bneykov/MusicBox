@@ -1,19 +1,13 @@
 package musicbox.MusicBox.web.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import musicbox.MusicBox.model.CustomUserDetails;
 import musicbox.MusicBox.model.dto.UserRegisterDTO;
 import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.services.user.UserService;
-import musicbox.MusicBox.utils.ObjectNotFoundException;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,13 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    private final SecurityContextRepository securityContextRepository;
 
 
-    public UserController(UserService userService, SecurityContextRepository securityContextRepository) {
+
+    public UserController(UserService userService) {
         this.userService = userService;
 
-        this.securityContextRepository = securityContextRepository;
+
     }
 
 
@@ -73,8 +67,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@Valid UserRegisterDTO registerDTO, BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes, HttpServletResponse response
-            , HttpServletRequest request) {
+                           RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(
                     "org.springframework.validation.BindingResult.registerDTO",
@@ -82,15 +75,8 @@ public class UserController {
             redirectAttributes.addFlashAttribute("registerDTO", registerDTO);
             return "redirect:/users/register";
         }
-        this.userService.register(registerDTO, successfulAuthentication -> {
-
-            SecurityContextHolderStrategy strategy = SecurityContextHolder.getContextHolderStrategy();
-            SecurityContext context = strategy.createEmptyContext();
-            context.setAuthentication(successfulAuthentication);
-            strategy.setContext(context);
-            securityContextRepository.saveContext(context, request, response);
-        });
-        return "redirect:/home";
+        this.userService.register(registerDTO);
+        return "redirect:/login";
     }
 
     @GetMapping("/{id}/change_role")

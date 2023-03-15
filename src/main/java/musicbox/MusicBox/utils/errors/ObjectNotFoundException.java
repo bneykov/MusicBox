@@ -1,4 +1,4 @@
-package musicbox.MusicBox.utils;
+package musicbox.MusicBox.utils.errors;
 
 import lombok.Getter;
 import lombok.Setter;
