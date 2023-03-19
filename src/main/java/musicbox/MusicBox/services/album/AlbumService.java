@@ -27,7 +27,6 @@ public class AlbumService {
     private final ArtistService artistService;
     private final PlaylistRepository playlistRepository;
     private final ArtistRepository artistRepository;
-
     public AlbumService(AlbumRepository albumRepository, ModelMapper modelMapper, SongRepository songRepository, ArtistService artistService, PlaylistRepository playlistRepository, ArtistRepository artistRepository) {
         this.albumRepository = albumRepository;
         this.modelMapper = modelMapper;

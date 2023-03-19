@@ -1,7 +1,7 @@
 package musicbox.MusicBox.services.playlist;
 
 import jakarta.transaction.Transactional;
-import musicbox.MusicBox.model.CustomUserDetails;
+import musicbox.MusicBox.services.user.CustomUserDetails;
 import musicbox.MusicBox.model.dto.PlaylistDTO;
 import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.model.entity.Song;
@@ -44,18 +44,14 @@ public class PlaylistService {
     }
 
     @Transactional
-    public boolean addPlaylist(PlaylistDTO playlistDTO, CustomUserDetails userDetails) {
+    public void addPlaylist(PlaylistDTO playlistDTO, CustomUserDetails userDetails) {
         Playlist playlist = this.modelMapper.map(playlistDTO, Playlist.class);
         UserEntity owner = this.userService.getUserById(userDetails.getId());
-        if (owner.getPlaylists().stream().anyMatch(playlist1 -> playlist1.getName().equals(playlist.getName()))) {
-            return false;
-        }
         playlist.setUserEntity(owner);
         playlist.setCreated(LocalDateTime.now());
         playlist.setModified(LocalDateTime.now());
         playlist.setSongs(new HashSet<>());
         this.playlistRepository.save(playlist);
-        return true;
     }
 
     public void addSongToPlaylist(Long playlistId, Long songId) {

@@ -9,6 +9,9 @@ cloudinary:
   api_key: "133183588698468"
   api_secret: "qAeWm3WbSFi2eueRLC5GaabzjYs"
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     password: ''

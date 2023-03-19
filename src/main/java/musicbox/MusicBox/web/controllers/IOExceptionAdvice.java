@@ -10,7 +10,7 @@ import java.io.IOException;
 @ControllerAdvice
 public class IOExceptionAdvice {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler({IOException.class, RuntimeException.class})
+    @ExceptionHandler({IOException.class})
     public String onIOException(){
 
         return "image-upload-error";

@@ -1,7 +1,7 @@
 package musicbox.MusicBox.web.controllers;
 
 import jakarta.validation.Valid;
-import musicbox.MusicBox.model.CustomUserDetails;
+import musicbox.MusicBox.services.user.CustomUserDetails;
 import musicbox.MusicBox.model.dto.UserRegisterDTO;
 import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.services.user.UserService;

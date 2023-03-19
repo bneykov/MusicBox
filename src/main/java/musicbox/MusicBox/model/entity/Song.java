@@ -18,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "songs")
-public class Song extends BaseImage {
+public class Song extends BaseImageEntity {
 
     @Column(columnDefinition = "TEXT")
     private String path;

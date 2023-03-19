@@ -26,12 +26,18 @@
             <div class="text-white label-holder d-flex justify-content-center mt-3">
                 <label for="image" class="h4 mb-2">Select image</label>
             </div>
-            <input th:field="*{image}" value="Choose image" type="file" name="image" accept="image/*" id="image"/>
+            <input  onchange="checkImageSize()"
+                    th:field="*{image}" th:errorclass="'is-invalid alert-danger'"
+                   value="Choose image" type="file" name="image" accept="image/*" id="image"/>
+            <small th:if="${#fields.hasErrors('image')}"
+                   th:errors="*{image}"
+                   class="text-warning">Error message</small>
         </div>
 
 
         <div class="button-holder d-flex justify-content-center mt-2">
-            <button type="submit" class="btn btn-success btn-lg mb-3" value="Create_Playlist">Create Playlist</button>
+            <button id = 'btnSubmit'
+                    type="submit" class="btn btn-success btn-lg mb-3" value="Create_Playlist">Create Playlist</button>
 
         </div>
     </form>

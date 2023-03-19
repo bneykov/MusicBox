@@ -1,4 +1,4 @@
-package musicbox.MusicBox.utils.events;
+package musicbox.MusicBox.services.events;
 
 import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.repositories.UserRepository;

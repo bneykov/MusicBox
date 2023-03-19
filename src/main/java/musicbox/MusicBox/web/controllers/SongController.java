@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -37,14 +36,16 @@ public class SongController {
     private SongDTO songDTO() {
         return new SongDTO();
     }
+
     @GetMapping("/add")
     public String addSong(Model model) {
         model.addAttribute("genres", Genre.values());
-        model.addAttribute("albums",this.albumService.getAlbums());
-        model.addAttribute("artists",this.artistService.getArtists());
+        model.addAttribute("albums", this.albumService.getAlbums());
+        model.addAttribute("artists", this.artistService.getArtists());
 
         return "add-song";
     }
+
     @GetMapping("/all")
     public String allSongs(Model model) {
         model.addAttribute("title", "Songs");
@@ -53,9 +54,11 @@ public class SongController {
 
         return "view-all";
     }
+
     @PostMapping("/add")
     private String addSong(@Valid SongDTO songDTO, BindingResult bindingResult,
-                              RedirectAttributes redirectAttributes) throws IOException {
+                           RedirectAttributes redirectAttributes) throws IOException {
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("songDTO", songDTO);
             redirectAttributes
@@ -63,21 +66,21 @@ public class SongController {
                             "org.springframework.validation.BindingResult.songDTO", bindingResult);
             return "redirect:/songs/add";
         }
-        if(!songDTO.getImage().isEmpty()) {
-            File image = File.createTempFile("temp", null);
-            songDTO.getImage().transferTo(image);
-            Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
-            songDTO.setImageUrl(imageUploadResponse.get("secure_url"));
-            songDTO.setImageUUID(imageUploadResponse.get("public"));
-        }
+
+        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(songDTO.getImage());
+
+        songDTO.setImageUrl(imageUploadResponse.get("secure_url"));
+        songDTO.setImageUUID(imageUploadResponse.get("public_id"));
+
         this.songService.addSong(songDTO);
         return "redirect:/home";
 
     }
+
     @GetMapping("/remove/{id}")
     private String removeSong(@PathVariable Long id) {
-       this.songService.removeSongConnections(id);
-       this.songService.removeSong(id);
+        this.songService.removeSongConnections(id);
+        this.songService.removeSong(id);
         return "redirect:/songs/all";
 
     }

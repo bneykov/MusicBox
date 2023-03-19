@@ -1,18 +1,16 @@
 package musicbox.MusicBox.services.user;
 
-import musicbox.MusicBox.model.CustomUserDetails;
 import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.model.entity.UserRole;
 import musicbox.MusicBox.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements org.springframework.security.core.userdetails.UserDetailsService {
     private final UserRepository userRepository;
 
     public UserDetailsServiceImpl(UserRepository userRepository) {
@@ -28,13 +26,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private CustomUserDetails map(UserEntity userEntity) {
         return new CustomUserDetails(
+                userEntity.getId(),
+                userEntity.getName(),
                 userEntity.getUsername(),
+                userEntity.getEmail(),
                 userEntity.getPassword(),
-                extractAuthorities(userEntity)
-        ).setName(userEntity.getName())
-                .setEmail(userEntity.getEmail())
-                .setImageUrl(userEntity.getImageUrl())
-                .setId(userEntity.getId());
+                extractAuthorities(userEntity),
+                userEntity.getImageUrl(),
+                userEntity.getImageUUID(),
+                userEntity.getCreated(),
+                userEntity.getModified(),
+                userEntity.getLastLoggedIn());
     }
 
     private List<GrantedAuthority> extractAuthorities(UserEntity userEntity) {

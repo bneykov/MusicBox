@@ -1,6 +1,6 @@
 package musicbox.MusicBox.web.controllers;
 
-import musicbox.MusicBox.model.CustomUserDetails;
+import musicbox.MusicBox.services.user.CustomUserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

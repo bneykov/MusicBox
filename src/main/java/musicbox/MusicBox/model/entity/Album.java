@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "albums")
-public class Album extends BaseImage {
+public class Album extends BaseImageEntity {
 
 
 
@@ -27,11 +27,6 @@ public class Album extends BaseImage {
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Song> songs;
-
-    public void removeArtist(Artist artist){
-        this.artists.remove(artist);
-        artist.getAlbums().remove(this);
-    }
 
     public String getArtistsNames(){
         StringBuilder stringBuilder = new StringBuilder();

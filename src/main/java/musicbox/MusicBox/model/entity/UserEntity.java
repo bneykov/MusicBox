@@ -22,7 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class UserEntity extends BaseImage {
+public class UserEntity extends BaseImageEntity {
     @NotNull
     @Column(unique = true)
     private String username;

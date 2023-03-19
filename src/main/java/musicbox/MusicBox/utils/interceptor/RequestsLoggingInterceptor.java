@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 @Component
-public class LoggingInterceptor implements HandlerInterceptor {
-    private static final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
+public class RequestsLoggingInterceptor implements HandlerInterceptor {
+    private static final Logger logger = LoggerFactory.getLogger(RequestsLoggingInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

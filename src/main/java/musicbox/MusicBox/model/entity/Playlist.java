@@ -18,14 +18,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "playlists")
-public class Playlist extends BaseImage {
+public class Playlist extends BaseImageEntity {
 
 
     @ManyToOne
     private UserEntity userEntity;
 
     @ManyToMany(fetch = FetchType.EAGER)
-
     private Set<Song> songs;
 
     @Override

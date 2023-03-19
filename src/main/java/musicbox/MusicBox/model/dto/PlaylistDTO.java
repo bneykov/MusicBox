@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import musicbox.MusicBox.validation.annotation.UniquePlaylistName;
+import musicbox.MusicBox.validation.annotation.ValidImageFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
@@ -14,9 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class PlaylistDTO {
     @NotNull
+    @UniquePlaylistName
     @Size(min = 3, max = 20, message = "Playlist name length must be between 3 and 20 characters")
     private String name;
-
+    @ValidImageFormat
     private MultipartFile image;
 
     private String imageUrl;

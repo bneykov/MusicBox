@@ -1,6 +1,6 @@
 package musicbox.MusicBox.config;
 
-import musicbox.MusicBox.utils.interceptor.LoggingInterceptor;
+import musicbox.MusicBox.utils.interceptor.RequestsLoggingInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoggingInterceptor());
+        registry.addInterceptor(new RequestsLoggingInterceptor());
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 }

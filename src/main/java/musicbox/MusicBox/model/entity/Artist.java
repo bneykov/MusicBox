@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.io.IOException;
 import java.util.Set;
 
 @Getter
@@ -16,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "artists")
-public class Artist extends BaseImage {
+public class Artist extends BaseImageEntity {
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
     private Set<Song> songs;
@@ -24,12 +25,8 @@ public class Artist extends BaseImage {
     @ManyToMany(mappedBy = "artists", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Album> albums;
 
-    public void removeSong(Song song){
-        this.songs.remove(song);
-        song.getArtists().remove(this);
+    @Override
+    public void preRemove() throws IOException {
+        super.preRemove();
     }
-
-
-
-
 }

@@ -1,30 +1,26 @@
-
-
-
 function loadUsers() {
-        table.innerHTML = ""
+    table.innerHTML = ""
 
-        let requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
+    let requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
 
 
-        };
-        fetch('/users/get', requestOptions)
-            .then(response => response.json())
-            .then(users => {
-                let table = generateTable(users);
-                document.getElementById('tableParent').appendChild(table)
-            })
-            .catch(error => console.log('error', error));
-
+    };
+    fetch('/users/get', requestOptions)
+        .then(response => response.json())
+        .then(users => {
+            let table = generateTable(users);
+            document.getElementById('tableParent').appendChild(table)
+        })
+        .catch(error => console.log('Users fetch error', error));
 
 
 }
 
 let table = document.createElement('table');
 table.classList.add('table', 'table-striped', 'table-hover');
-table.id='table';
+table.id = 'table';
 
 function generateTable(users) {
 
@@ -32,21 +28,18 @@ function generateTable(users) {
     let headerRow = table.insertRow();
     let headers = ['Username', 'Name', 'Email', 'Last Modified', 'Last Logged In', 'Role'];
 
-    headers.forEach(function(header) {
+    headers.forEach(function (header) {
         let th = document.createElement('th');
         th.innerText = header;
         th.classList.add('text-light', 'text-center')
         headerRow.appendChild(th);
     });
 
-    users.forEach(async  function(user) {
-
-
+    users.forEach(async function (user) {
 
 
         let row = table.insertRow();
         row.classList.add('text-light', 'text-center');
-
 
 
         let usernameTd = document.createElement('td');
@@ -71,11 +64,13 @@ function generateTable(users) {
 
         let selectTd = document.createElement('td');
         let select = document.createElement('select');
-        select.onchange = function() { submitForm(user.id); };
+        select.onchange = function () {
+            changeRole(user.id);
+        };
         select.classList.add('browser-default', 'form-select');
         select.id = user.username + '_role';
         select.name = user.username + '_role';
-        select.title="select";
+        select.title = "select";
 
         let userOption = document.createElement('option');
         userOption.value = 'USER';
@@ -99,24 +94,16 @@ function generateTable(users) {
 
     return table;
 }
-async function submitForm(userId) {
 
-
-
+async function changeRole(userId) {
     const requestOptions = {
         method: 'GET',
-        redirect: 'follow',
-
-
+        redirect: 'follow'
     };
 
-
-   await fetch('/users/' + userId + '/change_role', requestOptions).then();
-  document.getElementById('table').innerHTML = "";
-   loadUsers();
-
-
-
+    await fetch('/users/' + userId + '/change_role', requestOptions).then()
+    document.getElementById('table').innerHTML = "";
+    loadUsers();
 }
 
 

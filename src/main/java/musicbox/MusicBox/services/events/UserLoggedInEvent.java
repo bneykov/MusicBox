@@ -1,4 +1,4 @@
-package musicbox.MusicBox.utils.events;
+package musicbox.MusicBox.services.events;
 
 import lombok.Getter;
 import musicbox.MusicBox.model.entity.UserEntity;

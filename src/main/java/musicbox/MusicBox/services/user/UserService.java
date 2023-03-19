@@ -9,6 +9,7 @@ import musicbox.MusicBox.repositories.RoleRepository;
 import musicbox.MusicBox.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,14 @@ public class UserService {
 
     public List<UserViewDTO> mapUsers(List<UserEntity> users){
         return users.stream().map(user -> this.modelMapper.map(user, UserViewDTO.class)).toList();
+    }
+    public UserEntity getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof CustomUserDetails user) {
+            return this.userRepository.findByUsername(user.getUsername()).orElse(null);
+        }
+        return null;
     }
 
     public void changeRole(Long id) {

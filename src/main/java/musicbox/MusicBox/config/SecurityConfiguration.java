@@ -3,13 +3,12 @@ package musicbox.MusicBox.config;
 import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.repositories.UserRepository;
 import musicbox.MusicBox.services.user.UserDetailsServiceImpl;
-import musicbox.MusicBox.utils.CustomAuthSuccessHandler;
+import musicbox.MusicBox.services.user.CustomAuthSuccessHandler;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -74,7 +73,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
     @Bean
-    public UserDetailsService userDetailsService(){
+    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){
         return new UserDetailsServiceImpl(userRepository);
     }
 

@@ -23,7 +23,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public abstract class BaseImage extends BaseEntity {
+public abstract class BaseImageEntity extends BaseEntity {
 
     @NotNull
     @Column(name = "name")

@@ -8,11 +8,9 @@ import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -69,10 +67,8 @@ public class ArtistController {
     @PostMapping("/add")
     private String addArtist(@Valid ArtistDTO artistDTO, BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) throws IOException {
-        if (artistDTO.getImage().isEmpty()) {
-            bindingResult.addError(new FieldError("artistDTO", "image"
-                    , "Please select an image"));
-        }
+
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("artistDTO", artistDTO);
             redirectAttributes
@@ -80,12 +76,10 @@ public class ArtistController {
                             "org.springframework.validation.BindingResult.artistDTO", bindingResult);
             return "redirect:/artists/add";
         }
-        File image = File.createTempFile("temp", null);
-        artistDTO.getImage().transferTo(image);
-        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
-        artistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
-        artistDTO.setImageUUID(imageUploadResponse.get("public"));
 
+        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(artistDTO.getImage());
+        artistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
+        artistDTO.setImageUUID(imageUploadResponse.get("public_id"));
         this.artistService.addArtist(artistDTO);
         return "redirect:/home";
 

@@ -1,23 +1,22 @@
 package musicbox.MusicBox.web.controllers;
 
 import jakarta.validation.Valid;
-import musicbox.MusicBox.model.CustomUserDetails;
 import musicbox.MusicBox.model.dto.PlaylistDTO;
 import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 import musicbox.MusicBox.services.playlist.PlaylistService;
 import musicbox.MusicBox.services.song.SongService;
+import musicbox.MusicBox.services.user.CustomUserDetails;
 import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
@@ -66,22 +65,11 @@ public class PlaylistController {
     }
 
     @PostMapping("/add")
-    private String addSong(@Valid PlaylistDTO playlistDTO, BindingResult bindingResult,
+    private String addPlaylist(@Valid PlaylistDTO playlistDTO, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes, @AuthenticationPrincipal
                            CustomUserDetails userDetails) throws IOException {
 
-        if (!playlistDTO.getImage().isEmpty()) {
-            File image = File.createTempFile("temp", null);
-            playlistDTO.getImage().transferTo(image);
-            Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
-            playlistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
-            playlistDTO.setImageUUID(imageUploadResponse.get("public"));
-        }
 
-        if (!this.playlistService.addPlaylist(playlistDTO, userDetails)) {
-            bindingResult.addError(new FieldError("playlistDTO", "name",
-                    "You already have a playlist with this name"));
-        }
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("playlistDTO", playlistDTO);
             redirectAttributes
@@ -89,6 +77,12 @@ public class PlaylistController {
                             "org.springframework.validation.BindingResult.playlistDTO", bindingResult);
             return "redirect:/playlists/add";
         }
+        MultipartFile image = playlistDTO.getImage();
+        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
+
+        playlistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
+        playlistDTO.setImageUUID(imageUploadResponse.get("public_id"));
+        this.playlistService.addPlaylist(playlistDTO, userDetails);
 
         return "redirect:/playlists/all";
 

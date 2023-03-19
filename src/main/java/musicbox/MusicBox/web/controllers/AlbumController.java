@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -28,6 +27,7 @@ public class AlbumController {
         this.artistService = artistService;
         this.cloudinaryService = cloudinaryService;
     }
+
     @ModelAttribute("albumDTO")
     private AlbumDTO albumDTO() {
         return new AlbumDTO();
@@ -38,6 +38,7 @@ public class AlbumController {
         model.addAttribute("artists", this.artistService.getArtists());
         return "add-album";
     }
+
     @GetMapping("/all")
     public String allAlbums(Model model) {
         model.addAttribute("title", "Albums");
@@ -45,6 +46,7 @@ public class AlbumController {
 
         return "view-all";
     }
+
     @GetMapping("/{id}")
     public String album(Model model, @PathVariable Long id) {
         if (this.albumService.getAlbumById(id) == null) {
@@ -55,17 +57,20 @@ public class AlbumController {
 
         return "view-all";
     }
+
     @GetMapping("/remove/{id}")
-    private String removeAlbum(@PathVariable Long id){
+    private String removeAlbum(@PathVariable Long id) {
         if (this.albumService.getAlbumById(id) == null) {
             throw new ObjectNotFoundException(id, "Album");
         }
         this.albumService.removeAlbum(id);
         return "redirect:/albums/all";
     }
+
     @PostMapping("/add")
     private String addAlbum(@Valid AlbumDTO albumDTO, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) throws IOException {
+
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("albumDTO", albumDTO);
@@ -74,13 +79,11 @@ public class AlbumController {
                             "org.springframework.validation.BindingResult.albumDTO", bindingResult);
             return "redirect:/albums/add";
         }
-        if (!albumDTO.getImage().isEmpty()) {
-            File image = File.createTempFile("temp", null);
-            albumDTO.getImage().transferTo(image);
-            Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
-            albumDTO.setImageUrl(imageUploadResponse.get("secure_url"));
-            albumDTO.setImageUUID(imageUploadResponse.get("public"));
-        }
+
+        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(albumDTO().getImage());
+
+        albumDTO.setImageUrl(imageUploadResponse.get("secure_url"));
+        albumDTO.setImageUUID(imageUploadResponse.get("public_id"));
         this.albumService.addAlbum(albumDTO);
         return "redirect:/home";
 
