@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.repositories.UserRepository;
-import musicbox.MusicBox.services.events.UserLoggedInEvent;
+import musicbox.MusicBox.utils.events.UserLoggedInEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;

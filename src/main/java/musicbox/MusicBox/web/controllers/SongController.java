@@ -68,10 +68,8 @@ public class SongController {
         }
 
         Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(songDTO.getImage());
-
         songDTO.setImageUrl(imageUploadResponse.get("secure_url"));
         songDTO.setImageUUID(imageUploadResponse.get("public_id"));
-
         this.songService.addSong(songDTO);
         return "redirect:/home";
 

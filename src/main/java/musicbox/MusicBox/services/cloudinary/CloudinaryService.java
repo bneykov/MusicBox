@@ -23,7 +23,7 @@ public class CloudinaryService {
 
     public Map<String, String> uploadImage(MultipartFile imageFile) throws IOException {
 
-        if (imageFile.isEmpty()) {
+        if (imageFile == null || imageFile.isEmpty()) {
             return new HashMap<>();
         }
 
@@ -49,6 +49,7 @@ public class CloudinaryService {
             try {
                 ImageIO.read(file.getInputStream());
                 return true;
+
             } catch (Exception e) {
                 return false;
             }

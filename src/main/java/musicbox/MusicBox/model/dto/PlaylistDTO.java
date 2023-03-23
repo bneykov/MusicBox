@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import musicbox.MusicBox.validation.annotation.UniquePlaylistName;
-import musicbox.MusicBox.validation.annotation.ValidImageFormat;
+import musicbox.MusicBox.utils.validation.annotation.UniquePlaylistName;
+import musicbox.MusicBox.utils.validation.annotation.ValidImageFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter

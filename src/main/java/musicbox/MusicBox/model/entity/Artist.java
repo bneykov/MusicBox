@@ -22,7 +22,7 @@ public class Artist extends BaseImageEntity {
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
     private Set<Song> songs;
 
-    @ManyToMany(mappedBy = "artists", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "artists", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<Album> albums;
 
     @Override

@@ -114,13 +114,22 @@ public class InitService {
                     .created(LocalDateTime.now())
                     .imageUrl("https://rb.gy/2f1iog")
                     .build();
-            this.artistRepository.save(artist);
+            Artist artist2 = Artist.builder()
+                    .id(2L)
+                    .name("Bruno Mars")
+                    .albums(new HashSet<>())
+                    .modified(LocalDateTime.now())
+                    .created(LocalDateTime.now())
+                    .imageUrl("https://rb.gy/2f1iog")
+                    .build();
+            this.artistRepository.saveAll(List.of(artist, artist2));
         }
     }
     private void initAlbums(){
         if (this.albumRepository.count() == 0) {
 
             Artist artist = this.artistRepository.findById(1L).orElseThrow();
+            Artist artist2 = this.artistRepository.findById(2L).orElseThrow();
             Album album = Album.builder()
                     .id(1L)
                     .name("For You")
@@ -129,7 +138,15 @@ public class InitService {
                     .modified(LocalDateTime.now())
                     .imageUrl("https://m.media-amazon.com/images/I/71maiXUoH2L._SX425_.jpg")
                     .build();
-            this.albumRepository.save(album);
+            Album album2 = Album.builder()
+                    .id(2L)
+                    .name("Shared album")
+                    .artists(Set.of(artist, artist2))
+                    .created(LocalDateTime.now())
+                    .modified(LocalDateTime.now())
+                    .imageUrl("https://m.media-amazon.com/images/I/71maiXUoH2L._SX425_.jpg")
+                    .build();
+            this.albumRepository.saveAll(List.of(album, album2));
         }
     }
 

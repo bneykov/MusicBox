@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import musicbox.MusicBox.validation.annotation.PasswordMatch;
-import musicbox.MusicBox.validation.annotation.UniqueEmail;
-import musicbox.MusicBox.validation.annotation.UniqueUsername;
+import musicbox.MusicBox.utils.validation.annotation.PasswordMatch;
+import musicbox.MusicBox.utils.validation.annotation.UniqueEmail;
+import musicbox.MusicBox.utils.validation.annotation.UniqueUsername;
 
 @Getter
 @Setter

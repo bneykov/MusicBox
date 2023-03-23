@@ -4,19 +4,13 @@ package musicbox.MusicBox.services.song;
 import jakarta.transaction.Transactional;
 import musicbox.MusicBox.model.dto.SongDTO;
 import musicbox.MusicBox.model.entity.Album;
-import musicbox.MusicBox.model.entity.Artist;
-import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.model.entity.Song;
 import musicbox.MusicBox.repositories.AlbumRepository;
-import musicbox.MusicBox.repositories.ArtistRepository;
-import musicbox.MusicBox.repositories.PlaylistRepository;
 import musicbox.MusicBox.repositories.SongRepository;
-import musicbox.MusicBox.services.artist.ArtistService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -25,20 +19,14 @@ import java.util.List;
 public class SongService {
     private final SongRepository songRepository;
     private final ModelMapper modelMapper;
-
-    private final ArtistService artistService;
-    private final ArtistRepository artistRepository;
     private final AlbumRepository albumRepository;
-    private final PlaylistRepository playlistRepository;
 
 
-    public SongService(SongRepository songRepository, ModelMapper modelMapper, ArtistService artistService, ArtistRepository artistRepository, AlbumRepository albumRepository, PlaylistRepository playlistRepository) {
+    public SongService(SongRepository songRepository, ModelMapper modelMapper, AlbumRepository albumRepository) {
         this.songRepository = songRepository;
         this.modelMapper = modelMapper;
-        this.artistService = artistService;
-        this.artistRepository = artistRepository;
         this.albumRepository = albumRepository;
-        this.playlistRepository = playlistRepository;
+
     }
 
     public Song getSongById(Long id){
@@ -61,37 +49,24 @@ public class SongService {
         song.setCreated(LocalDateTime.now());
         song.setModified(LocalDateTime.now());
         song.setPlaylists(new HashSet<>());
-        album.getArtists().forEach(entry -> {
-            Artist artist = this.artistService.getArtistById(entry.getId());
-            song.getArtists().add(artist);
-        });
-        this.modelMapper.map(song, Song.class);
+        album.getArtists().forEach(artist -> song.getArtists().add(artist));
         this.songRepository.save(song);
     }
-    @Transactional()
+    @Transactional
     public void removeSongConnections(Long id){
-
-        List<Artist> artistsToSave = new ArrayList<>();
-        List<Playlist> playlistsToSave = new ArrayList<>();
         Song song = this.getSongById(id);
-        song.getArtists().forEach(entry -> {
+        this.songRepository.save(getSongWithoutRelations(song));
+    }
 
-            Artist artist = this.artistRepository.findById(entry.getId()).orElse(null);
-            artist.getSongs().remove(song);
-            artistsToSave.add(artist);
-        });
-        song.getPlaylists().forEach(entry -> {
-            Playlist playlist = this.playlistRepository.findById(entry.getId()).orElse(null);
-            playlist.getSongs().remove(song);
-            playlistsToSave.add(playlist);
-        });
-        this.playlistRepository.saveAll(playlistsToSave);
-        this.artistRepository.saveAll(artistsToSave);
+    public static Song getSongWithoutRelations(Song song) {
+        song.getArtists().forEach(artist -> artist.getSongs().remove(song));
+        song.getPlaylists().forEach(playlist -> playlist.getSongs().remove(song));
         song.getArtists().clear();
         song.getPlaylists().clear();
         song.setAlbum(null);
-        this.songRepository.save(song);
+        return song;
     }
+
     public void removeSong(Long id){
         this.songRepository.deleteById(id);
     }

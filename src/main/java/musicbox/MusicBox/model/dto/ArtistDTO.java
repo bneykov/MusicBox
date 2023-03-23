@@ -2,17 +2,15 @@ package musicbox.MusicBox.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import musicbox.MusicBox.validation.annotation.ImageNotEmpty;
-import musicbox.MusicBox.validation.annotation.UniqueArtistName;
-import musicbox.MusicBox.validation.annotation.ValidImageFormat;
+import lombok.*;
+import musicbox.MusicBox.utils.validation.annotation.ImageNotEmpty;
+import musicbox.MusicBox.utils.validation.annotation.UniqueArtistName;
+import musicbox.MusicBox.utils.validation.annotation.ValidImageFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArtistDTO {

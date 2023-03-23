@@ -18,14 +18,12 @@ import java.util.Set;
 @Table(name = "albums")
 public class Album extends BaseImageEntity {
 
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "album_id"),
             inverseJoinColumns = @JoinColumn(name = "artist_id"))
     private Set<Artist> artists;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "album", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Song> songs;
 
     public String getArtistsNames(){

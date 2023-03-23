@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
@@ -69,7 +68,6 @@ public class PlaylistController {
                            RedirectAttributes redirectAttributes, @AuthenticationPrincipal
                            CustomUserDetails userDetails) throws IOException {
 
-
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("playlistDTO", playlistDTO);
             redirectAttributes
@@ -77,13 +75,11 @@ public class PlaylistController {
                             "org.springframework.validation.BindingResult.playlistDTO", bindingResult);
             return "redirect:/playlists/add";
         }
-        MultipartFile image = playlistDTO.getImage();
-        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(image);
 
+        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(playlistDTO().getImage());
         playlistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
         playlistDTO.setImageUUID(imageUploadResponse.get("public_id"));
         this.playlistService.addPlaylist(playlistDTO, userDetails);
-
         return "redirect:/playlists/all";
 
     }

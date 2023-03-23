@@ -36,7 +36,6 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http
             , SecurityContextRepository securityContextRepository) throws Exception {
         http
-
                 .authorizeHttpRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/", "/albums/all", "/songs/all", "/artists/all").permitAll()

@@ -71,7 +71,6 @@ public class AlbumController {
     private String addAlbum(@Valid AlbumDTO albumDTO, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) throws IOException {
 
-
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("albumDTO", albumDTO);
             redirectAttributes
@@ -81,7 +80,6 @@ public class AlbumController {
         }
 
         Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(albumDTO().getImage());
-
         albumDTO.setImageUrl(imageUploadResponse.get("secure_url"));
         albumDTO.setImageUUID(imageUploadResponse.get("public_id"));
         this.albumService.addAlbum(albumDTO);

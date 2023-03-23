@@ -68,7 +68,6 @@ public class ArtistController {
     private String addArtist(@Valid ArtistDTO artistDTO, BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) throws IOException {
 
-
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("artistDTO", artistDTO);
             redirectAttributes
