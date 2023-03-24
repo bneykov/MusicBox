@@ -26,5 +26,4 @@ public class GetUsersController {
         return ResponseEntity.ok(users);
     }
 
-
 }

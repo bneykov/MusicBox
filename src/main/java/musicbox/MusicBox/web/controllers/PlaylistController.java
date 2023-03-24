@@ -53,7 +53,8 @@ public class PlaylistController {
     }
 
     @GetMapping("/add/{id}")
-    public String addSongToPlaylist(Model model, @AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long id) {
+    public String addSongToPlaylist(Model model, @AuthenticationPrincipal CustomUserDetails userDetails,
+                                    @PathVariable Long id) {
         if (this.songService.getSongById(id) == null) {
             throw new ObjectNotFoundException(id, "Song");
         }
@@ -65,8 +66,8 @@ public class PlaylistController {
 
     @PostMapping("/add")
     private String addPlaylist(@Valid PlaylistDTO playlistDTO, BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes, @AuthenticationPrincipal
-                           CustomUserDetails userDetails) throws IOException {
+                               RedirectAttributes redirectAttributes, @AuthenticationPrincipal
+                               CustomUserDetails userDetails) throws IOException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("playlistDTO", playlistDTO);
@@ -76,7 +77,7 @@ public class PlaylistController {
             return "redirect:/playlists/add";
         }
 
-        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(playlistDTO().getImage());
+        Map<String, String> imageUploadResponse = this.cloudinaryService.uploadImage(playlistDTO.getImage());
         playlistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
         playlistDTO.setImageUUID(imageUploadResponse.get("public_id"));
         this.playlistService.addPlaylist(playlistDTO, userDetails);
@@ -86,11 +87,17 @@ public class PlaylistController {
 
     @GetMapping("/{playlistId}/add/{songId}")
 
-    private String addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
+    private String addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId
+            , @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Playlist playlist = this.playlistService.getPlaylistById(playlistId);
+        if (playlist == null) {
+            throw new ObjectNotFoundException(playlistId, "Playlist");
+        }
+        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
+            throw new AccessDeniedException("Sorry, you can't edit this playlist");
+        }
         if (this.songService.getSongById(songId) == null) {
             throw new ObjectNotFoundException(songId, "Song");
-        } else if (this.playlistService.getPlaylistById(playlistId) == null) {
-            throw new ObjectNotFoundException(playlistId, "Playlist");
         }
 
         this.playlistService.addSongToPlaylist(playlistId, songId);
@@ -101,36 +108,42 @@ public class PlaylistController {
     private String removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable Long songId,
                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
         Playlist playlist = this.playlistService.getPlaylistById(playlistId);
+        if (playlist == null) {
+            throw new ObjectNotFoundException(playlistId, "Playlist");
+        }
+        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
+            throw new AccessDeniedException("Sorry, you can't edit this playlist");
+        }
         if (this.songService.getSongById(songId) == null) {
             throw new ObjectNotFoundException(songId, "Song");
-
-        } else if (playlist == null) {
-            throw new ObjectNotFoundException(playlistId, "Playlist");
-
-        } else if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
-            throw new AccessDeniedException("Sorry, you can't edit this playlist");
-
         }
+
         this.playlistService.removeSongFromPlaylist(playlistId, songId);
         return "redirect:/playlists/" + playlistId;
     }
 
     @GetMapping("/remove/{id}")
-    private String removePlaylist(@PathVariable Long id) {
+    private String removePlaylist(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
         Playlist playlist = this.playlistService.getPlaylistById(id);
         if (playlist == null) {
             throw new ObjectNotFoundException(id, "Playlist");
         }
-
+        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
+            throw new AccessDeniedException("Sorry, you can't delete this playlist");
+        }
         this.playlistService.removePlaylist(id);
         return "redirect:/playlists/all";
     }
 
     @GetMapping("/{id}")
-    private String viewPlaylist(@PathVariable Long id, Model model) {
+    private String viewPlaylist(@PathVariable Long id, Model model,
+                                @AuthenticationPrincipal CustomUserDetails userDetails) {
         Playlist playlist = this.playlistService.getPlaylistById(id);
         if (playlist == null) {
             throw new ObjectNotFoundException(id, "Playlist");
+        }
+        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
+            throw new AccessDeniedException("Sorry, you can't delete this playlist");
         }
         model.addAttribute("songs", playlist.getSongs());
         model.addAttribute("currentPlaylist", playlist);

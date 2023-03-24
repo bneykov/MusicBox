@@ -95,6 +95,7 @@ class AlbumServiceTest {
 
     }
 
+
     @Test
     @DisplayName("addAlbum saves new album to the database")
     void testAddAlbumWithValidData() {
@@ -112,7 +113,7 @@ class AlbumServiceTest {
 
         albumService.addAlbum(albumDTO);
 
-        verify(mockAlbumRepository, times(1)).save(albumArgumentCaptor.capture());
+        verify(mockAlbumRepository).save(albumArgumentCaptor.capture());
         Album savedAlbum = albumArgumentCaptor.getValue();
         assertEquals(albumDTO.getName(), savedAlbum.getName());
         assertEquals(albumDTO.getImageUUID(), savedAlbum.getImageUUID());
@@ -203,7 +204,8 @@ class AlbumServiceTest {
     @Test
     @DisplayName("getAlbumById returns null when given invalid id")
     void testGetAlbumByIdWithInvalidId() {
-        Album actual = albumService.getAlbumById(1L);
+        when(mockAlbumRepository.findById(5L)).thenReturn(Optional.empty());
+        Album actual = albumService.getAlbumById(5L);
         assertNull(actual);
     }
 

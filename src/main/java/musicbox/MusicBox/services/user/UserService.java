@@ -8,12 +8,12 @@ import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.repositories.RoleRepository;
 import musicbox.MusicBox.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -25,7 +25,6 @@ public class UserService {
 
     private final ModelMapper modelMapper;
 
-    @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
@@ -37,7 +36,7 @@ public class UserService {
     }
 
     public UserEntity getUserById(Long id) {
-        return this.userRepository.findById(id).orElseThrow();
+        return this.userRepository.findById(id).orElse(null);
     }
 
     public List<UserEntity> getUsers() {
@@ -74,6 +73,7 @@ public class UserService {
     }
 
     private void makeUser(UserEntity user) {
+
         UserRole userRole = this.roleRepository.findUserRoleByRole(RoleEnum.USER).orElse(null);
         user.setRoles(List.of(userRole));
         this.userRepository.save(user);
@@ -85,6 +85,7 @@ public class UserService {
         UserRole userRole = this.roleRepository.findUserRoleByRole(RoleEnum.USER).orElseThrow();
         UserEntity user = this.modelMapper.map(registerDTO, UserEntity.class);
         user.setRoles(List.of(userRole));
+        user.setPlaylists(new HashSet<>());
         user.setCreated(LocalDateTime.now());
         user.setModified(LocalDateTime.now());
         user.setLastLoggedIn(LocalDateTime.now());

@@ -20,7 +20,7 @@ import java.util.Set;
 @Table(name = "songs")
 public class Song extends BaseImageEntity {
 
-    @Column(columnDefinition = "TEXT")
+    @Column
     private String path;
 
     @NotNull

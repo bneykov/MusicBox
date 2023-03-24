@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,6 +35,8 @@ public class SongServiceTest {
     private AlbumRepository albumRepository;
     @Mock
     private ModelMapper modelMapper;
+    @Captor
+    private ArgumentCaptor<Song> songArgumentCaptor;
 
     Song song = Song.builder()
             .id(1L)
@@ -93,15 +97,7 @@ public class SongServiceTest {
             .songs(new HashSet<>(Set.of(song, song2)))
             .build();
 
-    SongDTO songDTO = SongDTO.builder()
-            .name("testSong2")
-            .imageUrl("testImageUrl2")
-            .imageUUID("testImageUUID2")
-            .path("testPath2")
-            .duration(50)
-            .genre(Genre.ROCK)
-            .album(album2.getId())
-            .build();
+
 
     @BeforeEach
     void setUp() {
@@ -147,13 +143,36 @@ public class SongServiceTest {
     @Test
     @DisplayName("getSongById returns null when given invalid id")
     void testGetSongByIdWithInvalidId() {
-        Song actual = songService.getSongById(1L);
+        when(songRepository.findById(any())).thenReturn(Optional.empty());
+        Song actual = songService.getSongById(song.getId());
         assertNull(actual);
     }
 
     @Test
     @DisplayName("addSong saves new song to the database")
     void testAddSongWithValidData() {
+
+        SongDTO songDTO = SongDTO.builder()
+                .name("testSong2")
+                .imageUrl("testImageUrl2")
+                .imageUUID("testImageUUID2")
+                .path("testPath2")
+                .duration(50)
+                .genre(Genre.ROCK)
+                .album(album2.getId())
+                .build();
+
+        song2 = Song.builder()
+                .id(2L)
+                .name("testSong2")
+                .imageUrl("testImageUrl2")
+                .imageUUID("testImageUUID2")
+                .path("testPath2")
+                .path("testPath2")
+                .duration(50)
+                .genre(Genre.ROCK)
+                .album(album2)
+                .build();
 
         album2.setArtists(new HashSet<>(Set.of(artist, artist2)));
         song2.setAlbum(album2);
@@ -163,32 +182,41 @@ public class SongServiceTest {
                 .thenReturn(Optional.of(album2));
 
         songService.addSong(songDTO);
-
-        verify(songRepository, times(1)).save(song2);
-        assertEquals(songDTO.getName(), song2.getName());
-        assertEquals(songDTO.getImageUUID(), song2.getImageUUID());
-        assertEquals(songDTO.getImageUrl(), song2.getImageUrl());
-        assertEquals(songDTO.getPath(), song2.getPath());
-        assertEquals(songDTO.getGenre(), song2.getGenre());
-        assertEquals(songDTO.getDuration(), song2.getDuration());
-        assertEquals(songDTO.getAlbum(), song2.getAlbum().getId());
-        assertEquals(Set.of(artist, artist2), song2.getArtists());
-        assertTrue(song2.getPlaylists().isEmpty());
+        verify(songRepository).save(songArgumentCaptor.capture());
+        Song savedSong = songArgumentCaptor.getValue();
+        assertEquals(songDTO.getName(), savedSong.getName());
+        assertEquals(songDTO.getImageUUID(), savedSong.getImageUUID());
+        assertEquals(songDTO.getImageUrl(), savedSong.getImageUrl());
+        assertEquals(songDTO.getPath(), savedSong.getPath());
+        assertEquals(songDTO.getGenre(), savedSong.getGenre());
+        assertEquals(songDTO.getDuration(), savedSong.getDuration());
+        assertEquals(songDTO.getAlbum(), savedSong.getAlbum().getId());
+        assertEquals(Set.of(artist, artist2), savedSong.getArtists());
+        assertTrue(savedSong.getPlaylists().isEmpty());
         String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-        assertEquals(currentDateTime, song2.getCreated());
-        assertEquals(currentDateTime, song2.getModified());
+        assertEquals(currentDateTime, savedSong.getCreated());
+        assertEquals(currentDateTime, savedSong.getModified());
 
     }
-@Test
+
+    @Test
     @DisplayName("getSongWithoutRelations returns Song without relations")
-    void testRemoveSongConnections(){
+    void testRemoveSongConnections() {
         when(songRepository.findById(song.getId())).thenReturn(Optional.of(song));
         songService.removeSongConnections(song.getId());
-        verify(songRepository, times(1)).save(song);
-        assertTrue(song.getPlaylists().isEmpty());
-        assertTrue(song.getArtists().isEmpty());
-        assertNull(song.getAlbum());
+        verify(songRepository).save(songArgumentCaptor.capture());
+        Song savedSong = songArgumentCaptor.getValue();
+        assertTrue(savedSong.getPlaylists().isEmpty());
+        assertTrue(savedSong.getArtists().isEmpty());
+        assertNull(savedSong.getAlbum());
 
+    }
+
+    @Test
+    @DisplayName("removeSong removes song from the database")
+    void testRemoveSong(){
+        songService.removeSong(song.getId());
+        verify(songRepository, times(1)).deleteById(song.getId());
     }
 
 }

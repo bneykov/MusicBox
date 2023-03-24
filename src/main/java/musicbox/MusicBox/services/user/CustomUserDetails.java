@@ -1,11 +1,14 @@
 package musicbox.MusicBox.services.user;
 
+import lombok.Builder;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-
+@Setter
+@Builder
 public class CustomUserDetails implements UserDetails {
     private final Long id;
     private final String name;
@@ -14,15 +17,11 @@ public class CustomUserDetails implements UserDetails {
     private final String password;
 
     private final Collection<GrantedAuthority> authorities;
-
     private final String imageUrl;
     private final String imageUUID;
     private final String created;
     private final String modified;
     private final String lastLoggedIn;
-
-
-
 
     public CustomUserDetails(Long id, String name, String username, String email,
                              String password, Collection<GrantedAuthority> authorities,

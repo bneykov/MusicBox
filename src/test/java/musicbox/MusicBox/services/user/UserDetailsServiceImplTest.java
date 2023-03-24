@@ -58,9 +58,7 @@ public class UserDetailsServiceImplTest {
                 .build();
         when(mockUserRepository.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
 
-
         CustomUserDetails userDetails = (CustomUserDetails) userDetailsServiceImpl.loadUserByUsername(testUser.getUsername());
-
 
         assertEquals(testUser.getId(), userDetails.getId());
         assertEquals(testUser.getUsername(), userDetails.getUsername());

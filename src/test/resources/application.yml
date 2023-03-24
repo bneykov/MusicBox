@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never
+cloudinary:
+  cloud_name: "bneikov"
+  api_key: "133183588698468"
+  api_secret: "qAeWm3WbSFi2eueRLC5GaabzjYs"
+app:
+  default:
+    password: topsecret

@@ -2,8 +2,8 @@ package musicbox.MusicBox.config;
 
 import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.repositories.UserRepository;
-import musicbox.MusicBox.services.user.UserDetailsServiceImpl;
 import musicbox.MusicBox.services.user.CustomAuthSuccessHandler;
+import musicbox.MusicBox.services.user.UserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

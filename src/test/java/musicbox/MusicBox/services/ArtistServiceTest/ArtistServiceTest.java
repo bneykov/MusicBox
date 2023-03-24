@@ -11,9 +11,7 @@ import musicbox.MusicBox.services.artist.ArtistService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
@@ -38,6 +36,9 @@ class ArtistServiceTest {
 
     @Mock
     private AlbumService albumService;
+
+    @Captor
+    private ArgumentCaptor<Artist> artistArgumentCaptor;
 
     Artist artist = Artist.builder()
             .id(1L)
@@ -100,13 +101,14 @@ class ArtistServiceTest {
     @Test
     @DisplayName("getArtistById returns null when given invalid id")
     void testGetArtistByIdWithInvalidId() {
-        Artist actual = artistService.getArtistById(1L);
+        when(artistRepository.findById(any())).thenReturn(Optional.empty());
+        Artist actual = artistService.getArtistById(artist.getId());
         assertNull(actual);
     }
 
     @Test
     @DisplayName("getAlbumsByArtistId returns albums by a specific artist")
-    void testGetAlbumsByArtistId() {
+    void testGetAlbumsByArtistIdWithValidId() {
         Album album = Album.builder()
                 .id(1L)
                 .name("testAlbum")
@@ -116,21 +118,29 @@ class ArtistServiceTest {
         Set<Album> actualAlbums = artistService.getAlbumsByArtistId(artist.getId());
         assertEquals(expectedAlbums, actualAlbums);
     }
+    @Test
+    @DisplayName("getAlbumsByArtistId returns empty Set if artist id is invalid")
+    void testGetAlbumsByArtistIdWithInvalidId() {
+        when(albumRepository.findAllByArtistId(any())).thenReturn(new HashSet<>());
+        Set<Album> actualAlbums = artistService.getAlbumsByArtistId(artist.getId());
+        assertTrue(actualAlbums.isEmpty());
+    }
 
     @Test
     @DisplayName("addArtist saves new artist to the database")
     void testAddArtist() {
         when(modelMapper.map(artistDTO, Artist.class)).thenReturn(artist);
         artistService.addArtist(artistDTO);
-        verify(artistRepository, times(1)).save(artist);
-        assertEquals(artistDTO.getName(), artist.getName());
-        assertEquals(artistDTO.getImageUrl(), artist.getImageUrl());
-        assertEquals(artistDTO.getImageUUID(), artist.getImageUUID());
-        assertTrue(artist.getAlbums().isEmpty());
-        assertTrue(artist.getSongs().isEmpty());
+        verify(artistRepository, times(1)).save(artistArgumentCaptor.capture());
+        Artist savedArtist = artistArgumentCaptor.getValue();
+        assertEquals(artistDTO.getName(), savedArtist.getName());
+        assertEquals(artistDTO.getImageUrl(), savedArtist.getImageUrl());
+        assertEquals(artistDTO.getImageUUID(), savedArtist.getImageUUID());
+        assertTrue(savedArtist.getAlbums().isEmpty());
+        assertTrue(savedArtist.getSongs().isEmpty());
         String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-        assertEquals(currentDateTime, artist.getCreated());
-        assertEquals(currentDateTime, artist.getModified());
+        assertEquals(currentDateTime, savedArtist.getCreated());
+        assertEquals(currentDateTime, savedArtist.getModified());
 
     }
 
