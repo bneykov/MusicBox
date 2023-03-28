@@ -9,6 +9,7 @@ import musicbox.MusicBox.repositories.PlaylistRepository;
 import musicbox.MusicBox.repositories.SongRepository;
 import musicbox.MusicBox.repositories.UserRepository;
 import musicbox.MusicBox.services.user.CustomUserDetails;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -124,11 +125,15 @@ public class PlaylistServiceTest {
     }
 
     @Test
-    @DisplayName("getPlaylistById returns null when given invalid id")
+    @DisplayName("getPlaylistById throws ObjectNotFound when given invalid id")
     void testGetPlaylistByIdWithInvalidId() {
-        when(playlistRepository.findById(any())).thenReturn(Optional.empty());
-        Playlist actual = playlistService.getPlaylistById(playlist.getId());
-        assertNull(actual);
+        when(playlistRepository.findById(5L)).thenReturn(Optional.empty());
+        try {
+            playlistService.getPlaylistById(5L);
+            fail("Expected  ObjectNotFoundException");
+        } catch (ObjectNotFoundException exception) {
+            assertEquals("Object with ID 5 of type Playlist not found", exception.getMessage());
+        }
     }
 
     @Test

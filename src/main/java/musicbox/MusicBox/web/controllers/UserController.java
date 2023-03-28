@@ -1,11 +1,11 @@
 package musicbox.MusicBox.web.controllers;
 
 import jakarta.validation.Valid;
-import musicbox.MusicBox.services.user.CustomUserDetails;
 import musicbox.MusicBox.model.dto.UserRegisterDTO;
 import musicbox.MusicBox.model.enums.RoleEnum;
+import musicbox.MusicBox.services.user.CustomUserDetails;
 import musicbox.MusicBox.services.user.UserService;
-import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,6 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-
         return "login";
     }
 
@@ -38,7 +37,6 @@ public class UserController {
     public String onFailedLogin(@ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                                 String username,
                                 RedirectAttributes redirectAttributes) {
-
         redirectAttributes.addFlashAttribute("invalidCredentials", true);
         redirectAttributes.addFlashAttribute("username", username);
         return "redirect:/users/login";
@@ -50,7 +48,7 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("roles", RoleEnum.values());
         model.addAttribute("users", this.userService.getUsers());
-        return "/all-users";
+        return "all-users";
     }
 
 
@@ -63,22 +61,16 @@ public class UserController {
     public String register(@Valid UserRegisterDTO registerDTO, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute(
-                    "org.springframework.validation.BindingResult.registerDTO",
-                    bindingResult);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registerDTO", bindingResult);
             redirectAttributes.addFlashAttribute("registerDTO", registerDTO);
             return "redirect:/users/register";
         }
         this.userService.register(registerDTO);
-        return "redirect:/login";
+        return "redirect:/users/login";
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/change_role")
     public String changeRole(@PathVariable Long id) {
-        if (this.userService.getUserById(id) == null) {
-            throw new ObjectNotFoundException(id, "User");
-        }
-
         this.userService.changeRole(id);
         return "redirect:/users/all";
     }

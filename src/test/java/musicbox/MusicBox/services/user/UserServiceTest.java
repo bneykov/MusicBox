@@ -6,6 +6,7 @@ import musicbox.MusicBox.model.entity.UserRole;
 import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.repositories.RoleRepository;
 import musicbox.MusicBox.repositories.UserRepository;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -76,11 +76,15 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("getUserById returns null when given invalid id")
+    @DisplayName("getUserById throws ObjectNotFound when given invalid id")
     void testGetUserByIdWithInvalidId() {
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
-        UserEntity actual = userService.getUserById(5L);
-        assertNull(actual);
+        when(userRepository.findById(5L)).thenReturn(Optional.empty());
+        try {
+            userService.getUserById(5L);
+            fail("Expected  ObjectNotFoundException");
+        } catch (ObjectNotFoundException exception) {
+            assertEquals("Object with ID 5 of type User not found", exception.getMessage());
+        }
     }
 
     @Test

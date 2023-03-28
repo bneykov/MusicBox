@@ -1,6 +1,7 @@
 package musicbox.MusicBox.services.init;
 
 import jakarta.annotation.PostConstruct;
+import musicbox.MusicBox.constants.DefaultImageURLs;
 import musicbox.MusicBox.model.entity.*;
 import musicbox.MusicBox.model.enums.Genre;
 import musicbox.MusicBox.model.enums.RoleEnum;
@@ -25,8 +26,16 @@ public class InitService {
     private final SongRepository songRepository;
     private final PasswordEncoder passwordEncoder;
     private final String defaultPassword;
+    private Artist artist, artist2;
+    private Album album, album2;
+    private Song song;
+    private UserEntity admin, user;
+    private Playlist playlist;
 
-    public InitService(RoleRepository roleRepository, UserRepository userRepository, AlbumRepository albumRepository, ArtistRepository artistRepository, PlaylistRepository playlistRepository, SongRepository songRepository, PasswordEncoder passwordEncoder,
+
+    public InitService(RoleRepository roleRepository, UserRepository userRepository, AlbumRepository albumRepository,
+                       ArtistRepository artistRepository, PlaylistRepository playlistRepository,
+                       SongRepository songRepository, PasswordEncoder passwordEncoder,
                        @Value("${app.default.password}") String defaultPassword) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
@@ -75,7 +84,7 @@ public class InitService {
 
     private void initUser() {
         UserRole userRole = roleRepository.findUserRoleByRole(RoleEnum.USER).orElseThrow();
-        UserEntity user = UserEntity.builder()
+        user = UserEntity.builder()
                 .email("user@abv.bg")
                 .username("user")
                 .name("Ivan Ivanov")
@@ -86,11 +95,11 @@ public class InitService {
                 .modified(LocalDateTime.now())
                 .lastLoggedIn(LocalDateTime.now())
                 .build();
-        userRepository.save(user);
+        user = userRepository.save(user);
     }
 
     private void initAdmin() {
-        UserEntity admin = UserEntity.builder()
+        admin = UserEntity.builder()
                 .email("admin@abv.bg")
                 .username("admin")
                 .name("Admin Adminov")
@@ -101,61 +110,55 @@ public class InitService {
                 .modified(LocalDateTime.now())
                 .lastLoggedIn(LocalDateTime.now())
                 .build();
-        userRepository.save(admin);
+        admin = userRepository.save(admin);
     }
 
-    private void initArtists(){
+    private void initArtists() {
         if (this.artistRepository.count() == 0) {
-            Artist artist = Artist.builder()
-                    .id(1L)
+            artist = Artist.builder()
+
                     .name("Selena Gomez")
                     .albums(new HashSet<>())
                     .modified(LocalDateTime.now())
                     .created(LocalDateTime.now())
                     .imageUrl("https://rb.gy/2f1iog")
                     .build();
-            Artist artist2 = Artist.builder()
-                    .id(2L)
+            artist2 = Artist.builder()
                     .name("Bruno Mars")
                     .albums(new HashSet<>())
                     .modified(LocalDateTime.now())
                     .created(LocalDateTime.now())
-                    .imageUrl("https://rb.gy/2f1iog")
+                    .imageUrl("https://www.eslsongs.com/wp-content/uploads/2022/10/mars.jpg")
                     .build();
             this.artistRepository.saveAll(List.of(artist, artist2));
         }
     }
-    private void initAlbums(){
-        if (this.albumRepository.count() == 0) {
 
-            Artist artist = this.artistRepository.findById(1L).orElseThrow();
-            Artist artist2 = this.artistRepository.findById(2L).orElseThrow();
-            Album album = Album.builder()
-                    .id(1L)
+    private void initAlbums() {
+        if (this.albumRepository.count() == 0) {
+            album = Album.builder()
                     .name("For You")
                     .artists(Set.of(artist))
                     .created(LocalDateTime.now())
                     .modified(LocalDateTime.now())
                     .imageUrl("https://m.media-amazon.com/images/I/71maiXUoH2L._SX425_.jpg")
                     .build();
-            Album album2 = Album.builder()
-                    .id(2L)
+            album2 = Album.builder()
                     .name("Shared album")
                     .artists(Set.of(artist, artist2))
                     .created(LocalDateTime.now())
                     .modified(LocalDateTime.now())
-                    .imageUrl("https://m.media-amazon.com/images/I/71maiXUoH2L._SX425_.jpg")
+                    .imageUrl("https://www.vectornator.io/blog/content/images/2022/03/611b830385d20348a9809a8e_Cover-Album-Covers--1-.png")
                     .build();
             this.albumRepository.saveAll(List.of(album, album2));
         }
     }
 
-    private void initSongs(){
+    private void initSongs() {
         if (this.songRepository.count() == 0) {
-            Artist artist = this.artistRepository.findById(1L).orElseThrow();
-            Album album = this.albumRepository.findById(1L).orElseThrow();
-            Song song = Song.builder()
-                    .id(1L)
+
+            song = Song.builder()
+
                     .name("Who says")
                     .imageUrl("https://i.scdn.co/image/ab67616d0000b273fddfbee3aafd7fadab0e5460")
                     .artists(Set.of(artist))
@@ -166,24 +169,117 @@ public class InitService {
                     .created(LocalDateTime.now())
                     .modified(LocalDateTime.now())
                     .build();
-            this.songRepository.save(song);
-        }
-    }
-    private void initPlaylists(){
-        if (this.playlistRepository.count() == 0) {
-            UserEntity user = this.userRepository.findByUsername("admin").orElseThrow();
-           Song song = this.songRepository.findById(1L).orElseThrow();
-           Playlist playlist = Playlist.builder()
-                   .songs(Set.of(song))
-                   .created(LocalDateTime.now())
-                   .modified(LocalDateTime.now())
-                   .name("Test Playlist")
-                   .userEntity(user)
-                   .imageUrl("https://i.pinimg.com/originals/19/f7/68/19f76854a898d32735a5cfdc2d2fc262.jpg")
-                   .build();
-           playlist.setSongs(Set.of(song));
-           this.playlistRepository.save(playlist);
+            song = this.songRepository.save(song);
         }
     }
 
+    private void initPlaylists() {
+        if (this.playlistRepository.count() == 0) {
+
+            playlist = Playlist.builder()
+                    .songs(Set.of(song))
+                    .created(LocalDateTime.now())
+                    .modified(LocalDateTime.now())
+                    .name("My Playlist")
+                    .userEntity(admin)
+                    .imageUrl(DefaultImageURLs.DEFAULT_PLAYLIST_IMAGE_URL)
+                    .build();
+            playlist.setSongs(Set.of(song));
+            this.playlistRepository.save(playlist);
+        }
+
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
+
+    public Artist getArtist2() {
+        return artist2;
+    }
+
+    public void setArtist2(Artist artist2) {
+        this.artist2 = artist2;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public Album getAlbum2() {
+        return album2;
+    }
+
+    public void setAlbum2(Album album2) {
+        this.album2 = album2;
+    }
+
+    public Song getSong() {
+        return song;
+    }
+
+    public void setSong(Song song) {
+        this.song = song;
+    }
+
+    public UserEntity getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(UserEntity admin) {
+        this.admin = admin;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+    }
+
+    public Set<Artist> getArtists() {
+        return new HashSet<>(Set.of(artist, artist2));
+    }
+
+    public Set<Album> getAlbums() {
+        return new HashSet<>(Set.of(album, album2));
+    }
+
+    public Set<Song> getSongs() {
+        return new HashSet<>(Set.of(song));
+    }
+
+    public Set<UserEntity> getUsers() {
+        return new HashSet<>(Set.of(admin, user));
+    }
+
+    public Set<Playlist> getPlaylists() {
+        return new HashSet<>(Set.of(playlist));
+    }
+
+    public void clearDatabase() {
+        playlistRepository.deleteAll();
+        artistRepository.deleteAll();
+        songRepository.deleteAll();
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
+        albumRepository.deleteAll();
+    }
 }

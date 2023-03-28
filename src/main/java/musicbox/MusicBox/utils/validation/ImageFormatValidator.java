@@ -15,7 +15,7 @@ public class ImageFormatValidator implements ConstraintValidator<ValidImageForma
 
     @Override
     public boolean isValid(MultipartFile image, ConstraintValidatorContext constraintValidatorContext) {
-        if (image.isEmpty()) {
+        if (image == null || image.isEmpty()) {
             return true;
         }
         return this.cloudinaryService.isImage(image);

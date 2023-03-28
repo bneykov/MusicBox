@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.repositories.UserRepository;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import musicbox.MusicBox.utils.events.UserLoggedInEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -31,7 +32,8 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
                                         Authentication authentication) throws IOException, ServletException {
         response.sendRedirect("/home");
         super.onAuthenticationSuccess(request, response, authentication);
-        UserEntity user = this.userRepository.findByUsername(authentication.getName()).orElse(null);
+        UserEntity user = this.userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ObjectNotFoundException("User"));
         applicationEventPublisher.publishEvent(new UserLoggedInEvent(this, user));
 
     }

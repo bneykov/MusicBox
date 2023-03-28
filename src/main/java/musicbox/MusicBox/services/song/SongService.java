@@ -7,6 +7,7 @@ import musicbox.MusicBox.model.entity.Album;
 import musicbox.MusicBox.model.entity.Song;
 import musicbox.MusicBox.repositories.AlbumRepository;
 import musicbox.MusicBox.repositories.SongRepository;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class SongService {
     }
 
     public Song getSongById(Long id){
-        return this.songRepository.findById(id).orElse(null);
+        return this.songRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Song"));
     }
 
     public List<Song> getSongs(){
@@ -42,7 +43,8 @@ public class SongService {
     @Transactional
     public void addSong(SongDTO songDTO){
         Song song = this.modelMapper.map(songDTO, Song.class);
-        Album album = this.albumRepository.findById(songDTO.getAlbum()).orElse(null);
+        Album album = this.albumRepository.findById(songDTO.getAlbum())
+                .orElseThrow(() -> new ObjectNotFoundException(songDTO.getAlbum(), "Album"));
         song.setArtists(new HashSet<>());
         song.setAlbum(album);
         song.setCreated(LocalDateTime.now());

@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +19,6 @@ import org.springframework.security.web.context.RequestAttributeSecurityContextR
 import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
-@EnableWebSecurity
 
 public class SecurityConfiguration {
     private final UserRepository userRepository;
@@ -38,7 +37,8 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers("/", "/albums/all", "/songs/all", "/artists/all").permitAll()
+                .requestMatchers("/", "/albums/all", "/songs/all", "/artists/all",
+                        "/albums/view/{id}", "/artists/view/{id}").permitAll()
                 .requestMatchers("/users/register", "/users/login", "/users/login-error").anonymous()
                 .requestMatchers("/users/all","*/change_role", "/songs/add/**", "/artists/add/**", "/albums/add/**"
                 , "/artists/remove/**", "/albums/remove/**", "/songs/remove/**").hasRole(RoleEnum.ADMIN.name())
@@ -72,7 +72,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
     @Bean
-    public org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService(){
         return new UserDetailsServiceImpl(userRepository);
     }
 

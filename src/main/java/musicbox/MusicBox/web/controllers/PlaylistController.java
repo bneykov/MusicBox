@@ -5,9 +5,8 @@ import musicbox.MusicBox.model.dto.PlaylistDTO;
 import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 import musicbox.MusicBox.services.playlist.PlaylistService;
-import musicbox.MusicBox.services.song.SongService;
 import musicbox.MusicBox.services.user.CustomUserDetails;
-import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,18 +17,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/playlists")
 public class PlaylistController {
+
     private final PlaylistService playlistService;
-    private final SongService songService;
     private final CloudinaryService cloudinaryService;
 
-    public PlaylistController(PlaylistService playlistService, SongService songService, CloudinaryService cloudinaryService) {
+    @Autowired
+    public PlaylistController(PlaylistService playlistService, CloudinaryService cloudinaryService) {
         this.playlistService = playlistService;
-        this.songService = songService;
         this.cloudinaryService = cloudinaryService;
     }
 
@@ -44,8 +42,19 @@ public class PlaylistController {
         return "create-playlist";
     }
 
+    @GetMapping("/{id}")
+    private String viewPlaylist(@PathVariable Long id, Model model
+            , @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Playlist playlist = this.playlistService.getPlaylistById(id);
+        if (!this.playlistService.isOwner(customUserDetails.getUsername(), id)) {
+            throw new AccessDeniedException("You can't view this playlist");
+        }
+        model.addAttribute("songs", playlist.getSongs());
+        model.addAttribute("currentPlaylist", playlist);
+        return "playlist";
+    }
     @GetMapping("/all")
-    public String viewPlaylists(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public String viewAllPlaylists(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         model.addAttribute("songId", null);
         model.addAttribute("currentUser", userDetails);
         model.addAttribute("playlists", this.playlistService.getUserPlaylists(userDetails.getId()));
@@ -55,9 +64,6 @@ public class PlaylistController {
     @GetMapping("/add/{id}")
     public String addSongToPlaylist(Model model, @AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable Long id) {
-        if (this.songService.getSongById(id) == null) {
-            throw new ObjectNotFoundException(id, "Song");
-        }
         model.addAttribute("songId", id);
         model.addAttribute("currentUser", userDetails);
         model.addAttribute("playlists", this.playlistService.getUserPlaylists(userDetails.getId()));
@@ -85,68 +91,23 @@ public class PlaylistController {
 
     }
 
-    @GetMapping("/{playlistId}/add/{songId}")
-
-    private String addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId
-            , @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Playlist playlist = this.playlistService.getPlaylistById(playlistId);
-        if (playlist == null) {
-            throw new ObjectNotFoundException(playlistId, "Playlist");
-        }
-        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
-            throw new AccessDeniedException("Sorry, you can't edit this playlist");
-        }
-        if (this.songService.getSongById(songId) == null) {
-            throw new ObjectNotFoundException(songId, "Song");
-        }
-
+    @PostMapping("/{playlistId}/add/{songId}")
+    private String addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
         this.playlistService.addSongToPlaylist(playlistId, songId);
         return "redirect:/playlists/" + playlistId;
     }
 
-    @GetMapping("/{playlistId}/remove/{songId}")
-    private String removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable Long songId,
-                                          @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Playlist playlist = this.playlistService.getPlaylistById(playlistId);
-        if (playlist == null) {
-            throw new ObjectNotFoundException(playlistId, "Playlist");
-        }
-        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
-            throw new AccessDeniedException("Sorry, you can't edit this playlist");
-        }
-        if (this.songService.getSongById(songId) == null) {
-            throw new ObjectNotFoundException(songId, "Song");
-        }
 
+    @DeleteMapping("/{playlistId}/remove/{songId}")
+    private String removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
         this.playlistService.removeSongFromPlaylist(playlistId, songId);
         return "redirect:/playlists/" + playlistId;
     }
 
-    @GetMapping("/remove/{id}")
-    private String removePlaylist(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Playlist playlist = this.playlistService.getPlaylistById(id);
-        if (playlist == null) {
-            throw new ObjectNotFoundException(id, "Playlist");
-        }
-        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
-            throw new AccessDeniedException("Sorry, you can't delete this playlist");
-        }
+    @DeleteMapping("/remove/{id}")
+    private String removePlaylist(@PathVariable Long id) {
         this.playlistService.removePlaylist(id);
         return "redirect:/playlists/all";
     }
 
-    @GetMapping("/{id}")
-    private String viewPlaylist(@PathVariable Long id, Model model,
-                                @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Playlist playlist = this.playlistService.getPlaylistById(id);
-        if (playlist == null) {
-            throw new ObjectNotFoundException(id, "Playlist");
-        }
-        if (!Objects.equals(playlist.getUserEntity().getId(), userDetails.getId())) {
-            throw new AccessDeniedException("Sorry, you can't delete this playlist");
-        }
-        model.addAttribute("songs", playlist.getSongs());
-        model.addAttribute("currentPlaylist", playlist);
-        return "playlist";
-    }
 }

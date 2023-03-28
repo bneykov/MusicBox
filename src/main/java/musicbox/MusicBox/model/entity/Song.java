@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import musicbox.MusicBox.constants.DefaultImageURLs;
 import musicbox.MusicBox.model.enums.Genre;
 
 import java.util.Set;
@@ -52,7 +53,7 @@ public class Song extends BaseImageEntity {
 
     public void setDefaultImage() {
         if (this.getImageUrl() == null) {
-            this.setImageUrl("https://res.cloudinary.com/bneikov/image/upload/v1678813917/generic_song_ahnwnj.jpg");
+            this.setImageUrl(DefaultImageURLs.DEFAULT_SONG_IMAGE_URL);
         }
     }
 

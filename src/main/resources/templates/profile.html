@@ -24,85 +24,104 @@
             <div class="col-md-8">
                 <div class="card bg-secondary text-white">
                     <div class="card-body">
-                        <h5 class="card-title mb-4 text-center">Profile info</h5>
-                        <form>
-                            <div class="row mb-3">
-                                <label for="name" class="col-sm-3 col-form-label">Name</label>
-                                <div class="col-sm-9">
-                                    <span type="text" class="form-control" id="name" th:text="${currentUser.name}">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="username" class="col-sm-3 col-form-label">Username</label>
-                                <div class="col-sm-9">
-                                    <span type="text" class="form-control" id="username"
-                                           th:text="${currentUser.username}">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="email" class="col-sm-3 col-form-label">Email</label>
-                                <div class="col-sm-9">
-                                    <span
-                                            type="email" class="form-control" id="email"
-                                           th:text="${currentUser.email}">
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-<!--                        <form-->
-<!--                                th:method="put"-->
-<!--                                th:action="@{/users/{id}/edit (id = ${currentUser.id})}"-->
-<!--                                th:object="${editProfileDTO}">-->
+                        <h5 class="card-title mb-4 text-center">Edit profile</h5>
+<!--                        <form>-->
 <!--                            <div class="row mb-3">-->
 <!--                                <label for="name" class="col-sm-3 col-form-label">Name</label>-->
 <!--                                <div class="col-sm-9">-->
-<!--                                    <input  th:field="*{name}" th:errorclass="'is-invalid alert-danger'"-->
-<!--                                            type="text" class="form-control" id="name" th:value="${currentUser.name}">-->
+<!--                                    <span type="text" class="form-control" id="name" th:text="${currentUser.name}">-->
+<!--                                    </span>-->
 <!--                                </div>-->
 <!--                            </div>-->
 <!--                            <div class="row mb-3">-->
 <!--                                <label for="username" class="col-sm-3 col-form-label">Username</label>-->
 <!--                                <div class="col-sm-9">-->
-<!--                                    <input th:field="*{username}" th:errorclass="'is-invalid alert-danger'"-->
-<!--                                           type="text" class="form-control" id="username"-->
-<!--                                           th:value="${currentUser.username}">-->
+<!--                                    <span type="text" class="form-control" id="username"-->
+<!--                                           th:text="${currentUser.username}">-->
+<!--                                    </span>-->
 <!--                                </div>-->
 <!--                            </div>-->
 <!--                            <div class="row mb-3">-->
 <!--                                <label for="email" class="col-sm-3 col-form-label">Email</label>-->
 <!--                                <div class="col-sm-9">-->
-<!--                                    <input  th:field="*{email}" th:errorclass="'is-invalid alert-danger'"-->
+<!--                                    <span-->
 <!--                                            type="email" class="form-control" id="email"-->
-<!--                                            th:value="${currentUser.email}">-->
+<!--                                           th:text="${currentUser.email}">-->
+<!--                                    </span>-->
 <!--                                </div>-->
 <!--                            </div>-->
-<!--                            <div class="row mb-3">-->
-<!--                                <label for="currentPassword" class="col-sm-3 col-form-label">Current Password</label>-->
-<!--                                <div class="col-sm-9">-->
-<!--                                    <input  th:field="*{currentPassword}" th:errorclass="'is-invalid alert-danger'"-->
-<!--                                            type="password" class="form-control" id="currentPassword" >-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="row mb-3">-->
-<!--                                <label for="newPassword" class="col-sm-3 col-form-label">New Password</label>-->
-<!--                                <div class="col-sm-9">-->
-<!--                                    <input th:field="*{password}" th:errorclass="'is-invalid alert-danger'"-->
-<!--                                           type="password"-->
-<!--                                           class="form-control"-->
-<!--                                           id="newPassword">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="row mb-3">-->
-<!--                                <label for="confirmPassword" class="col-sm-3 col-form-label">Confirm Password</label>-->
-<!--                                <div class="col-sm-9">-->
-<!--                                    <input  th:field="*{confirmPassword}" th:errorclass="'is-invalid alert-danger'"-->
-<!--                                            type="password" class="form-control" id="confirmPassword">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <button type="submit" class="btn btn-primary form-control">Save Changes</button>-->
 <!--                        </form>-->
+                        <form
+                                th:method="put"
+                                th:action="@{/profile/{id}/edit (id = ${currentUser.id})}"
+                                th:object="${updateDTO}">
+                            <div class="row mb-3">
+                                <label for="name" class="col-sm-3 col-form-label">Name</label>
+                                <div class="col-sm-9">
+                                    <input  th:field="*{name}" th:errorclass="'is-invalid alert-danger'"
+                                            type="text" class="form-control" id="name" th:value="${currentUser.getName()}">
+                                    <small th:if="${#fields.hasErrors('name')}"
+                                           th:errors="*{name}"
+                                           class="text-warning"></small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="username" class="col-sm-3 col-form-label">Username</label>
+                                <div class="col-sm-9">
+                                    <input th:field="*{username}"  th:errorclass="'is-invalid alert-danger'"
+                                           type="text" class="form-control" id="username"
+                                           th:value="${currentUser.username}">
+
+                                    <small th:if="${#fields.hasErrors('username')}"
+                                           th:errors="*{username}"
+                                           class="text-warning"></small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                <div class="col-sm-9">
+                                    <input  th:field="*{email}" th:errorclass="'is-invalid alert-danger'"
+                                            type="email" class="form-control" id="email"
+                                            th:value="${currentUser.email}">
+                                    <small th:if="${#fields.hasErrors('email')}"
+                                           th:errors="*{email}"
+                                           class="text-warning"></small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="currentPassword" class="col-sm-3 col-form-label">Current Password</label>
+                                <div class="col-sm-9">
+                                    <input  th:field="*{currentPassword}" th:errorclass="'is-invalid alert-danger'"
+                                            type="password" class="form-control" id="currentPassword" >
+                                    <small th:if="${#fields.hasErrors('currentPassword')}"
+                                           th:errors="*{currentPassword}"
+                                           class="text-warning"></small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="newPassword" class="col-sm-3 col-form-label">New Password</label>
+                                <div class="col-sm-9">
+                                    <input th:field="*{newPassword}" th:errorclass="'is-invalid alert-danger'"
+                                           type="password"
+                                           class="form-control"
+                                           id="newPassword">
+                                    <small th:if="${#fields.hasErrors('newPassword')}"
+                                           th:errors="*{newPassword}"
+                                           class="text-warning"></small>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="confirmPassword" class="col-sm-3 col-form-label">Confirm Password</label>
+                                <div class="col-sm-9">
+                                    <input  th:field="*{confirmPassword}" th:errorclass="'is-invalid alert-danger'"
+                                            type="password" class="form-control" id="confirmPassword">
+                                    <small th:if="${#fields.hasErrors('confirmPassword')}"
+                                           th:errors="*{confirmPassword}"
+                                           class="text-warning"></small>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary form-control">Save Changes</button>
+                        </form>
                     </div>
                 </div>
             </div>

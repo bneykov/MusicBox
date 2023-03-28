@@ -8,6 +8,7 @@ import musicbox.MusicBox.model.entity.Song;
 import musicbox.MusicBox.model.enums.Genre;
 import musicbox.MusicBox.repositories.AlbumRepository;
 import musicbox.MusicBox.repositories.SongRepository;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,6 @@ public class SongServiceTest {
             .name("testSong")
             .imageUrl("testImageUrl")
             .imageUUID("testImageUUID")
-            .path("testPath")
             .duration(100)
             .path("testPath")
             .genre(Genre.POP)
@@ -141,11 +141,15 @@ public class SongServiceTest {
     }
 
     @Test
-    @DisplayName("getSongById returns null when given invalid id")
+    @DisplayName("getSongById throws ObjectNotFound when given invalid id")
     void testGetSongByIdWithInvalidId() {
-        when(songRepository.findById(any())).thenReturn(Optional.empty());
-        Song actual = songService.getSongById(song.getId());
-        assertNull(actual);
+        when(songRepository.findById(5L)).thenReturn(Optional.empty());
+        try {
+            songService.getSongById(5L);
+            fail("Expected  ObjectNotFoundException");
+        } catch (ObjectNotFoundException exception) {
+            assertEquals("Object with ID 5 of type Song not found", exception.getMessage());
+        }
     }
 
     @Test
@@ -191,6 +195,7 @@ public class SongServiceTest {
         assertEquals(songDTO.getGenre(), savedSong.getGenre());
         assertEquals(songDTO.getDuration(), savedSong.getDuration());
         assertEquals(songDTO.getAlbum(), savedSong.getAlbum().getId());
+        assertNotNull(savedSong.getAlbum());
         assertEquals(Set.of(artist, artist2), savedSong.getArtists());
         assertTrue(savedSong.getPlaylists().isEmpty());
         String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));

@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import musicbox.MusicBox.model.dto.ArtistDTO;
 import musicbox.MusicBox.services.artist.ArtistService;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
-import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,21 +44,17 @@ public class ArtistController {
         return "view-all";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/view/{id}")
     public String artist(Model model, @PathVariable Long id) {
-        if (this.artistService.getArtistById(id) == null) {
-            throw new ObjectNotFoundException(id, "Artist");
-        }
+
         model.addAttribute("title", "Albums");
         model.addAttribute("albums", this.artistService.getAlbumsByArtistId(id));
         return "view-all";
     }
 
-    @GetMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     private String removeArtist(@PathVariable Long id) {
-        if (this.artistService.getArtistById(id) == null) {
-            throw new ObjectNotFoundException(id, "Artist");
-        }
+
         this.artistService.removeArtist(id);
         return "redirect:/artists/all";
     }

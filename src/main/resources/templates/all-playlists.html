@@ -23,20 +23,32 @@
 
             <div th:each="playlist:${playlists}" class="col">
                 <div class="card bg-light text-dark mb-3">
-
-                    <a th:if="${songId == null}" th:href="@{/playlists/{id}(id = *{playlist.id})}" class="card-img-top">
+                    <form
+                    th:method="post"
+                    th:action="@{/playlists/{id}(id = *{playlist.id})}">
+                    <button type="submit" th:if="${songId == null}"  class="card-img-top">
                     <img th:src="${playlist.imageUrl}"
                          class="card-img-top" alt="">
-                    </a>
-                    <a th:unless="${songId == null}"
-                       th:href="@{/playlists/{playlistId}/add/{songId}(playlistId = *{playlist.id}, songId = ${songId})}"
+                    </button>
+                    </form>
+                    <form
+                    th:method="post"
+                    th:action="@{/playlists/{playlistId}/add/{songId}(playlistId = *{playlist.id}, songId = ${songId})}">
+                    <button type="submit" th:unless="${songId == null}"
                        class="card-img-top">
                         <img th:src="${playlist.imageUrl}"
                              class="card-img-top" alt="">
-                    </a>
+                    </button>
+                    </form>
                     <div class="card-body">
                         <h5 th:text="${playlist.name}" class="card-title">Playlist name</h5>
-                        <a th:href="@{/playlists/remove/{id}(id = *{playlist.id})}" class="btn btn-danger">Delete</a>
+                        <form
+                                th:action="@{/playlists/remove/{id}(id = *{playlist.id})}"
+                                th:method="delete"
+                        >
+                            <button type="submit"
+                                    class="btn btn-danger">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>

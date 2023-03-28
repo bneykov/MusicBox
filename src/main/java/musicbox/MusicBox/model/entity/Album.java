@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import musicbox.MusicBox.constants.DefaultImageURLs;
 
 import java.util.Set;
 
@@ -27,6 +28,7 @@ public class Album extends BaseImageEntity {
     private Set<Song> songs;
 
     public String getArtistsNames(){
+
         StringBuilder stringBuilder = new StringBuilder();
         this.artists.forEach(artist -> stringBuilder.append(artist.getName()).append(", "));
        return stringBuilder.substring(0, stringBuilder.length() - 2);
@@ -34,7 +36,7 @@ public class Album extends BaseImageEntity {
 
     public void setDefaultImage(){
         if (this.getImageUrl() == null) {
-            this.setImageUrl("https://res.cloudinary.com/bneikov/image/upload/v1678813465/generic_album_gnkoaj.png");
+            this.setImageUrl(DefaultImageURLs.DEFAULT_ALBUM_IMAGE_URL);
         }
     }
 

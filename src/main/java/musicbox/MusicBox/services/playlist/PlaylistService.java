@@ -9,6 +9,7 @@ import musicbox.MusicBox.repositories.PlaylistRepository;
 import musicbox.MusicBox.repositories.SongRepository;
 import musicbox.MusicBox.repositories.UserRepository;
 import musicbox.MusicBox.services.user.CustomUserDetails;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class PlaylistService {
     }
 
     public Playlist getPlaylistById(Long id) {
-        return this.playlistRepository.findById(id).orElse(null);
+        return this.playlistRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Playlist"));
     }
 
     public PlaylistService(ModelMapper modelMapper, PlaylistRepository playlistRepository,
@@ -44,7 +45,8 @@ public class PlaylistService {
     @Transactional
     public void addPlaylist(PlaylistDTO playlistDTO, CustomUserDetails userDetails) {
         Playlist playlist = this.modelMapper.map(playlistDTO, Playlist.class);
-        UserEntity owner = this.userRepository.findById(userDetails.getId()).orElse(null);
+        UserEntity owner = this.userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new ObjectNotFoundException(userDetails.getId(), "User"));
         playlist.setUserEntity(owner);
         playlist.setCreated(LocalDateTime.now());
         playlist.setModified(LocalDateTime.now());
@@ -54,7 +56,8 @@ public class PlaylistService {
 
     public void addSongToPlaylist(Long playlistId, Long songId) {
         Playlist playlist = this.getPlaylistById(playlistId);
-        Song song = this.songRepository.findById(songId).orElse(null);
+        Song song = this.songRepository.findById(songId)
+                .orElseThrow(() -> new ObjectNotFoundException(songId, "Song"));
         playlist.getSongs().add(song);
         playlist.setModified(LocalDateTime.now());
         this.playlistRepository.save(playlist);
@@ -63,7 +66,8 @@ public class PlaylistService {
     @Transactional
     public void removeSongFromPlaylist(Long playlistId, Long songId) {
         Playlist playlist = this.getPlaylistById(playlistId);
-        Song song = this.songRepository.findById(songId).orElse(null);
+        Song song = this.songRepository.findById(songId)
+                .orElseThrow(() -> new ObjectNotFoundException(songId, "Song"));
         playlist.getSongs().remove(song);
         playlist.setModified(LocalDateTime.now());
         this.playlistRepository.save(playlist);
@@ -72,9 +76,12 @@ public class PlaylistService {
     public void removePlaylist(Long id) {
         this.playlistRepository.deleteById(id);
     }
-    public boolean isOwner(CustomUserDetails userDetails, Long playlistId){
-//        Playlist playlist = this.getPlaylistById(playlistId);
-//        return Objects.equals(playlist.getUserEntity().getId(), userDetails.getId());
-        return false;
+
+    public boolean isOwner(String username, Long id){
+        return playlistRepository.
+                findById(id).
+                filter(playlist -> playlist.getUserEntity().getUsername().equals(username)).
+                isPresent();
     }
+
 }

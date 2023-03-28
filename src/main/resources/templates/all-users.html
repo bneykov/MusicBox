@@ -23,49 +23,6 @@
                     </button>
                 </div>
             </div>
-
-
-<!--            <table class="table table-striped text-light">-->
-
-<!--                <tbody id="usersTable">-->
-<!--                <tr class="text-light text-center">-->
-<!--                    <th>Username</th>-->
-<!--                    <th>Name</th>-->
-<!--                    <th>Email</th>-->
-<!--                    <th>Last Modified</th>-->
-<!--                    <th>Change role</th>-->
-<!--                </tr>-->
-<!--                <tr th:each="user: ${users}" class="text-light text-center">-->
-<!--                    <form-->
-<!--                            th:method="post"-->
-<!--                            th:action="@{/users/{id}/change_role(id = ${user.id})}">-->
-<!--                        <td th:text="${user.username}">Username</td>-->
-<!--                        <td th:text="${user.name}">Name</td>-->
-<!--                        <td th:text="${user.email}">Email</td>-->
-<!--                        <td th:text="${user.modified}">Last Modified</td>-->
-<!--                        <td>-->
-<!--                            <select onchange="this.form.submit()" sec:authorize="hasRole('ADMIN')"-->
-<!--                                    class="browser-default form-select" id="role" name="role">-->
-
-<!--                                <option th:selected="${user.roles.size() == 1}"-->
-<!--                                        th:value="USER"-->
-<!--                                        th:text="User">-->
-
-<!--                                </option>-->
-<!--                                <option-->
-<!--                                        th:selected="${user.roles.size() > 1}"-->
-<!--                                        th:value="ADMIN"-->
-<!--                                        th:text="Admin">-->
-<!--                                </option>-->
-
-<!--                            </select>-->
-<!--                        </td>-->
-<!--                    </form>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
-
-
         </div>
 
     </div>

@@ -75,7 +75,7 @@ public class SongController {
 
     }
 
-    @GetMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     private String removeSong(@PathVariable Long id) {
         this.songService.removeSongConnections(id);
         this.songService.removeSong(id);

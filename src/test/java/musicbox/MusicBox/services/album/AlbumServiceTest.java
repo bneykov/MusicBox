@@ -8,6 +8,7 @@ import musicbox.MusicBox.model.entity.Song;
 import musicbox.MusicBox.repositories.AlbumRepository;
 import musicbox.MusicBox.repositories.ArtistRepository;
 import musicbox.MusicBox.repositories.SongRepository;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -202,11 +203,15 @@ class AlbumServiceTest {
         assertEquals(album, actual);
     }
     @Test
-    @DisplayName("getAlbumById returns null when given invalid id")
+    @DisplayName("getAlbumById throws ObjectNotFound when given invalid id")
     void testGetAlbumByIdWithInvalidId() {
         when(mockAlbumRepository.findById(5L)).thenReturn(Optional.empty());
-        Album actual = albumService.getAlbumById(5L);
-        assertNull(actual);
+        try {
+            albumService.getAlbumById(5L);
+            fail("Expected  ObjectNotFoundException");
+        } catch (ObjectNotFoundException exception) {
+            assertEquals("Object with ID 5 of type Album not found", exception.getMessage());
+        }
     }
 
     @Test

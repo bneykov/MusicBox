@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import musicbox.MusicBox.constants.DefaultImageURLs;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,8 +46,10 @@ public class UserEntity extends BaseImageEntity {
     private Set<Playlist> playlists;
 
 
-    public void setDefaultImage(){
-
+    public void setDefaultImage() {
+        if (this.getImageUrl() == null) {
+            this.setImageUrl(DefaultImageURLs.DEFAULT_USER_IMAGE_URL);
+        }
     }
 
     public String getLastLoggedIn() {

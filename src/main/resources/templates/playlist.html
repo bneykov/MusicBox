@@ -14,15 +14,15 @@
             <div class="col-12">
                 <h2 th:text="${currentPlaylist.name}" class="text-light mb-3  text-center"></h2>
                 <h2 th:if="${songs.isEmpty()}" class="text-warning mb-3 mt-5  text-center">
-                   Let's add some songs!
+                    Let's add some songs!
 
                 </h2>
                 <div class="col text-center">
-                <a th:if="${songs.isEmpty()}"
-                   class="btn btn-lg btn-success mt-3 mb-3" href="/songs/all" role="button">Explore songs</a>
+                    <a th:if="${songs.isEmpty()}"
+                       class="btn btn-lg btn-success mt-3 mb-3" href="/songs/all" role="button">Explore songs</a>
                 </div>
                 <h3 th:if="${!songs.isEmpty()}"
-                        th:text="|Duration: ${currentPlaylist.playlistDurationFormat}|"
+                    th:text="|Duration: ${currentPlaylist.playlistDurationFormat}|"
                     class="text-light mb-3  text-center"></h3>
             </div>
             <table th:if="${!songs.isEmpty()}" class="table table-striped text-light">
@@ -42,9 +42,14 @@
                     <td th:text="${song.album.name}">Album</td>
                     <td th:text="${song.genre.value}">Genre</td>
                     <td th:text="${song.formattedDuration}">Duration</td>
-                    <td><a
-                            th:href="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${currentPlaylist.id}, songId = *{song.id})}"
-                           class="btn btn-danger">Remove</a></td>
+                    <td>
+                        <form
+                        th:method="delete"
+                        th:action="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${currentPlaylist.id}, songId = *{song.id})}">
+                            <button type="submit"
+                                class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
                 </tr>
                 </tbody>
             </table>

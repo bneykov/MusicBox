@@ -23,8 +23,13 @@
                         <p th:text="${song.getArtistsNames()}" class="card-text">Artists</p>
                         <a sec:authorize="isAuthenticated()"
                            th:href="@{/playlists/add/{id}(id = ${song.id})}" class="btn btn-primary">Add to playlist</a>
-                        <a sec:authorize="hasRole('ADMIN')"
-                           th:href="@{/songs/remove/{id}(id = *{song.id})}" class="btn btn-danger mt-3">Delete</a>
+                        <form
+                                th:action="@{/songs/remove/{id}(id = *{song.id})}"
+                                th:method="delete"
+                        >
+                            <button type="submit" sec:authorize="hasRole('ADMIN')"
+                                    class="btn btn-danger mt-3">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -45,14 +50,19 @@
         </div>
         <div th:each="album:${albums}" class="col-lg-2 col-md-6 col-sm-12">
             <div class="card bg-light text-dark mb-3">
-                <a class="card-img-top" th:href="@{/albums/{id}(id = *{album.id})}">
+                <a class="card-img-top" th:href="@{/albums/view/{id}(id = *{album.id})}">
                     <img th:src="${album.imageUrl}" class="card-img-top" alt="">
                 </a>
                 <div class="card-body">
                     <h5 th:text="${album.name}" class="card-title">Album Name</h5>
                     <p th:text="${album.getArtistsNames()}" class="card-text">Artist Name</p>
-                    <a sec:authorize="hasRole('ADMIN')"
-                       th:href="@{/albums/remove/{id}(id = *{album.id})}" class="btn btn-danger">Delete</a>
+                    <form
+                            th:action="@{/albums/remove/{id}(id = *{album.id})}"
+                            th:method="delete"
+                    >
+                        <button type="submit" sec:authorize="hasRole('ADMIN')"
+                                class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -72,13 +82,18 @@
         </div>
         <div th:each="artist:${artists}" class="col-lg-2 col-md-6 col-sm-12">
             <div class="card bg-light text-dark mb-3">
-                <a class="card-img-top" th:href="@{/artists/{id}(id = *{artist.id})}">
+                <a class="card-img-top" th:href="@{/artists/view/{id}(id = *{artist.id})}">
                     <img th:src="${artist.imageUrl}" class="card-img-top" alt="">
                 </a>
                 <div class="card-body">
                     <h5 th:text="${artist.name}" class="card-title">Artist Name</h5>
-                    <a sec:authorize="hasRole('ADMIN')"
-                       th:href="@{/artists/remove/{id}(id = *{artist.id})}" class="btn btn-danger">Delete</a>
+                    <form
+                            th:action="@{/artists/remove/{id}(id = *{artist.id})}"
+                            th:method="delete"
+                    >
+                        <button type="submit" sec:authorize="hasRole('ADMIN')"
+                                class="btn btn-danger">Delete</button>
+                    </form>
                 </div>
             </div>
         </div>

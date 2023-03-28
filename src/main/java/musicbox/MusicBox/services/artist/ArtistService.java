@@ -7,6 +7,7 @@ import musicbox.MusicBox.model.entity.Artist;
 import musicbox.MusicBox.repositories.AlbumRepository;
 import musicbox.MusicBox.repositories.ArtistRepository;
 import musicbox.MusicBox.services.album.AlbumService;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class ArtistService {
     }
 
     public Artist getArtistById(Long id) {
-        return this.artistRepository.findById(id).orElse(null);
+        return this.artistRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Artist"));
     }
 
     public Set<Album> getAlbumsByArtistId(Long id) {

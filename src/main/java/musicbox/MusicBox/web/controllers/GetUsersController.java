@@ -3,6 +3,7 @@ package musicbox.MusicBox.web.controllers;
 import musicbox.MusicBox.model.dto.UserViewDTO;
 import musicbox.MusicBox.services.user.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class GetUsersController {
         this.userService = userService;
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/get")
     public ResponseEntity<List<UserViewDTO>> getUsers() {
         List<UserViewDTO> users = userService.mapUsers(userService.getUsers());

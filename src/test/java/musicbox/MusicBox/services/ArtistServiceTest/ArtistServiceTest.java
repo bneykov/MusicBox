@@ -8,6 +8,7 @@ import musicbox.MusicBox.repositories.AlbumRepository;
 import musicbox.MusicBox.repositories.ArtistRepository;
 import musicbox.MusicBox.services.album.AlbumService;
 import musicbox.MusicBox.services.artist.ArtistService;
+import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,11 +100,15 @@ class ArtistServiceTest {
     }
 
     @Test
-    @DisplayName("getArtistById returns null when given invalid id")
+    @DisplayName("getArtistById throws ObjectNotFound when given invalid id")
     void testGetArtistByIdWithInvalidId() {
-        when(artistRepository.findById(any())).thenReturn(Optional.empty());
-        Artist actual = artistService.getArtistById(artist.getId());
-        assertNull(actual);
+        when(artistRepository.findById(5L)).thenReturn(Optional.empty());
+        try {
+            artistService.getArtistById(5L);
+            fail("Expected  ObjectNotFoundException");
+        } catch (ObjectNotFoundException exception) {
+            assertEquals("Object with ID 5 of type Artist not found", exception.getMessage());
+        }
     }
 
     @Test
@@ -129,6 +134,11 @@ class ArtistServiceTest {
     @Test
     @DisplayName("addArtist saves new artist to the database")
     void testAddArtist() {
+        artist = Artist.builder()
+                .name("testArtist")
+                .imageUUID("testUUID")
+                .imageUrl("testUrl")
+                .build();
         when(modelMapper.map(artistDTO, Artist.class)).thenReturn(artist);
         artistService.addArtist(artistDTO);
         verify(artistRepository, times(1)).save(artistArgumentCaptor.capture());
