@@ -20,7 +20,7 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    private String home(Model model) {
+    public String home(Model model) {
         model.addAttribute("songs", this.songService.getHomeSongs());
         model.addAttribute("artists", this.artistService.getHomeArtists());
         model.addAttribute("albums", this.albumService.getHomeAlbums());

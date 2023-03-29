@@ -28,7 +28,7 @@ public class AlbumController {
     }
 
     @ModelAttribute("albumDTO")
-    private AlbumDTO albumDTO() {
+    public AlbumDTO albumDTO() {
         return new AlbumDTO();
     }
 
@@ -56,13 +56,13 @@ public class AlbumController {
     }
 
     @DeleteMapping("/remove/{id}")
-    private String removeAlbum(@PathVariable Long id) {
+    public String removeAlbum(@PathVariable Long id) {
         this.albumService.removeAlbum(id);
         return "redirect:/albums/all";
     }
 
     @PostMapping("/add")
-    private String addAlbum(@Valid AlbumDTO albumDTO, BindingResult bindingResult,
+    public String addAlbum(@Valid AlbumDTO albumDTO, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {

@@ -27,14 +27,13 @@ public class Album extends BaseImageEntity {
     @OneToMany(mappedBy = "album", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<Song> songs;
 
-    public String getArtistsNames(){
-
+    public String getArtistsNames() {
         StringBuilder stringBuilder = new StringBuilder();
         this.artists.forEach(artist -> stringBuilder.append(artist.getName()).append(", "));
-       return stringBuilder.substring(0, stringBuilder.length() - 2);
+        return stringBuilder.substring(0, stringBuilder.length() - 2);
     }
 
-    public void setDefaultImage(){
+    public void setDefaultImage() {
         if (this.getImageUrl() == null) {
             this.setImageUrl(DefaultImageURLs.DEFAULT_ALBUM_IMAGE_URL);
         }

@@ -6,8 +6,7 @@ import musicbox.MusicBox.model.entity.Playlist;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 import musicbox.MusicBox.services.playlist.PlaylistService;
 import musicbox.MusicBox.services.user.CustomUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,7 @@ public class PlaylistController {
     private final PlaylistService playlistService;
     private final CloudinaryService cloudinaryService;
 
-    @Autowired
+
     public PlaylistController(PlaylistService playlistService, CloudinaryService cloudinaryService) {
         this.playlistService = playlistService;
         this.cloudinaryService = cloudinaryService;
@@ -41,14 +40,10 @@ public class PlaylistController {
 
         return "create-playlist";
     }
-
+    @PreAuthorize("isOwner(#id)")
     @GetMapping("/{id}")
-    private String viewPlaylist(@PathVariable Long id, Model model
-            , @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public String viewPlaylist(@PathVariable Long id, Model model) {
         Playlist playlist = this.playlistService.getPlaylistById(id);
-        if (!this.playlistService.isOwner(customUserDetails.getUsername(), id)) {
-            throw new AccessDeniedException("You can't view this playlist");
-        }
         model.addAttribute("songs", playlist.getSongs());
         model.addAttribute("currentPlaylist", playlist);
         return "playlist";
@@ -71,7 +66,7 @@ public class PlaylistController {
     }
 
     @PostMapping("/add")
-    private String addPlaylist(@Valid PlaylistDTO playlistDTO, BindingResult bindingResult,
+    public String addPlaylist(@Valid PlaylistDTO playlistDTO, BindingResult bindingResult,
                                RedirectAttributes redirectAttributes, @AuthenticationPrincipal
                                CustomUserDetails userDetails) throws IOException {
 
@@ -90,22 +85,22 @@ public class PlaylistController {
         return "redirect:/playlists/all";
 
     }
-
+    @PreAuthorize("isOwner(#playlistId)")
     @PostMapping("/{playlistId}/add/{songId}")
-    private String addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
+    public String addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
         this.playlistService.addSongToPlaylist(playlistId, songId);
         return "redirect:/playlists/" + playlistId;
     }
 
-
+    @PreAuthorize("isOwner(#playlistId)")
     @DeleteMapping("/{playlistId}/remove/{songId}")
-    private String removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
+    public String removeSongFromPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
         this.playlistService.removeSongFromPlaylist(playlistId, songId);
         return "redirect:/playlists/" + playlistId;
     }
-
+    @PreAuthorize("isOwner(#id)")
     @DeleteMapping("/remove/{id}")
-    private String removePlaylist(@PathVariable Long id) {
+    public String removePlaylist(@PathVariable Long id) {
         this.playlistService.removePlaylist(id);
         return "redirect:/playlists/all";
     }

@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-
 public class PlaylistService {
     private final ModelMapper modelMapper;
     private final PlaylistRepository playlistRepository;
@@ -32,6 +31,7 @@ public class PlaylistService {
     public Playlist getPlaylistById(Long id) {
         return this.playlistRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Playlist"));
     }
+
 
     public PlaylistService(ModelMapper modelMapper, PlaylistRepository playlistRepository,
                            UserRepository userRepository, SongRepository songRepository) {

@@ -56,7 +56,7 @@ public class SongController {
     }
 
     @PostMapping("/add")
-    private String addSong(@Valid SongDTO songDTO, BindingResult bindingResult,
+    public String addSong(@Valid SongDTO songDTO, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
@@ -76,7 +76,7 @@ public class SongController {
     }
 
     @DeleteMapping("/remove/{id}")
-    private String removeSong(@PathVariable Long id) {
+    public String removeSong(@PathVariable Long id) {
         this.songService.removeSongConnections(id);
         this.songService.removeSong(id);
         return "redirect:/songs/all";

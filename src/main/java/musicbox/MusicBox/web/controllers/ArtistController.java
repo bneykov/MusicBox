@@ -53,14 +53,14 @@ public class ArtistController {
     }
 
     @DeleteMapping("/remove/{id}")
-    private String removeArtist(@PathVariable Long id) {
+    public String removeArtist(@PathVariable Long id) {
 
         this.artistService.removeArtist(id);
         return "redirect:/artists/all";
     }
 
     @PostMapping("/add")
-    private String addArtist(@Valid ArtistDTO artistDTO, BindingResult bindingResult,
+    public String addArtist(@Valid ArtistDTO artistDTO, BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
