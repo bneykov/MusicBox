@@ -17,6 +17,8 @@ import java.util.Set;
 @Entity
 @Table(name = "artists")
 public class Artist extends BaseImageEntity {
+    @Column(length = 100000)
+    private String description;
 
     @ManyToMany(mappedBy = "artists", cascade = CascadeType.ALL)
     private Set<Song> songs;

@@ -19,8 +19,8 @@
                     <img th:src="${song.imageUrl}" class="card-img-top" alt="">
                     <div class="card-body">
                         <h5 th:text="${song.getName}" class="card-title">Song Name</h5>
-                        <p th:text="${song.album.name}" class="card-text">Album</p>
-                        <p th:text="${song.getArtistsNames()}" class="card-text">Artists</p>
+                        <p th:text="|Album: ${song.album.name}|" class="card-text">Album</p>
+                        <p th:text="|Contributing artists: ${song.getArtistsNames()}|" class="card-text">Artists</p>
                         <a sec:authorize="isAuthenticated()"
                            th:href="@{/playlists/add/{id}(id = ${song.id})}" class="btn btn-primary">Add to playlist</a>
                         <form
@@ -55,7 +55,7 @@
                 </a>
                 <div class="card-body">
                     <h5 th:text="${album.name}" class="card-title">Album Name</h5>
-                    <p th:text="${album.getArtistsNames()}" class="card-text">Artist Name</p>
+                    <p th:text="|Contributing artists: ${album.getArtistsNames()}|" class="card-text">Artist Name</p>
                     <form
                             th:action="@{/albums/remove/{id}(id = *{album.id})}"
                             th:method="delete"

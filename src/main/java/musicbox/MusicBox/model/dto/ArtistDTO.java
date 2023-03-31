@@ -23,6 +23,9 @@ public class ArtistDTO {
     @ValidImageFormat
     private MultipartFile image;
 
+    @NotNull
+    @Size(min = 10, max = 1000, message = "Description length must be between 10 and 1000 characters long")
+    private String description;
     private String imageUrl;
 
     private String imageUUID;

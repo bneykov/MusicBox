@@ -46,7 +46,7 @@ public class ArtistController {
 
     @GetMapping("/view/{id}")
     public String artist(Model model, @PathVariable Long id) {
-
+        model.addAttribute("artist", this.artistService.getArtistById(id));
         model.addAttribute("title", "Albums");
         model.addAttribute("albums", this.artistService.getAlbumsByArtistId(id));
         return "view-all";
@@ -75,7 +75,7 @@ public class ArtistController {
         artistDTO.setImageUrl(imageUploadResponse.get("secure_url"));
         artistDTO.setImageUUID(imageUploadResponse.get("public_id"));
         this.artistService.addArtist(artistDTO);
-        return "redirect:/home";
+        return "redirect:/artists/all";
 
     }
 }

@@ -13,32 +13,27 @@
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
             <div class="col-12">
                 <h2 th:if="${songId == null}" class="text-light mb-3  text-center">My Playlists</h2>
-                <h2 th:unless="${songId == null}" class="text-light mb-3  text-center">Select a playlist</h2>
-                    <div class="col text-center mb-3">
-                        <a th:href="@{/playlists/add}" class="btn btn-primary">Create New</a>
-                    </div>
+                <h2 th:unless="${songId == null}" class="text-light mb-3  text-center">Select playlist</h2>
+                <div class="col text-center mb-3">
+                    <a th:href="@{/playlists/add}" class="btn btn-primary">Create New</a>
+                </div>
             </div>
-
 
 
             <div th:each="playlist:${playlists}" class="col">
                 <div class="card bg-light text-dark mb-3">
+                    <a th:if="${songId == null}" class="card-img-top" th:href="@{/playlists/{id}(id = *{playlist.id})}">
+                        <img th:src="${playlist.imageUrl}" class="card-img-top" alt="">
+                    </a>
                     <form
-                    th:method="post"
-                    th:action="@{/playlists/{id}(id = *{playlist.id})}">
-                    <button type="submit" th:if="${songId == null}"  class="card-img-top">
-                    <img th:src="${playlist.imageUrl}"
-                         class="card-img-top" alt="">
-                    </button>
-                    </form>
-                    <form
-                    th:method="post"
-                    th:action="@{/playlists/{playlistId}/add/{songId}(playlistId = *{playlist.id}, songId = ${songId})}">
-                    <button type="submit" th:unless="${songId == null}"
-                       class="card-img-top">
-                        <img th:src="${playlist.imageUrl}"
-                             class="card-img-top" alt="">
-                    </button>
+                            th:method="post"
+                            th:action="@{/playlists/{playlistId}/add/{songId}(playlistId = *{playlist.id}, songId = ${songId})}">
+                        <button type="submit"
+                                th:unless="${songId == null}"
+                                class="card-img-top">
+                            <img th:src="${playlist.imageUrl}"
+                                 class="card-img-top" alt="">
+                        </button>
                     </form>
                     <div class="card-body">
                         <h5 th:text="${playlist.name}" class="card-title">Playlist name</h5>
@@ -47,15 +42,16 @@
                                 th:method="delete"
                         >
                             <button type="submit"
-                                    class="btn btn-danger">Delete</button>
+                                    class="btn btn-danger">Delete
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
 
-    </div>
+        </div>
 
-</div>
+    </div>
 </div>
 
 </body>

@@ -77,7 +77,7 @@ public class AlbumController {
         albumDTO.setImageUrl(imageUploadResponse.get("secure_url"));
         albumDTO.setImageUUID(imageUploadResponse.get("public_id"));
         this.albumService.addAlbum(albumDTO);
-        return "redirect:/home";
+        return "redirect:/albums/all";
 
     }
 

@@ -10,7 +10,7 @@
           th:method="post"
           th:action="@{/users/register}"
           th:object="${registerDTO}">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <div class="label-holder textCol d-flex justify-content-center">
                 <label for="username" class="h5 mb-2">Username</label>
             </div>
@@ -20,7 +20,7 @@
                    th:errors="*{username}"
                    class="text-warning">Username error message</small>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <div class="label-holder textCol d-flex justify-content-center">
                 <label for="email" class="h5 mb-2">Email</label>
             </div>
@@ -31,7 +31,7 @@
                    th:errors="*{email}"
                    class="text-warning">Email error message</small>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <div class="label-holder textCol d-flex justify-content-center">
                 <label for="name" class="h5 mb-2">Name</label>
             </div>
@@ -42,7 +42,7 @@
                    th:errors="*{name}"
                     class="text-warning">Name error message</small>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <div class="label-holder text-white textCol d-flex justify-content-center">
                 <label for="password" class="h5 mb-2">Password</label>
             </div>
@@ -52,7 +52,7 @@
                    th:errors="*{password}"
                    class="text-warning">Password error message</small>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <div class="label-holder text-white textCol d-flex justify-content-center">
                 <label for="confirmPassword" class="h5 mb-2">Confirm Password</label>
             </div>
@@ -65,7 +65,7 @@
         </div>
 
         <div class="button-holder d-flex justify-content-center">
-            <button type="submit" class="btn btn-success btn-lg mb-3 mt-3" value="Register">Register</button>
+            <button type="submit" class="btn btn-success btn-lg mb-3" value="Register">Register</button>
 
         </div>
         <div>

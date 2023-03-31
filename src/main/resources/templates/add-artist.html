@@ -12,7 +12,7 @@
           th:method="post"
           th:action="@{/artists/add}"
           th:object="${artistDTO}">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <div class="label-holder textCol d-flex justify-content-center">
                 <label for="name" class="h4 mb-2">Name</label>
             </div>
@@ -22,20 +22,33 @@
                    th:errors="*{name}"
                    class="text-warning">Error message</small>
         </div>
-        <div class="form-group mb-3" >
+        <div class="form-group mb-3">
+            <div class="label-holder textCol d-flex justify-content-center">
+                <label for="description" class="h4 mb-2">Description</label>
+            </div>
+            <textarea th:field="*{description}" th:errorclass="'is-invalid alert-danger'"
+                   type="text" class="form-control" id="description" name="description">
+            </textarea>
+            <small th:if="${#fields.hasErrors('description')}"
+                   th:errors="*{description}"
+                   class="text-warning">Error message</small>
+        </div>
+        <div class="form-group mb-3">
             <div class="text-white label-holder d-flex justify-content-center mt-3">
                 <label for="image" class="h4 mb-2">Select image</label>
             </div>
             <input onchange="checkImageSize()" th:field="*{image}" th:errorclass="'is-invalid alert-danger'"
-                   value="Choose image" type="file" name="image"  accept="image/*" id="image" />
+                   value="Choose image" type="file" name="image" accept="image/*" id="image"/>
             <small th:if="${#fields.hasErrors('image')}"
                    th:text="${#fields.errors('image').get(0)}"
                    class="text-warning">Error message</small>
         </div>
 
         <div class="button-holder d-flex justify-content-center mt-2">
-            <button id = 'btnSubmit'
-                    type="submit" class="btn btn-success btn-lg mb-3" value="Add_Artist">Add Artist</button><br/>
+            <button id='btnSubmit'
+                    type="submit" class="btn btn-success btn-lg mb-3" value="Add_Artist">Add Artist
+            </button>
+            <br/>
         </div>
     </form>
 </main>

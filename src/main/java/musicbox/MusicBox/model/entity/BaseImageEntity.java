@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import musicbox.MusicBox.constants.CloudinaryConfig;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,22 +38,13 @@ public abstract class BaseImageEntity extends BaseEntity {
     public void setDefaultImage(){
 
     }
-    @Value("${cloudinary.cloud_name}")
-    private String cloudName;
-
-    @Value("${cloudinary.api_key}")
-    private String apiKey;
-
-    @Value("${cloudinary.api_secret}")
-    private String apiSecret;
-
     @PreRemove
     public void preRemove() throws IOException {
         if (imageUUID != null) {
             Map<String, String> config = new HashMap<>();
-            config.put("cloud_name", cloudName);
-            config.put("api_key", apiKey);
-            config.put("api_secret", apiSecret);
+            config.put("cloud_name", CloudinaryConfig.CLOUDINARY_CLOUD_NAME);
+            config.put("api_key", CloudinaryConfig.CLOUDINARY_API_KEY);
+            config.put("api_secret", CloudinaryConfig.CLOUDINARY_API_SECRET);
             CloudinaryService cloudinaryService = new CloudinaryService(new Cloudinary(config));
             cloudinaryService.deleteImage(imageUUID);
         }

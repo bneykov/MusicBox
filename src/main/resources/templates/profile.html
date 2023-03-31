@@ -25,32 +25,6 @@
                 <div class="card bg-secondary text-white">
                     <div class="card-body">
                         <h5 class="card-title mb-4 text-center">Edit profile</h5>
-<!--                        <form>-->
-<!--                            <div class="row mb-3">-->
-<!--                                <label for="name" class="col-sm-3 col-form-label">Name</label>-->
-<!--                                <div class="col-sm-9">-->
-<!--                                    <span type="text" class="form-control" id="name" th:text="${currentUser.name}">-->
-<!--                                    </span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="row mb-3">-->
-<!--                                <label for="username" class="col-sm-3 col-form-label">Username</label>-->
-<!--                                <div class="col-sm-9">-->
-<!--                                    <span type="text" class="form-control" id="username"-->
-<!--                                           th:text="${currentUser.username}">-->
-<!--                                    </span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="row mb-3">-->
-<!--                                <label for="email" class="col-sm-3 col-form-label">Email</label>-->
-<!--                                <div class="col-sm-9">-->
-<!--                                    <span-->
-<!--                                            type="email" class="form-control" id="email"-->
-<!--                                           th:text="${currentUser.email}">-->
-<!--                                    </span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </form>-->
                         <form
                                 th:method="put"
                                 th:action="@{/profile/{id}/edit (id = ${currentUser.id})}"

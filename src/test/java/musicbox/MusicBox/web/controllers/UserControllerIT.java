@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -87,6 +88,7 @@ public class UserControllerIT {
                 andExpect(view().name("login"));
 
     }
+
     @Test
     @WithMockUser
     void testLoginPageForbidden() throws Exception {
@@ -94,6 +96,7 @@ public class UserControllerIT {
                 andExpect(status().isForbidden());
 
     }
+
     @Test
     @WithMockUser
     void testRegisterPageForbidden() throws Exception {
@@ -102,6 +105,7 @@ public class UserControllerIT {
     }
 
     @Test
+    @WithAnonymousUser
     void testFailedLogin() throws Exception {
         mockMvc.perform(post("/login-error")
                         .with(csrf()))
@@ -131,6 +135,7 @@ public class UserControllerIT {
         mockMvc.perform(get("/users/all"))
                 .andExpect(status().isForbidden());
     }
+
     @Test
     @WithMockUser(
             username = "admin",
@@ -141,6 +146,7 @@ public class UserControllerIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/users/all"));
     }
+
     @Test
     @WithMockUser
     void testNonAdminChangeRole() throws Exception {

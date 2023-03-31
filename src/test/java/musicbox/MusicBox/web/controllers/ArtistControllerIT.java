@@ -79,6 +79,7 @@ public class ArtistControllerIT {
         mockMvc.perform(multipart("/artists/add")
                         .file(file) //cannot be empty
                         .param("name", "validArtistName")
+                        .param("description", "testDescription")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
@@ -133,6 +134,7 @@ public class ArtistControllerIT {
         mockMvc.perform(get("/artists/view/{id}", artist.getId()))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Albums"))
+                .andExpect(model().attributeExists("artist"))
                 .andExpect(model().attribute("albums", hasSize(artist.getAlbums().size())))
                 .andExpect(view().name("view-all"));
     }

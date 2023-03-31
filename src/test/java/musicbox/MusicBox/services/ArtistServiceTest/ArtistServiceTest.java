@@ -46,6 +46,7 @@ class ArtistServiceTest {
             .name("testArtist")
             .imageUUID("testUUID")
             .imageUrl("testUrl")
+            .description("testDescription")
             .albums(new HashSet<>())
             .songs(new HashSet<>())
             .created(LocalDateTime.now())
@@ -56,6 +57,7 @@ class ArtistServiceTest {
             .name("testArtist")
             .imageUUID("testUUID")
             .imageUrl("testUrl")
+            .description("testDescription")
             .build();
 
     @BeforeEach
@@ -138,6 +140,7 @@ class ArtistServiceTest {
                 .name("testArtist")
                 .imageUUID("testUUID")
                 .imageUrl("testUrl")
+                .description("testDescription")
                 .build();
         when(modelMapper.map(artistDTO, Artist.class)).thenReturn(artist);
         artistService.addArtist(artistDTO);
@@ -146,6 +149,7 @@ class ArtistServiceTest {
         assertEquals(artistDTO.getName(), savedArtist.getName());
         assertEquals(artistDTO.getImageUrl(), savedArtist.getImageUrl());
         assertEquals(artistDTO.getImageUUID(), savedArtist.getImageUUID());
+        assertEquals(artistDTO.getDescription(), savedArtist.getDescription());
         assertTrue(savedArtist.getAlbums().isEmpty());
         assertTrue(savedArtist.getSongs().isEmpty());
         String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));

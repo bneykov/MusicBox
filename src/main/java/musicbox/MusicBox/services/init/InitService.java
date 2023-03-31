@@ -119,6 +119,10 @@ public class InitService {
 
                     .name("Selena Gomez")
                     .albums(new HashSet<>())
+                    .description("Selena Gomez is an American singer, actress, and producer born on July 22, 1992." +
+                            " She began her career on the children's television series \"Barney & Friends\" before rising to fame as the lead actress in Disney Channel's \"Wizards of Waverly Place.\"" +
+                            " In 2008, Selena formed the band Selena Gomez & the Scene and released three studio albums with them." +
+                            " Her debut solo album, \"Stars Dance,\" released in 2013, topped the charts and solidified her position as a pop icon.")
                     .modified(LocalDateTime.now())
                     .created(LocalDateTime.now())
                     .imageUrl("https://rb.gy/2f1iog")
@@ -126,6 +130,9 @@ public class InitService {
             artist2 = Artist.builder()
                     .name("Bruno Mars")
                     .albums(new HashSet<>())
+                    .description("Bruno Mars is an American singer, songwriter, record producer, and dancer, born on October 8, 1985." +
+                            " He began his career as a music producer, writing songs for artists such as Flo Rida and Brandy." +
+                            " His debut solo album, \"Doo-Wops & Hooligans,\" released in 2010, made him a household name.")
                     .modified(LocalDateTime.now())
                     .created(LocalDateTime.now())
                     .imageUrl("https://www.eslsongs.com/wp-content/uploads/2022/10/mars.jpg")
@@ -148,7 +155,7 @@ public class InitService {
                     .artists(Set.of(artist, artist2))
                     .created(LocalDateTime.now())
                     .modified(LocalDateTime.now())
-                    .imageUrl("https://www.vectornator.io/blog/content/images/2022/03/611b830385d20348a9809a8e_Cover-Album-Covers--1-.png")
+                    .imageUrl("https://upload.wikimedia.org/wikipedia/en/5/54/Public_image_ltd_album_cover.jpg")
                     .build();
             this.albumRepository.saveAll(List.of(album, album2));
         }

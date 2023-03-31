@@ -91,7 +91,7 @@ public class AlbumControllerIT {
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/home"));
+                .andExpect(redirectedUrl("/albums/all"));
     }
 
     @Test
