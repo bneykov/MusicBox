@@ -1,4 +1,4 @@
-package musicbox.MusicBox.web.controllers;
+package musicbox.MusicBox.web.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,4 +1,4 @@
-package musicbox.MusicBox.web.controllers;
+package musicbox.MusicBox.web.advice;
 
 import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
