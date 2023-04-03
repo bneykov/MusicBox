@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import musicbox.MusicBox.model.dto.ArtistDTO;
 import musicbox.MusicBox.services.artist.ArtistService;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,7 @@ public class ArtistController {
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addArtist() {
 
         return "add-artist";
@@ -53,6 +55,7 @@ public class ArtistController {
     }
 
     @DeleteMapping("/remove/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String removeArtist(@PathVariable Long id) {
 
         this.artistService.removeArtist(id);
@@ -60,6 +63,7 @@ public class ArtistController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addArtist(@Valid ArtistDTO artistDTO, BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) throws IOException {
 

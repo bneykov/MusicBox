@@ -1,6 +1,5 @@
 package musicbox.MusicBox.web.controllers;
 
-import musicbox.MusicBox.model.entity.UserEntity;
 import musicbox.MusicBox.model.enums.RoleEnum;
 import musicbox.MusicBox.services.init.InitService;
 import org.junit.jupiter.api.AfterEach;
@@ -28,12 +27,10 @@ public class UserControllerIT {
     @Autowired
     private InitService initService;
 
-    private UserEntity testUser;
 
     @BeforeEach
     void setUp() {
         this.initService.init();
-        this.testUser = this.initService.getUser();
     }
 
     @AfterEach
@@ -136,21 +133,5 @@ public class UserControllerIT {
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    @WithMockUser(
-            username = "admin",
-            roles = {"ADMIN", "USER"}
-    )
-    void testAdminChangeRole() throws Exception {
-        mockMvc.perform(get("/users/{id}/change_role", testUser.getId()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users/all"));
-    }
 
-    @Test
-    @WithMockUser
-    void testNonAdminChangeRole() throws Exception {
-        mockMvc.perform(get("/users/{id}/change_role", testUser.getId()))
-                .andExpect(status().isForbidden());
-    }
 }

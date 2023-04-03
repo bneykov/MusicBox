@@ -20,7 +20,6 @@ public class PlaylistSecurityExpressionHandler extends DefaultMethodSecurityExpr
                                                                               MethodInvocation invocation) {
 
         OwnerSecurityExpressionRoot root = new OwnerSecurityExpressionRoot(authentication, playlistService);
-
         root.setPermissionEvaluator(getPermissionEvaluator());
         root.setTrustResolver(new AuthenticationTrustResolverImpl());
         root.setRoleHierarchy(getRoleHierarchy());

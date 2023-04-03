@@ -39,7 +39,7 @@ public class UserEntity extends BaseImageEntity {
     private LocalDateTime lastLoggedIn;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles;
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)

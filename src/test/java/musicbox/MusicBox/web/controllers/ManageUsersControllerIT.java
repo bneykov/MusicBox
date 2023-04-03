@@ -13,25 +13,24 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GetUsersControllerIT {
+public class ManageUsersControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private InitService initService;
 
-    private UserEntity user, admin;
+    private UserEntity testUser, testAdmin;
 
     @BeforeEach
     void setUp() {
-        user = this.initService.getUser();
-        admin = this.initService.getAdmin();
         this.initService.init();
+        testUser = this.initService.getUser();
+        testAdmin = this.initService.getAdmin();
     }
 
     @AfterEach
@@ -53,8 +52,26 @@ public class GetUsersControllerIT {
         mockMvc.perform(get("/users/get"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(initService.getUsers().size())))
-                .andExpect(jsonPath("$[0].username").value(admin.getUsername()))
-                .andExpect(jsonPath("$[1].username").value(user.getUsername()));
+                .andExpect(jsonPath("$[0].username").value(testAdmin.getUsername()))
+                .andExpect(jsonPath("$[1].username").value(testUser.getUsername()));
+    }
+
+    @Test
+    @WithMockUser(
+            username = "admin",
+            roles = {"ADMIN", "USER"}
+    )
+    void testAdminChangeRole() throws Exception {
+        mockMvc.perform(get("/users/{id}/change_role", testUser.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/users/all"));
+    }
+
+    @Test
+    @WithMockUser
+    void testNonAdminChangeRole() throws Exception {
+        mockMvc.perform(get("/users/{id}/change_role", testUser.getId()))
+                .andExpect(status().isForbidden());
     }
 
 }

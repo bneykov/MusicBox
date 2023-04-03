@@ -38,8 +38,18 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto col-12 justify-content-between ">
-                <li sec:authorize="hasRole('ADMIN')" class="nav-item">
-                    <a class="nav-link" th:href="@{/users/all}">All Users</a>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item dropdown me-4">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="adminDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="adminDropdown">
+                        <a class="dropdown-item" th:href="@{/users/all}">Manage Users</a>
+                        <a class="dropdown-item" th:href="@{/artists/add}">Add Artist</a>
+                        <a class="dropdown-item" th:href="@{/albums/add}">Add Album</a>
+                        <a class="dropdown-item" th:href="@{/songs/add}">Add Song</a>
+
+                    </div>
                 </li>
                 <li class="nav-item"
                 >

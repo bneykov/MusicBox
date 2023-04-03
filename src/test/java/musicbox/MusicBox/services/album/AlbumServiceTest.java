@@ -139,7 +139,6 @@ class AlbumServiceTest {
         song2.setArtists(new HashSet<>(Set.of(artist2)));
         song.setAlbum(album);
         song2.setAlbum(album2);
-        when(mockSongRepository.findAllById(any())).thenReturn(new ArrayList<>(List.of(song, song2)));
         albumService.removeSongsFromLinkedEntities(album.getSongs());
         verify(mockSongRepository, times(1)).deleteAll(any());
         assertTrue(song.getPlaylists().isEmpty());
@@ -161,6 +160,12 @@ class AlbumServiceTest {
     void testRemoveAlbum() {
         album.setArtists(new HashSet<>(Set.of(artist, artist2)));
         artist.setAlbums(new HashSet<>(Set.of(album, album2)));
+        artist2.setAlbums(new HashSet<>(Set.of(album, album2)));
+        song.setArtists(new HashSet<>(album.getArtists()));
+        song2.setArtists(new HashSet<>(album.getArtists()));
+        song.setPlaylists(new HashSet<>(Set.of(playlist)));
+        song2.setPlaylists(new HashSet<>(Set.of(playlist)));
+        playlist.setSongs(new HashSet<>(Set.of(song, song2)));
         when(mockAlbumRepository.findById(1L)).thenReturn(Optional.of(album));
         albumService.removeAlbum(album.getId());
         verify(mockAlbumRepository, times(1)).delete(album);
@@ -174,13 +179,17 @@ class AlbumServiceTest {
         album2.setArtists(new HashSet<>(Set.of(artist)));
         artist.setAlbums(new HashSet<>(Set.of(album, album2)));
         artist2.setAlbums(new HashSet<>(Set.of(album)));
+        song.setArtists(new HashSet<>(album.getArtists()));
+        song2.setArtists(new HashSet<>(album.getArtists()));
+        song.setPlaylists(new HashSet<>(Set.of(playlist)));
+        song2.setPlaylists(new HashSet<>(Set.of(playlist)));
+        playlist.setSongs(new HashSet<>(Set.of(song, song2)));
         List<Album> albums = new ArrayList<>(List.of(album));
         List<Artist> artists = new ArrayList<>(List.of(artist, artist2));
         when(mockAlbumRepository.findAllById(any())).thenReturn(albums);
-        when(mockArtistRepository.findAllById(any())).thenReturn(artists);
         albumService.removeAllAlbumsFromArtist(artist2.getAlbums());
         verify(mockAlbumRepository, times(1)).deleteAll(albums);
-        verify(mockArtistRepository, times(1)).saveAll(artists);
+        verify(mockArtistRepository, times(1)).saveAll(new HashSet<>(artists));
         assertTrue(artists.get(1).getAlbums().isEmpty());
         assertEquals(1, artists.get(0).getAlbums().size());
     }

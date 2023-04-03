@@ -7,6 +7,7 @@ import musicbox.MusicBox.services.album.AlbumService;
 import musicbox.MusicBox.services.artist.ArtistService;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
 import musicbox.MusicBox.services.song.SongService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,7 @@ public class SongController {
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addSong(Model model) {
         model.addAttribute("genres", Genre.values());
         model.addAttribute("albums", this.albumService.getAlbums());
@@ -56,6 +58,7 @@ public class SongController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addSong(@Valid SongDTO songDTO, BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) throws IOException {
 
@@ -76,6 +79,7 @@ public class SongController {
     }
 
     @DeleteMapping("/remove/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String removeSong(@PathVariable Long id) {
         this.songService.removeSongConnections(id);
         this.songService.removeSong(id);

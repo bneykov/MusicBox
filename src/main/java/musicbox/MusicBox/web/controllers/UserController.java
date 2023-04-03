@@ -44,6 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public String all(Model model, @AuthenticationPrincipal CustomUserDetails currentUser) {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("roles", RoleEnum.values());
@@ -68,11 +69,6 @@ public class UserController {
         this.userService.register(registerDTO);
         return "redirect:/users/login";
     }
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/{id}/change_role")
-    public String changeRole(@PathVariable Long id) {
-        this.userService.changeRole(id);
-        return "redirect:/users/all";
-    }
+
 
 }

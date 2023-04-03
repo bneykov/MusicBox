@@ -28,7 +28,6 @@ public class SecurityConfiguration {
 
     public SecurityConfiguration(UserRepository userRepository, CustomAuthSuccessHandler authSuccessHandler) {
         this.userRepository = userRepository;
-
         this.authSuccessHandler = authSuccessHandler;
     }
 

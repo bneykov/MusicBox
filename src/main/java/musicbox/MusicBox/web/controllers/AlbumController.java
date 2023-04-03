@@ -5,6 +5,7 @@ import musicbox.MusicBox.model.dto.AlbumDTO;
 import musicbox.MusicBox.services.album.AlbumService;
 import musicbox.MusicBox.services.artist.ArtistService;
 import musicbox.MusicBox.services.cloudinary.CloudinaryService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,7 @@ public class AlbumController {
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addAlbum(Model model) {
         model.addAttribute("artists", this.artistService.getArtists());
         return "add-album";
@@ -54,14 +56,15 @@ public class AlbumController {
 
         return "view-all";
     }
-
     @DeleteMapping("/remove/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String removeAlbum(@PathVariable Long id) {
         this.albumService.removeAlbum(id);
         return "redirect:/albums/all";
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addAlbum(@Valid AlbumDTO albumDTO, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) throws IOException {
 

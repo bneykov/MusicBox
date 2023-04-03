@@ -1,11 +1,13 @@
+let table = document.createElement('table');
+table.classList.add('table', 'table-striped', 'table-hover');
+table.id = 'table';
+
 function loadUsers() {
     table.innerHTML = ""
 
     let requestOptions = {
         method: 'GET',
         redirect: 'follow',
-
-
     };
     fetch('/users/get', requestOptions)
         .then(response => response.json())
@@ -18,9 +20,6 @@ function loadUsers() {
 
 }
 
-let table = document.createElement('table');
-table.classList.add('table', 'table-striped', 'table-hover');
-table.id = 'table';
 
 function generateTable(users) {
 
@@ -87,7 +86,6 @@ function generateTable(users) {
             adminOption.selected = true;
         }
         select.appendChild(adminOption);
-
         selectTd.appendChild(select);
         row.appendChild(selectTd);
     });
@@ -102,9 +100,13 @@ async function changeRole(userId) {
     };
 
     await fetch('/users/' + userId + '/change_role', requestOptions).then()
-    document.getElementById('table').innerHTML = "";
+        .catch(error => console.log('Role change error', error));
     loadUsers();
 }
+
+$(document).ready(function () {
+    loadUsers();
+});
 
 
 

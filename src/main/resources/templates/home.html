@@ -23,13 +23,6 @@
                         <p th:text="|Contributing artists: ${song.getArtistsNames()}|" class="card-text">Artists</p>
                         <a sec:authorize="isAuthenticated()"
                            th:href="@{/playlists/add/{id}(id = ${song.id})}" class="btn btn-primary">Add to playlist</a>
-                        <form
-                                th:action="@{/songs/remove/{id}(id = *{song.id})}"
-                                th:method="delete"
-                        >
-                            <button type="submit" sec:authorize="hasRole('ADMIN')"
-                                    class="btn btn-danger mt-3">Delete</button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -56,13 +49,6 @@
                 <div class="card-body">
                     <h5 th:text="${album.name}" class="card-title">Album Name</h5>
                     <p th:text="|Contributing artists: ${album.getArtistsNames()}|" class="card-text">Artist Name</p>
-                    <form
-                            th:action="@{/albums/remove/{id}(id = *{album.id})}"
-                            th:method="delete"
-                    >
-                        <button type="submit" sec:authorize="hasRole('ADMIN')"
-                                class="btn btn-danger">Delete</button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -87,13 +73,6 @@
                 </a>
                 <div class="card-body">
                     <h5 th:text="${artist.name}" class="card-title">Artist Name</h5>
-                    <form
-                            th:action="@{/artists/remove/{id}(id = *{artist.id})}"
-                            th:method="delete"
-                    >
-                        <button type="submit" sec:authorize="hasRole('ADMIN')"
-                                class="btn btn-danger">Delete</button>
-                    </form>
                 </div>
             </div>
         </div>

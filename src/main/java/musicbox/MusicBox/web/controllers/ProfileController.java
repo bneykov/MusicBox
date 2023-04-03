@@ -1,5 +1,6 @@
 package musicbox.MusicBox.web.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import musicbox.MusicBox.model.dto.UserUpdateDTO;
 import musicbox.MusicBox.services.user.CustomUserDetails;
@@ -32,20 +33,22 @@ public class ProfileController {
 
 
     @GetMapping("/profile")
-    public String profile(Model model, @AuthenticationPrincipal CustomUserDetails userDetails){
+    public String profile(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         model.addAttribute("currentUser", userDetails);
         return "profile";
     }
+
     @PutMapping("/profile/{id}/edit")
     public String editProfile(@PathVariable Long id, @Valid UserUpdateDTO updateDTO, BindingResult bindingResult,
-                              RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.updateDTO",
                     bindingResult);
             redirectAttributes.addFlashAttribute("updateDTO", updateDTO);
             return "redirect:/profile";
         }
-            this.userService.update(updateDTO, id);
-            return "redirect:/profile";
+        this.userService.update(updateDTO, id);
+       request.getSession().invalidate();
+        return "redirect:/users/login";
     }
 }

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AlbumService {
@@ -81,17 +82,14 @@ public class AlbumService {
     }
 
     public void unlinkArtistsFromAlbum(Album album) {
-        List<Long> artistIds = album.getArtists().stream().map(Artist::getId).toList();
-        List<Artist> artistsToUnlink = this.artistRepository.findAllById(artistIds);
+        Set<Artist> artistsToUnlink = album.getArtists();
         artistsToUnlink.forEach(artist -> artist.getAlbums().remove(album));
         this.artistRepository.saveAll(artistsToUnlink);
     }
 
     public void removeSongsFromLinkedEntities(Set<Song> songs) {
-        List<Long> songIds = songs.stream().map(Song::getId).toList();
-        List<Song> songsToDelete = this.songRepository.findAllById(songIds);
-        songsToDelete = songsToDelete.stream().map(SongService::getSongWithoutRelations).toList();
-        this.songRepository.deleteAll(songsToDelete);
+        songs = songs.stream().map(SongService::getSongWithoutRelations).collect(Collectors.toSet());
+        this.songRepository.deleteAll(songs);
     }
 
 }
