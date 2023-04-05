@@ -47,7 +47,7 @@ public class UserEntity extends BaseImageEntity {
 
 
     public void setDefaultImage() {
-        if (this.getImageUrl() == null) {
+        if (this.getImageUrl() == null || this.getImageUrl().isBlank()) {
             this.setImageUrl(DefaultImageURLs.DEFAULT_USER_IMAGE_URL);
         }
     }

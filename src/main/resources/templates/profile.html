@@ -4,7 +4,7 @@
 
 
 <head th:replace="fragments/commons::head">
-    <script src="/js/allUsers.js"></script>
+
 </head>
 <body>
 
@@ -16,8 +16,22 @@
                 <div class="card bg-secondary text-white text-center">
                     <div class="card-body">
                         <img th:src="${currentUser.imageUrl}" class="rounded-circle mb-3 card-img"
-                             alt="Profile Picture" id="profilePicture">
+                             alt="Profile Picture" id="picture">
                         <h5 th:text="${currentUser.name}" class="card-title ">Name</h5>
+
+                        <button onclick="document.getElementById('image').click()" class="btn btn-primary me-2"
+                                id="imageSelectBtn">Change Profile Picture
+                        </button>
+                        <button title="Clear selection" onclick=clearImageSelection()
+                                class="btn btn-secondary rounded-pill">
+                            <span>X</span>
+                        </button>
+                        <p>
+                            <button title="Remove profile picture" onclick=deletePicture() class="btn btn-danger mt-3 mb-3">
+                                <span>Delete picture</span>
+                            </button>
+                            <small id="sizeError" class="text-warning" style="display: none"></small>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -26,23 +40,30 @@
                     <div class="card-body">
                         <h5 class="card-title mb-4 text-center">Edit profile</h5>
                         <form
+                                th:enctype="'multipart/form-data'"
                                 th:method="put"
                                 th:action="@{/profile/{id}/edit (id = ${currentUser.id})}"
                                 th:object="${updateDTO}">
                             <div class="row mb-3">
                                 <label for="name" class="col-sm-3 col-form-label">Name</label>
                                 <div class="col-sm-9">
-                                    <input  th:field="*{name}" th:errorclass="'is-invalid alert-danger'"
-                                            type="text" class="form-control" id="name" th:value="${currentUser.getName()}">
+                                    <input th:field="*{name}" th:errorclass="'is-invalid alert-danger'"
+                                           type="text" class="form-control" id="name"
+                                           th:value="${currentUser.getName()}">
                                     <small th:if="${#fields.hasErrors('name')}"
                                            th:errors="*{name}"
                                            class="text-warning"></small>
                                 </div>
+                                <input onchange="checkImageSize()" th:field="*{image}"
+                                       th:errorclass="'is-invalid alert-danger'"
+                                       style="display:none" value="Choose image" type="file" name="image"
+                                       accept="image/*"
+                                       id="image"/>
                             </div>
                             <div class="row mb-3">
                                 <label for="username" class="col-sm-3 col-form-label">Username</label>
                                 <div class="col-sm-9">
-                                    <input th:field="*{username}"  th:errorclass="'is-invalid alert-danger'"
+                                    <input th:field="*{username}" th:errorclass="'is-invalid alert-danger'"
                                            type="text" class="form-control" id="username"
                                            th:value="${currentUser.username}">
 
@@ -54,9 +75,9 @@
                             <div class="row mb-3">
                                 <label for="email" class="col-sm-3 col-form-label">Email</label>
                                 <div class="col-sm-9">
-                                    <input  th:field="*{email}" th:errorclass="'is-invalid alert-danger'"
-                                            type="email" class="form-control" id="email"
-                                            th:value="${currentUser.email}">
+                                    <input th:field="*{email}" th:errorclass="'is-invalid alert-danger'"
+                                           type="email" class="form-control" id="email"
+                                           th:value="${currentUser.email}">
                                     <small th:if="${#fields.hasErrors('email')}"
                                            th:errors="*{email}"
                                            class="text-warning"></small>
@@ -65,8 +86,8 @@
                             <div class="row mb-3">
                                 <label for="currentPassword" class="col-sm-3 col-form-label">Current Password</label>
                                 <div class="col-sm-9">
-                                    <input  th:field="*{currentPassword}" th:errorclass="'is-invalid alert-danger'"
-                                            type="password" class="form-control" id="currentPassword" >
+                                    <input th:field="*{currentPassword}" th:errorclass="'is-invalid alert-danger'"
+                                           type="password" class="form-control" id="currentPassword">
                                     <small th:if="${#fields.hasErrors('currentPassword')}"
                                            th:errors="*{currentPassword}"
                                            class="text-warning"></small>
@@ -87,14 +108,21 @@
                             <div class="row mb-3">
                                 <label for="confirmPassword" class="col-sm-3 col-form-label">Confirm Password</label>
                                 <div class="col-sm-9">
-                                    <input  th:field="*{confirmPassword}" th:errorclass="'is-invalid alert-danger'"
-                                            type="password" class="form-control" id="confirmPassword">
+                                    <input th:field="*{confirmPassword}" th:errorclass="'is-invalid alert-danger'"
+                                           type="password" class="form-control" id="confirmPassword">
                                     <small th:if="${#fields.hasErrors('confirmPassword')}"
                                            th:errors="*{confirmPassword}"
                                            class="text-warning"></small>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary form-control">Save Changes and Log out</button>
+                            <label style="display:none" for="imageUrl" class="col-sm-3 col-form-label">Confirm
+                                Password</label>
+                            <input style="display:none" th:field="*{imageUrl}"
+                                   type="text" class="form-control" id="imageUrl">
+
+                            <button id="btnSubmit"
+                                    type="submit" class="btn btn-primary form-control">Save Changes and Log out
+                            </button>
                         </form>
                     </div>
                 </div>

@@ -102,8 +102,10 @@
             <small th:if="${#fields.hasErrors('image')}"
                    th:errors="*{image}"
                    class="text-warning">Error message</small>
-        </div>
+            <small style="display: none" id="sizeError" class="text-warning mt-3">
 
+            </small>
+        </div>
         <div class="button-holder d-flex justify-content-center mt-2">
             <button id = 'btnSubmit'
                     type="submit" class="btn btn-success btn-lg mb-3" value="Add_Song">Add Song</button>

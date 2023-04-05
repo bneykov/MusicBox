@@ -41,7 +41,9 @@ public class CloudinaryService {
     }
 
     public void deleteImage(String publicId) throws IOException {
-        this.cloudinary.uploader().destroy(publicId, null);
+        if (publicId != null) {
+            this.cloudinary.uploader().destroy(publicId, null);
+        }
     }
 
     public boolean isImage(MultipartFile file) {

@@ -104,11 +104,14 @@ public class UserService {
         user.setName(updateDTO.getName());
         user.setUsername(updateDTO.getUsername());
         user.setEmail(updateDTO.getEmail());
-        user.setImageUrl(updateDTO.getImageUrl());
-        user.setModified(LocalDateTime.now());
+        if (updateDTO.getImageUrl() != null) {
+            user.setImageUrl(updateDTO.getImageUrl());
+            user.setImageUUID(updateDTO.getImageUUID());
+        }
         if (!updateDTO.getNewPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
         }
+        user.setModified(LocalDateTime.now());
         this.userRepository.save(user);
     }
 

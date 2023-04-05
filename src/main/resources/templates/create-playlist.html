@@ -32,6 +32,10 @@
             <small th:if="${#fields.hasErrors('image')}"
                    th:errors="*{image}"
                    class="text-warning">Error message</small>
+
+            <small style="display: none" id="sizeError" class="text-warning mt-3">
+
+            </small>
         </div>
 
 

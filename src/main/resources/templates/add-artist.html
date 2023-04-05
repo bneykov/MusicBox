@@ -42,6 +42,10 @@
             <small th:if="${#fields.hasErrors('image')}"
                    th:text="${#fields.errors('image').get(0)}"
                    class="text-warning">Error message</small>
+
+            <small style="display: none" id="sizeError" class="text-warning mt-3">
+
+            </small>
         </div>
 
         <div class="button-holder d-flex justify-content-center mt-2">

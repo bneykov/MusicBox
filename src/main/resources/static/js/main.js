@@ -43,16 +43,22 @@ function selectAlbum() {
 }
 
 
-function checkImageSize() {
-    let fileInput = document.getElementById('image');
-    let submitButton = document.getElementById('btnSubmit');
+window.onload = function () {
+    this.fileInput = document.getElementById('image');
+    this.submitButton = document.getElementById('btnSubmit');
+    this.fileSelectButton = document.getElementById('imageSelectBtn');
+    this.profilePicture = document.getElementById('picture')
+    this.imageUrlInput = document.getElementById('imageUrl');
+    this.imageSrcBeforeEdit = document.getElementById('picture').src;
+};
 
-    if (submitButton.disabled === true){
-        fileInput.classList.remove('is-invalid', 'alert-danger')
-        fileInput.nextSibling.remove();
-        submitButton.disabled = false;
-    }
-    if (fileInput.files.length === 0){
+function checkImageSize() {
+
+    enableSubmitButtonIfDisabled();
+    hideSizeError();
+    if (fileInput.files.length === 0) {
+        profilePicture.src = imageSrcBeforeEdit;
+        imageUrlInput.setAttribute("value", imageSrcBeforeEdit);
         return;
     }
 
@@ -60,16 +66,45 @@ function checkImageSize() {
     let fileSizeInMB = fileSize / (1024.0 * 1024.0);
     if (fileSizeInMB > 10) {
         submitButton.disabled = true;
-        let errorMessage = document.createElement('small');
-        errorMessage.classList.add('text-warning')
-        fileInput.classList.add('is-invalid', 'alert-danger')
-        errorMessage.innerHTML = 'The selected file is too large ('
+        let sizeErrorElement = document.getElementById('sizeError')
+        sizeErrorElement.style.display = 'block'
+        sizeErrorElement.textContent = 'The selected file is too large ('
             + fileSizeInMB.toFixed(2) +
             ' MB) . Please select a file no bigger than 10 MB';
-        let errorMessageContainer = document.createElement('p')
-        errorMessageContainer.appendChild(errorMessage)
-        fileInput.parentNode.insertBefore(errorMessageContainer, fileInput.nextSibling);
 
+    } else {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            profilePicture.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+        imageUrlInput.setAttribute("value", "newImage");
+
+    }
+}
+
+function hideSizeError() {
+    document.getElementById('sizeError').style.display = 'none';
+}
+
+function clearImageSelection() {
+
+    fileInput.value = null;
+    checkImageSize();
+}
+
+function deletePicture() {
+    profilePicture.src = 'https://res.cloudinary.com/bneikov/image/upload/v1679933174/default_profile_pic_nzgzqa.png'
+    fileInput.value = null;
+    imageUrlInput.setAttribute("value", "");
+    hideSizeError();
+    enableSubmitButtonIfDisabled();
+}
+
+function enableSubmitButtonIfDisabled() {
+    if (submitButton.disabled === true) {
+        submitButton.disabled = false;
     }
 }
 
