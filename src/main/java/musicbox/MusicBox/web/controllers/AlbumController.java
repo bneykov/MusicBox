@@ -56,6 +56,7 @@ public class AlbumController {
 
         return "view-all";
     }
+
     @DeleteMapping("/remove/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String removeAlbum(@PathVariable Long id) {
@@ -66,7 +67,7 @@ public class AlbumController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public String addAlbum(@Valid AlbumDTO albumDTO, BindingResult bindingResult,
-                            RedirectAttributes redirectAttributes) throws IOException {
+                           RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("albumDTO", albumDTO);

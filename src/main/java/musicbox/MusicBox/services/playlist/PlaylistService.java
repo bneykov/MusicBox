@@ -24,15 +24,6 @@ public class PlaylistService {
     private final UserRepository userRepository;
     private final SongRepository songRepository;
 
-    public Set<Playlist> getUserPlaylists(Long id) {
-        return this.playlistRepository.findAllByUserEntityId(id);
-    }
-
-    public Playlist getPlaylistById(Long id) {
-        return this.playlistRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Playlist"));
-    }
-
-
     public PlaylistService(ModelMapper modelMapper, PlaylistRepository playlistRepository,
                            UserRepository userRepository, SongRepository songRepository) {
         this.modelMapper = modelMapper;
@@ -40,6 +31,14 @@ public class PlaylistService {
         this.userRepository = userRepository;
         this.songRepository = songRepository;
 
+    }
+
+    public Set<Playlist> getUserPlaylists(Long id) {
+        return this.playlistRepository.findAllByUserEntityId(id);
+    }
+
+    public Playlist getPlaylistById(Long id) {
+        return this.playlistRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Playlist"));
     }
 
     @Transactional
@@ -77,7 +76,7 @@ public class PlaylistService {
         this.playlistRepository.deleteById(id);
     }
 
-    public boolean isOwner(String username, Long id){
+    public boolean isOwner(String username, Long id) {
         return playlistRepository.
                 findById(id).
                 filter(playlist -> playlist.getUserEntity().getUsername().equals(username)).

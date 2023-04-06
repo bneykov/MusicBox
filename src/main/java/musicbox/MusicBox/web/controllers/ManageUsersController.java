@@ -28,6 +28,7 @@ public class ManageUsersController {
         List<UserViewDTO> users = userService.mapUsers(userService.getUsers());
         return ResponseEntity.ok(users);
     }
+
     @GetMapping("/{id}/change_role")
     @PreAuthorize("hasRole('ADMIN')")
     public RedirectView changeRole(@PathVariable Long id) {

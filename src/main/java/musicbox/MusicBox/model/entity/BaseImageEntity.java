@@ -33,11 +33,13 @@ public abstract class BaseImageEntity extends BaseEntity {
 
     @Column(name = "image_uuid")
     private String imageUUID;
+
     @PrePersist
     @PreUpdate
-    public void setDefaultImage(){
+    public void setDefaultImage() {
 
     }
+
     @PreRemove
     public void preRemove() throws IOException {
         if (imageUUID != null) {

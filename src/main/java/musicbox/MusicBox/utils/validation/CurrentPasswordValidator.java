@@ -18,6 +18,6 @@ public class CurrentPasswordValidator implements ConstraintValidator<ValidCurren
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        return  passwordEncoder.matches(value, this.userService.getCurrentUser().getPassword());
+        return passwordEncoder.matches(value, this.userService.getCurrentUser().getPassword());
     }
 }

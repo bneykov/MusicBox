@@ -30,6 +30,10 @@ public class OwnerSecurityExpressionRoot
         return playlistService.isOwner(authentication.getName(), id);
     }
 
+    @Override
+    public Object getFilterObject() {
+        return filterObject;
+    }
 
     @Override
     public void setFilterObject(Object filterObject) {
@@ -37,18 +41,13 @@ public class OwnerSecurityExpressionRoot
     }
 
     @Override
-    public Object getFilterObject() {
-        return filterObject;
+    public Object getReturnObject() {
+        return this.returnObject;
     }
 
     @Override
     public void setReturnObject(Object returnObject) {
         this.returnObject = returnObject;
-    }
-
-    @Override
-    public Object getReturnObject() {
-        return this.returnObject;
     }
 
     @Override

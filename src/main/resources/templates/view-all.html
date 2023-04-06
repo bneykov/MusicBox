@@ -37,7 +37,8 @@
                                 th:method="delete"
                         >
                             <button type="submit" sec:authorize="hasRole('ADMIN')"
-                                    class="btn btn-danger mt-3">Delete</button>
+                                    class="btn btn-danger mt-3">Delete
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -45,17 +46,19 @@
             <div th:if="${title.equals('Albums')}" th:each="album:${albums}" class="col-lg-2 col-md-6 col-sm-12">
                 <div class="card bg-light text-dark mb-3">
                     <a class="card-img-top" th:href="@{/albums/view/{id}(id = *{album.id})}">
-                    <img th:src="${album.imageUrl}" class="card-img-top" alt="">
+                        <img th:src="${album.imageUrl}" class="card-img-top" alt="">
                     </a>
                     <div class="card-body">
                         <h5 th:text="${album.name}" class="card-title">Album Name</h5>
-                        <p th:text="|Contributing artists: ${album.getArtistsNames()}|" class="card-text">Artist Name</p>
+                        <p th:text="|Contributing artists: ${album.getArtistsNames()}|" class="card-text">Artist
+                            Name</p>
                         <form
                                 th:action="@{/albums/remove/{id}(id = *{album.id})}"
                                 th:method="delete"
                         >
-                        <button type="submit" sec:authorize="hasRole('ADMIN')"
-                                class="btn btn-danger">Delete</button>
+                            <button type="submit" sec:authorize="hasRole('ADMIN')"
+                                    class="btn btn-danger">Delete
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -72,7 +75,8 @@
                                 th:method="delete"
                         >
                             <button type="submit" sec:authorize="hasRole('ADMIN')"
-                                    class="btn btn-danger">Delete</button>
+                                    class="btn btn-danger">Delete
+                            </button>
                         </form>
                     </div>
                 </div>

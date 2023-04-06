@@ -40,8 +40,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/", "/albums/all", "/songs/all", "/artists/all",
                         "/albums/view/{id}", "/artists/view/{id}").permitAll()
                 .requestMatchers("/users/register", "/users/login", "/users/login-error").anonymous()
-                .requestMatchers("/users/all","*/change_role", "/songs/add/**", "/artists/add/**", "/albums/add/**"
-                , "/artists/remove/**", "/albums/remove/**", "/songs/remove/**").hasRole(RoleEnum.ADMIN.name())
+                .requestMatchers("/users/all", "*/change_role", "/songs/add/**", "/artists/add/**", "/albums/add/**"
+                        , "/artists/remove/**", "/albums/remove/**", "/songs/remove/**").hasRole(RoleEnum.ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                 .invalidateHttpSession(true).and()
                 .securityContext()
                 .securityContextRepository(securityContextRepository);
-       http.headers().xssProtection();
+        http.headers().xssProtection();
 
         return http.build();
     }
@@ -67,12 +67,14 @@ public class SecurityConfiguration {
         return new DelegatingSecurityContextRepository(new RequestAttributeSecurityContextRepository()
                 , new HttpSessionSecurityContextRepository());
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl(userRepository);
     }
 

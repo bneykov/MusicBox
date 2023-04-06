@@ -40,6 +40,7 @@ public class PlaylistController {
 
         return "create-playlist";
     }
+
     @PreAuthorize("isOwner(#id)")
     @GetMapping("/{id}")
     public String viewPlaylist(@PathVariable Long id, Model model) {
@@ -48,6 +49,7 @@ public class PlaylistController {
         model.addAttribute("currentPlaylist", playlist);
         return "playlist";
     }
+
     @GetMapping("/all")
     public String viewAllPlaylists(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         model.addAttribute("songId", null);
@@ -67,8 +69,8 @@ public class PlaylistController {
 
     @PostMapping("/add")
     public String addPlaylist(@Valid PlaylistDTO playlistDTO, BindingResult bindingResult,
-                               RedirectAttributes redirectAttributes, @AuthenticationPrincipal
-                               CustomUserDetails userDetails) throws IOException {
+                              RedirectAttributes redirectAttributes, @AuthenticationPrincipal
+                              CustomUserDetails userDetails) throws IOException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("playlistDTO", playlistDTO);
@@ -85,6 +87,7 @@ public class PlaylistController {
         return "redirect:/playlists/all";
 
     }
+
     @PreAuthorize("isOwner(#playlistId)")
     @PostMapping("/{playlistId}/add/{songId}")
     public String addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
@@ -98,6 +101,7 @@ public class PlaylistController {
         this.playlistService.removeSongFromPlaylist(playlistId, songId);
         return "redirect:/playlists/" + playlistId;
     }
+
     @PreAuthorize("isOwner(#id)")
     @DeleteMapping("/remove/{id}")
     public String removePlaylist(@PathVariable Long id) {

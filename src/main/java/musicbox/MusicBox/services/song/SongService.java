@@ -29,19 +29,29 @@ public class SongService {
 
     }
 
-    public Song getSongById(Long id){
+    public static Song getSongWithoutRelations(Song song) {
+        song.getArtists().forEach(artist -> artist.getSongs().remove(song));
+        song.getPlaylists().forEach(playlist -> playlist.getSongs().remove(song));
+        song.getArtists().clear();
+        song.getPlaylists().clear();
+        song.setAlbum(null);
+        return song;
+    }
+
+    public Song getSongById(Long id) {
         return this.songRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Song"));
     }
 
-    public List<Song> getSongs(){
+    public List<Song> getSongs() {
         return this.songRepository.findAll();
     }
-    public List<Song> getHomeSongs(){
+
+    public List<Song> getHomeSongs() {
         return this.songRepository.findAll().stream().limit(6).toList();
     }
 
     @Transactional
-    public void addSong(SongDTO songDTO){
+    public void addSong(SongDTO songDTO) {
         Song song = this.modelMapper.map(songDTO, Song.class);
         Album album = this.albumRepository.findById(songDTO.getAlbum())
                 .orElseThrow(() -> new ObjectNotFoundException(songDTO.getAlbum(), "Album"));
@@ -53,22 +63,14 @@ public class SongService {
         album.getArtists().forEach(artist -> song.getArtists().add(artist));
         this.songRepository.save(song);
     }
+
     @Transactional
-    public void removeSongConnections(Long id){
+    public void removeSongConnections(Long id) {
         Song song = this.getSongById(id);
         this.songRepository.save(getSongWithoutRelations(song));
     }
 
-    public static Song getSongWithoutRelations(Song song) {
-        song.getArtists().forEach(artist -> artist.getSongs().remove(song));
-        song.getPlaylists().forEach(playlist -> playlist.getSongs().remove(song));
-        song.getArtists().clear();
-        song.getPlaylists().clear();
-        song.setAlbum(null);
-        return song;
-    }
-
-    public void removeSong(Long id){
+    public void removeSong(Long id) {
         this.songRepository.deleteById(id);
     }
 }

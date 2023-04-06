@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ObjectNotFoundAdvice {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(ObjectNotFoundException.class)
-    public String onObjectNotFound(ObjectNotFoundException onfe, Model model){
+    public String onObjectNotFound(ObjectNotFoundException onfe, Model model) {
         model.addAttribute("id", onfe.getId());
         model.addAttribute("type", onfe.getType());
         return "object-not-found";

@@ -15,6 +15,7 @@ public class ObjectNotFoundException extends RuntimeException {
         this.id = id;
         this.type = type;
     }
+
     public ObjectNotFoundException(String type) {
         super("Object of type " + type + " not found");
         this.type = type;

@@ -65,7 +65,7 @@ public class ArtistController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public String addArtist(@Valid ArtistDTO artistDTO, BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) throws IOException {
+                            RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("artistDTO", artistDTO);

@@ -97,7 +97,7 @@
                 <label for="image" class="h5 mb-2">Select image</label>
             </div>
             <input onchange="checkImageSize()"
-                    th:field="*{image}" th:errorclass="'is-invalid alert-danger'"
+                   th:field="*{image}" th:errorclass="'is-invalid alert-danger'"
                    value="Choose image" type="file" name="image" accept="image/*" id="image"/>
             <small th:if="${#fields.hasErrors('image')}"
                    th:errors="*{image}"
@@ -107,13 +107,12 @@
             </small>
         </div>
         <div class="button-holder d-flex justify-content-center mt-2">
-            <button id = 'btnSubmit'
-                    type="submit" class="btn btn-success btn-lg mb-3" value="Add_Song">Add Song</button>
+            <button id='btnSubmit'
+                    type="submit" class="btn btn-success btn-lg mb-3" value="Add_Song">Add Song
+            </button>
         </div>
     </form>
 </main>
-
-
 
 
 </body>

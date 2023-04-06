@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class MusicBoxApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MusicBoxApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MusicBoxApplication.class, args);
+    }
 
 }

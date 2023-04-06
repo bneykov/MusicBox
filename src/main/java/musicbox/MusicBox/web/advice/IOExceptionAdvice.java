@@ -11,7 +11,7 @@ import java.io.IOException;
 public class IOExceptionAdvice {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({IOException.class})
-    public String onIOException(){
+    public String onIOException() {
 
         return "image-upload-error";
     }

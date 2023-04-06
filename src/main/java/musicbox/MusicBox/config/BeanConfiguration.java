@@ -26,8 +26,9 @@ public class BeanConfiguration {
         config.put("cloud_name", cloudName);
         config.put("api_key", apiKey);
         config.put("api_secret", apiSecret);
-       return new Cloudinary(config);
+        return new Cloudinary(config);
     }
+
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();

@@ -9,13 +9,13 @@
     <form class="mx-auto w-25 bg-blur rounded"
           th:method="post"
           th:action="@{/users/login}"
-          >
+    >
         <div class="form-group mt-4">
             <div class="label-holder textCol d-flex justify-content-center">
                 <label for="username" class="h5 mb-2">Username</label>
             </div>
-            <input  th:value="${username}"
-                    type="text" class="form-control" id="username" name="username"/>
+            <input th:value="${username}"
+                   type="text" class="form-control" id="username" name="username"/>
         </div>
 
         <div class="form-group mt-4">
@@ -24,8 +24,8 @@
             </div>
             <input
                     type="password" class="form-control" id="password" name="password"/>
-        <small th:if="${invalidCredentials}"
-                class="text-warning mt-3">Incorrect username or password!</small>
+            <small th:if="${invalidCredentials}"
+                   class="text-warning mt-3">Incorrect username or password!</small>
         </div>
         <div class="button-holder d-flex justify-content-center">
             <button type="submit" class="btn btn-success btn-lg mb-3 mt-3">Login</button>

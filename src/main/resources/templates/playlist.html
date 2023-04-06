@@ -29,7 +29,7 @@
 
                 <tbody>
                 <tr class="text-light text-center">
-                    <th >Title</th>
+                    <th>Title</th>
                     <th>Contributing artists</th>
                     <th>Album</th>
                     <th>Genre</th>
@@ -44,10 +44,11 @@
                     <td th:text="${song.formattedDuration}">Duration</td>
                     <td>
                         <form
-                        th:method="delete"
-                        th:action="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${currentPlaylist.id}, songId = *{song.id})}">
+                                th:method="delete"
+                                th:action="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${currentPlaylist.id}, songId = *{song.id})}">
                             <button type="submit"
-                                class="btn btn-danger">Remove</button>
+                                    class="btn btn-danger">Remove
+                            </button>
                         </form>
                     </td>
                 </tr>

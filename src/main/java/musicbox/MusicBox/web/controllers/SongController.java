@@ -60,7 +60,7 @@ public class SongController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public String addSong(@Valid SongDTO songDTO, BindingResult bindingResult,
-                           RedirectAttributes redirectAttributes) throws IOException {
+                          RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("songDTO", songDTO);
