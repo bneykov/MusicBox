@@ -21,14 +21,7 @@
         <div class="row mb-3">
             <div class="col-12">
                 <h2 class="text-light mb-3  text-center" th:text="${title}"></h2>
-                <div th:switch="${title}" class="col text-center mb-3">
-                    <a      sec:authorize="hasRole('ADMIN')"
-                            th:case="'Songs'" th:href="@{/songs/add}" class="btn btn-primary">Add New</a>
-                    <a      sec:authorize="hasRole('ADMIN')"
-                            th:case="'Artists'" th:href="@{/artists/add}" class="btn btn-primary">Add New</a>
-                    <a      sec:authorize="hasRole('ADMIN')"
-                            th:case="'Albums'" th:href="@{/albums/add}" class="btn btn-primary">Add New</a>
-                </div>
+
             </div>
             <div th:if="${title.equals('Songs')}" th:each="song:${songs}" class="col-lg-2 col-md-6 col-sm-12">
                 <div class="card bg-light text-dark mb-3">

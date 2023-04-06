@@ -22,7 +22,7 @@ public class UniqueUsernameIfNewValidator implements ConstraintValidator<UniqueU
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        UserEntity user = this.userRepository.findByEmail(value).orElse(null);
+        UserEntity user = this.userRepository.findByUsername(value).orElse(null);
         return user == null || Objects.equals(user.getId(), this.userService.getCurrentUser().getId());
     }
 }
