@@ -61,19 +61,24 @@ function checkImageSize() {
         imageUrlInput.setAttribute("value", imageSrcBeforeEdit);
         return;
     }
-
-    let fileSize = fileInput.files[0].size;
+    const file = fileInput.files[0];
+    let fileSize = file.size;
+    let fileType = file.type;
     let fileSizeInMB = fileSize / (1024.0 * 1024.0);
+    let sizeErrorElement = document.getElementById('sizeError')
     if (fileSizeInMB > 10) {
         submitButton.disabled = true;
-        let sizeErrorElement = document.getElementById('sizeError')
         sizeErrorElement.style.display = 'block'
         sizeErrorElement.textContent = 'The selected file is too large ('
             + fileSizeInMB.toFixed(2) +
             ' MB) . Please select a file no bigger than 10 MB';
 
+    } else if (!fileType.startsWith("image/")) {
+        submitButton.disabled = true;
+        sizeErrorElement.style.display = 'block'
+        sizeErrorElement.textContent = 'The selected file is not an image.';
     } else {
-        const file = fileInput.files[0];
+
         const reader = new FileReader();
         reader.onload = function (e) {
             profilePicture.src = e.target.result;
