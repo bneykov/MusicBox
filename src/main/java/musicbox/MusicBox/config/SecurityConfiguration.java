@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/", "/albums/all", "/songs/all", "/artists/all",
-                        "/albums/view/{id}", "/artists/view/{id}").permitAll()
+                        "/albums/view/{id}", "/artists/view/{id}", "/playlists/{id}/**").permitAll()
                 .requestMatchers("/users/register", "/users/login", "/users/login-error").anonymous()
                 .requestMatchers("/users/all", "*/change_role", "/songs/add/**", "/artists/add/**", "/albums/add/**"
                         , "/artists/remove/**", "/albums/remove/**", "/songs/remove/**").hasRole(RoleEnum.ADMIN.name())
@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin()
                 .loginPage("/users/login")
-                .successHandler(authSuccessHandler)
+                .successHandler(authSuccessHandler) // using custom successHandler which fires event on login
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                 .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
                 .failureForwardUrl("/users/login-error")

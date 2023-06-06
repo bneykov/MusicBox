@@ -20,8 +20,8 @@ import java.util.Set;
 @Entity
 @Table(name = "playlists")
 public class Playlist extends BaseImageEntity {
-
-
+    @Column(unique = true)
+    private String link;
     @ManyToOne
     private UserEntity userEntity;
 
@@ -29,12 +29,18 @@ public class Playlist extends BaseImageEntity {
     private Set<Song> songs;
 
     @Override
-    public void setDefaultImage() {
+    public void prePersist() {
         if (this.getImageUrl() == null) {
             this.setImageUrl(DefaultImageURLs.DEFAULT_PLAYLIST_IMAGE_URL);
         }
     }
 
+    @PostPersist
+    private void setPlaylistLink(){
+        this.link = "http://localhost:8000/playlists/" + this.getId();
+    }
+
+    //Get playlist total duration formatted
     public String getPlaylistDurationFormat() {
         long seconds = this.songs.stream().mapToLong(Song::getDuration).sum();
         Duration duration = Duration.ofSeconds(seconds);

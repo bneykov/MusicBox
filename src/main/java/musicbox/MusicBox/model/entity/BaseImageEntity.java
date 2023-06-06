@@ -34,12 +34,13 @@ public abstract class BaseImageEntity extends BaseEntity {
     @Column(name = "image_uuid")
     private String imageUUID;
 
+    //Set default image based on the entity type
     @PrePersist
     @PreUpdate
-    public void setDefaultImage() {
+    public void prePersist() {
 
     }
-
+    //Remove image from the cloud if the entity being removed has image that's not set by default
     @PreRemove
     public void preRemove() throws IOException {
         if (imageUUID != null) {

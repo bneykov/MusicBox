@@ -22,11 +22,11 @@ public class CloudinaryService {
 
 
     public Map<String, String> uploadImage(MultipartFile imageFile) throws IOException {
-
+        //Check if an image is present
         if (imageFile == null || imageFile.isEmpty()) {
             return new HashMap<>();
         }
-
+        //Upload image to the cloud
         File image = File.createTempFile("temp", null);
         imageFile.transferTo(image);
         Map<String, String> config = new HashMap<>();
@@ -39,13 +39,13 @@ public class CloudinaryService {
         response.put("public_id", result.get("public_id").toString());
         return response;
     }
-
+    //Delete image from the cloud
     public void deleteImage(String publicId) throws IOException {
-        if (publicId != null) {
+        if (publicId != null) { // If image is not default image
             this.cloudinary.uploader().destroy(publicId, null);
         }
     }
-
+    //Check if the file is valid
     public boolean isImage(MultipartFile file) {
         if (file.getContentType() != null && file.getContentType().startsWith("image/")) {
             try {

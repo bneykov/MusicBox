@@ -1,14 +1,14 @@
 package musicbox.MusicBox.model.entity;
 
 
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import musicbox.MusicBox.constants.DefaultImageURLs;
+import musicbox.MusicBox.utils.token.SecretKeyOperations;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +24,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class UserEntity extends BaseImageEntity {
+
     @NotNull
     @Column(unique = true)
     private String username;
@@ -38,6 +39,10 @@ public class UserEntity extends BaseImageEntity {
     @Column
     private LocalDateTime lastLoggedIn;
 
+    @Column
+    @NotNull
+    private String secretKey;
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles;
@@ -46,11 +51,14 @@ public class UserEntity extends BaseImageEntity {
     private Set<Playlist> playlists;
 
 
-    public void setDefaultImage() {
+    @SneakyThrows
+    public void prePersist() {
+        this.secretKey = SecretKeyOperations.encrypt(Keys.secretKeyFor(SignatureAlgorithm.HS256));
         if (this.getImageUrl() == null || this.getImageUrl().isBlank()) {
             this.setImageUrl(DefaultImageURLs.DEFAULT_USER_IMAGE_URL);
         }
     }
+
 
     public String getLastLoggedIn() {
         return lastLoggedIn.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));

@@ -1,5 +1,9 @@
 package musicbox.MusicBox.services.playlist;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.transaction.Transactional;
 import musicbox.MusicBox.model.dto.PlaylistDTO;
 import musicbox.MusicBox.model.entity.Playlist;
@@ -9,7 +13,10 @@ import musicbox.MusicBox.repositories.PlaylistRepository;
 import musicbox.MusicBox.repositories.SongRepository;
 import musicbox.MusicBox.repositories.UserRepository;
 import musicbox.MusicBox.services.user.CustomUserDetails;
+import musicbox.MusicBox.utils.errors.InvalidTokenException;
 import musicbox.MusicBox.utils.errors.ObjectNotFoundException;
+import musicbox.MusicBox.utils.token.AccessTokenGenerator;
+import musicbox.MusicBox.utils.token.SecretKeyOperations;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +48,7 @@ public class PlaylistService {
         return this.playlistRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Playlist"));
     }
 
+    //Save playlist with the data from the DTO
     @Transactional
     public void addPlaylist(PlaylistDTO playlistDTO, CustomUserDetails userDetails) {
         Playlist playlist = this.modelMapper.map(playlistDTO, Playlist.class);
@@ -72,15 +80,41 @@ public class PlaylistService {
         this.playlistRepository.save(playlist);
     }
 
+    //Remove playlist from database
     public void removePlaylist(Long id) {
         this.playlistRepository.deleteById(id);
     }
 
+    // Check if a user is playlist's owner
     public boolean isOwner(String username, Long id) {
         return playlistRepository.
                 findById(id).
                 filter(playlist -> playlist.getUserEntity().getUsername().equals(username)).
                 isPresent();
+    }
+
+    public String createShareableLink(Long id) {
+        Playlist playlist = this.getPlaylistById(id);
+        String accessToken = AccessTokenGenerator.generateAccessToken(id, playlist.getUserEntity().getSecretKey());
+        return playlist.getLink() + "/" + accessToken;
+    }
+
+    public boolean isValidToken(Playlist playlist, String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(SecretKeyOperations.decrypt(playlist.getUserEntity().getSecretKey()))
+                    .build().parseClaimsJws(token)
+                    .getBody();
+
+            String playlistId = claims.getSubject();
+
+            if (playlistId.equals(playlist.getId().toString())) {
+                return true;
+            }
+        } catch (SignatureException | MalformedJwtException ex) {
+            throw new InvalidTokenException();
+        }
+        throw new ObjectNotFoundException(playlist.getId(), "Playlist");
     }
 
 }

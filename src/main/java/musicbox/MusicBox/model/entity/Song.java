@@ -51,12 +51,13 @@ public class Song extends BaseImageEntity {
     }
 
 
-    public void setDefaultImage() {
+    public void prePersist() {
         if (this.getImageUrl() == null) {
             this.setImageUrl(DefaultImageURLs.DEFAULT_SONG_IMAGE_URL);
         }
     }
 
+    //Get song duration duration formatted
     public String getFormattedDuration() {
         int minutes = duration / 60;
         int seconds = duration % 60;

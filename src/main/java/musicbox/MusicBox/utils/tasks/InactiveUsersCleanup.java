@@ -15,7 +15,7 @@ public class InactiveUsersCleanup {
     public InactiveUsersCleanup(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    //Every day at 00:00 check for users whose last login was more than 6 months ago and delete if any
     @Scheduled(cron = "0 0 0 * * *")
     public void performTask() {
 

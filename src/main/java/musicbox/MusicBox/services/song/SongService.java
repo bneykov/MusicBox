@@ -28,7 +28,7 @@ public class SongService {
         this.albumRepository = albumRepository;
 
     }
-
+    //Get song without connections to other entities
     public static Song getSongWithoutRelations(Song song) {
         song.getArtists().forEach(artist -> artist.getSongs().remove(song));
         song.getPlaylists().forEach(playlist -> playlist.getSongs().remove(song));
@@ -45,11 +45,11 @@ public class SongService {
     public List<Song> getSongs() {
         return this.songRepository.findAll();
     }
-
+    //Get Songs for home page
     public List<Song> getHomeSongs() {
         return this.songRepository.findAll().stream().limit(6).toList();
     }
-
+    //Save a song with the data from the DTO
     @Transactional
     public void addSong(SongDTO songDTO) {
         Song song = this.modelMapper.map(songDTO, Song.class);
@@ -63,13 +63,13 @@ public class SongService {
         album.getArtists().forEach(artist -> song.getArtists().add(artist));
         this.songRepository.save(song);
     }
-
+    //Save song without connections to other entities
     @Transactional
     public void removeSongConnections(Long id) {
         Song song = this.getSongById(id);
         this.songRepository.save(getSongWithoutRelations(song));
     }
-
+    //Remove song from database
     public void removeSong(Long id) {
         this.songRepository.deleteById(id);
     }

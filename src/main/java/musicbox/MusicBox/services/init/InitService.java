@@ -32,7 +32,7 @@ public class InitService {
     private UserEntity admin, user;
     private Playlist playlist;
 
-
+    // Initializes entities on database creation
     public InitService(RoleRepository roleRepository, UserRepository userRepository, AlbumRepository albumRepository,
                        ArtistRepository artistRepository, PlaylistRepository playlistRepository,
                        SongRepository songRepository, PasswordEncoder passwordEncoder,
@@ -100,7 +100,7 @@ public class InitService {
 
     private void initAdmin() {
         admin = UserEntity.builder()
-                .email("admin@abv.bg")
+                .email("admin@musicbox.com")
                 .username("admin")
                 .name("Admin Adminov")
                 .password(passwordEncoder.encode(defaultPassword))

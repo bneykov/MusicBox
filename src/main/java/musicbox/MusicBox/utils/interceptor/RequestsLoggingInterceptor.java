@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class RequestsLoggingInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(RequestsLoggingInterceptor.class);
-
+    // Logs the request url, method and remote address
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         logger.info("Request URL: " + request.getRequestURL());

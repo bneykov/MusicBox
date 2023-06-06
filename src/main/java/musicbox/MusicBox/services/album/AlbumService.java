@@ -38,6 +38,7 @@ public class AlbumService {
         return this.albumRepository.findAll();
     }
 
+    //Return 6 albums for the home page
     public List<Album> getHomeAlbums() {
         return this.albumRepository.findAll().stream().limit(6).toList();
     }
@@ -49,7 +50,7 @@ public class AlbumService {
     public Album getAlbumById(Long id) {
         return this.albumRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Album"));
     }
-
+    //Save album with the data from the DTO
     public void addAlbum(AlbumDTO albumDTO) {
         Album album = this.modelMapper.map(albumDTO, Album.class);
         album.setCreated(LocalDateTime.now());
@@ -62,7 +63,7 @@ public class AlbumService {
         this.albumRepository.save(album);
     }
 
-
+    //Remove all albums related to an artist
     public void removeAllAlbumsFromArtist(Set<Album> albums) {
         List<Long> albumIds = albums.stream().map(Album::getId).toList();
         List<Album> albumsToDelete = this.albumRepository.findAllById(albumIds);
@@ -72,7 +73,7 @@ public class AlbumService {
         });
         this.albumRepository.deleteAll(albumsToDelete);
     }
-
+    //Remove album from database
     @Transactional
     public void removeAlbum(Long id) {
         Album album = this.getAlbumById(id);
@@ -80,13 +81,13 @@ public class AlbumService {
         unlinkArtistsFromAlbum(album);
         this.albumRepository.delete(album);
     }
-
+    //Remove all artists related to an album
     public void unlinkArtistsFromAlbum(Album album) {
         Set<Artist> artistsToUnlink = album.getArtists();
         artistsToUnlink.forEach(artist -> artist.getAlbums().remove(album));
         this.artistRepository.saveAll(artistsToUnlink);
     }
-
+    //Remove songs' relations and deletes them
     public void removeSongsFromLinkedEntities(Set<Song> songs) {
         songs = songs.stream().map(SongService::getSongWithoutRelations).collect(Collectors.toSet());
         this.songRepository.deleteAll(songs);

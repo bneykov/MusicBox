@@ -8,7 +8,7 @@ import lombok.Setter;
 public class ObjectNotFoundException extends RuntimeException {
     private final long id;
     private final String type;
-
+    //Error that occurs when entity cannot be found in the database
 
     public ObjectNotFoundException(long id, String type) {
         super("Object with ID " + id + " of type " + type + " not found");

@@ -34,7 +34,7 @@ public class ArtistService {
     public List<Artist> getArtists() {
         return this.artistRepository.findAll();
     }
-
+    //Get artists for home page
     public List<Artist> getHomeArtists() {
         return this.artistRepository.findAll().stream().limit(6).toList();
     }
@@ -46,7 +46,7 @@ public class ArtistService {
     public Set<Album> getAlbumsByArtistId(Long id) {
         return this.albumRepository.findAllByArtistId(id);
     }
-
+    //Save artist with the data from the DTO
     public void addArtist(ArtistDTO artistDTO) {
         Artist artist = this.modelMapper.map(artistDTO, Artist.class);
         artist.setCreated(LocalDateTime.now());
@@ -57,7 +57,7 @@ public class ArtistService {
         this.artistRepository.save(artist);
 
     }
-
+    //Remove artist from database
     @Transactional
     public void removeArtist(Long id) {
         Artist artist = this.getArtistById(id);

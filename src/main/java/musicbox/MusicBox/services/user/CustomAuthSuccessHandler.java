@@ -26,7 +26,7 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-
+    //Publish event on successful login and redirect to home page
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {

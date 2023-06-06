@@ -48,7 +48,7 @@ public class UserService {
     public List<UserViewDTO> mapUsers(List<UserEntity> users) {
         return users.stream().map(user -> this.modelMapper.map(user, UserViewDTO.class)).toList();
     }
-
+    //Return the current user as an instance of CustomUserDetails
     public UserEntity getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -83,7 +83,7 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-
+    //Save new user with the data from the DTO
     public void register(UserRegisterDTO registerDTO) {
 
         UserRole userRole = this.roleRepository.findUserRoleByRole(RoleEnum.USER)

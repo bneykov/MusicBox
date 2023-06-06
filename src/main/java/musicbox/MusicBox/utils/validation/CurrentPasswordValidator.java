@@ -15,7 +15,7 @@ public class CurrentPasswordValidator implements ConstraintValidator<ValidCurren
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
-
+    //Checks if entered password equals the password saved in the database
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         return passwordEncoder.matches(value, this.userService.getCurrentUser().getPassword());

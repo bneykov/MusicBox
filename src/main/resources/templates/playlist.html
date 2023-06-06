@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
 
 <head th:replace="fragments/commons::head">
 </head>
+<script src="/js/getLink.js"></script>
 <body>
 
 <div>
+
     <header th:replace="fragments/commons::nav"></header>
     <div class="container-fluid mt-3">
 
-
+        <span id="playlistId" th:title="${currentPlaylist.id}"></span>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
             <div class="col-12">
                 <h2 th:text="${currentPlaylist.name}" class="text-light mb-3  text-center"></h2>
@@ -24,7 +27,12 @@
                 <h3 th:if="${!songs.isEmpty()}"
                     th:text="|Duration: ${currentPlaylist.playlistDurationFormat}|"
                     class="text-light mb-3  text-center"></h3>
+                <div th:if="${#authentication.name == currentPlaylist.userEntity.username}"
+                     class="col text-center mb-3">
+                    <a id="share-button" onclick="getLink()" class="btn btn-primary">Share playlist</a>
+                </div>
             </div>
+
             <table th:if="${!songs.isEmpty()}" class="table table-striped text-light">
 
                 <tbody>
@@ -34,7 +42,7 @@
                     <th>Album</th>
                     <th>Genre</th>
                     <th>Duration</th>
-                    <th>Action</th>
+                    <th th:if="${#authentication.name == currentPlaylist.userEntity.username}">Action</th>
                 </tr>
                 <tr th:each="song: ${songs}" class="text-light text-center">
                     <td th:text="${song.getName()}">Song Title</td>
@@ -42,7 +50,7 @@
                     <td th:text="${song.album.name}">Album</td>
                     <td th:text="${song.genre.value}">Genre</td>
                     <td th:text="${song.formattedDuration}">Duration</td>
-                    <td>
+                    <td th:if="${#authentication.name == currentPlaylist.userEntity.username}">
                         <form
                                 th:method="delete"
                                 th:action="@{/playlists/{playlistId}/remove/{songId}(playlistId = ${currentPlaylist.id}, songId = *{song.id})}">
@@ -62,4 +70,5 @@
 </div>
 
 </body>
+
 </html>

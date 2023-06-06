@@ -15,6 +15,7 @@ public class ImageFormatValidator implements ConstraintValidator<ValidImageForma
 
     @Override
     public boolean isValid(MultipartFile image, ConstraintValidatorContext constraintValidatorContext) {
+        //If there is no selected file
         if (image == null || image.isEmpty()) {
             return true;
         }

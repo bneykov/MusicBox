@@ -33,7 +33,7 @@ public class Album extends BaseImageEntity {
         return stringBuilder.substring(0, stringBuilder.length() - 2);
     }
 
-    public void setDefaultImage() {
+    public void prePersist() {
         if (this.getImageUrl() == null) {
             this.setImageUrl(DefaultImageURLs.DEFAULT_ALBUM_IMAGE_URL);
         }

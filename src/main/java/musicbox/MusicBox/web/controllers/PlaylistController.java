@@ -50,11 +50,25 @@ public class PlaylistController {
         return "playlist";
     }
 
+    @GetMapping("/{id}/{token}")
+    public String viewPlaylist(@PathVariable Long id, Model model, @PathVariable String token) {
+
+
+        Playlist playlist = this.playlistService.getPlaylistById(id);
+        if (this.playlistService.isValidToken(playlist, token)) {
+            model.addAttribute("songs", playlist.getSongs());
+            model.addAttribute("currentPlaylist", playlist);
+
+        }
+        return "playlist";
+    }
+
     @GetMapping("/all")
     public String viewAllPlaylists(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         model.addAttribute("songId", null);
         model.addAttribute("currentUser", userDetails);
         model.addAttribute("playlists", this.playlistService.getUserPlaylists(userDetails.getId()));
+
         return "all-playlists";
     }
 
@@ -108,5 +122,6 @@ public class PlaylistController {
         this.playlistService.removePlaylist(id);
         return "redirect:/playlists/all";
     }
+
 
 }
