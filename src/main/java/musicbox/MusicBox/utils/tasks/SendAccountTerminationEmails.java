@@ -27,7 +27,7 @@ public class SendAccountTerminationEmails {
         List<UserEntity> usersToEmail = this.userRepository.findByLastLoggedInBefore(notificationDate);
         usersToEmail.forEach(user ->
                 this.emailService.sendAccountTerminationEmail(user.getEmail(),
-                        user.getUsername(), user.getLastLoggedIn()));
+                        user.getUsername(), user.getAccountTerminationDate()));
 
     }
 }

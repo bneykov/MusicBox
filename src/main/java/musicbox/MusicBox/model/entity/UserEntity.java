@@ -63,4 +63,8 @@ public class UserEntity extends BaseImageEntity {
     public String getLastLoggedIn() {
         return lastLoggedIn.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
     }
+
+    public String getAccountTerminationDate(){
+        return lastLoggedIn.plusMonths(6).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+    }
 }
